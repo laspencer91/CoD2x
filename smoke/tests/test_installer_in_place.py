@@ -94,6 +94,70 @@ function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle
         self.assert_original()
         self.assertFalse((self.game / 'cod2-smoke-test-backups').exists())
 
+    def test_cod2x_install_after_smoke_becomes_new_restoration_baseline(self):
+        original_client = self.original
+        self.run_action('Install')
+        receipt_path = self.game / 'cod2-smoke-test-install.json'
+        previous_receipt = receipt_path.read_bytes()
+        previous = json.loads(previous_receipt)
+        previous_loader = next(f for f in previous['files'] if f['path'] == 'mss32.dll')
+        updated_client = b'New CoD2x installed after smoke; keep this version'
+        (self.game / 'mss32.dll').write_bytes(updated_client)
+        backups_before = set((self.game / 'cod2-smoke-test-backups').iterdir())
+
+        self.run_action('Try', '-CheckOnly')
+        self.assertEqual((self.game / 'mss32.dll').read_bytes(), updated_client)
+        self.assertEqual(receipt_path.read_bytes(), previous_receipt)
+        self.assertEqual(set((self.game / 'cod2-smoke-test-backups').iterdir()), backups_before)
+        self.assertIn('Installed file changed', self.run_action('Uninstall', '-CheckOnly', succeeds=False))
+
+        self.assertIn('Preserved the updated CoD2x loader', self.run_action('Try'))
+        receipt = json.loads(receipt_path.read_text())
+        loader = next(f for f in receipt['files'] if f['path'] == 'mss32.dll')
+        self.assertNotEqual(loader['backup'], previous_loader['backup'])
+        self.assertEqual(loader['originalHash'], hashlib.sha256(updated_client).hexdigest())
+        self.assertEqual((self.game / loader['backup']).read_bytes(), updated_client)
+        self.assertEqual((self.game / previous_loader['backup']).read_bytes(), self.original)
+        history = (self.game / loader['backup']).parent / 'previous-install.json'
+        self.assertEqual(history.read_bytes(), previous_receipt)
+
+        self.run_action('Try')
+        repeated = json.loads(receipt_path.read_text())
+        self.assertEqual(next(f for f in repeated['files'] if f['path'] == 'mss32.dll')['backup'], loader['backup'])
+        self.run_action('Uninstall')
+        self.original = updated_client
+        self.assert_original()
+        self.assertEqual((self.game / previous_loader['backup']).read_bytes(), original_client)
+
+    def test_loader_rebase_rolls_back_if_receipt_commit_fails(self):
+        self.run_action('Install')
+        receipt_path = self.game / 'cod2-smoke-test-install.json'
+        previous_receipt = receipt_path.read_bytes()
+        updated_client = b'New CoD2x client; restore on failed smoke install'
+        (self.game / 'mss32.dll').write_bytes(updated_client)
+        script_path = self.bundle / 'Smoke-Test.ps1'
+        script = script_path.read_text()
+        commit = 'Write-Json $receiptPath ([ordered]@{ schema = 1;'
+        self.assertEqual(script.count(commit), 1)
+        script_path.write_text(script.replace(commit, "throw 'Fixture receipt commit failure'\n        " + commit))
+
+        self.assertIn('Fixture receipt commit failure', self.run_action('Install', succeeds=False))
+        self.assertEqual((self.game / 'mss32.dll').read_bytes(), updated_client)
+        self.assertEqual(receipt_path.read_bytes(), previous_receipt)
+        previous = json.loads(previous_receipt)
+        backup = next(f['backup'] for f in previous['files'] if f['path'] == 'mss32.dll')
+        self.assertEqual((self.game / backup).read_bytes(), self.original)
+
+    def test_reinstall_still_preserves_edits_to_other_installed_files(self):
+        self.run_action('Install')
+        look = self.game / 'mapkit_smoke_test/smoke_look_wide.cfg'
+        look.write_bytes(b'Manually changed smoke settings')
+        receipt_path = self.game / 'cod2-smoke-test-install.json'
+        receipt_before = receipt_path.read_bytes()
+        self.assertIn('Installed file changed', self.run_action('Try', succeeds=False))
+        self.assertEqual(look.read_bytes(), b'Manually changed smoke settings')
+        self.assertEqual(receipt_path.read_bytes(), receipt_before)
+
     def test_try_rejects_unsupported_renderer_before_replacing_client(self):
         (self.game / 'gfx_d3d_mp_x86_s.dll').write_bytes(b'Unsupported renderer fixture')
         self.assertIn('Unsupported DX9 renderer', self.run_action('Try', succeeds=False))

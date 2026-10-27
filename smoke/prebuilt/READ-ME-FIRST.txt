@@ -17,8 +17,10 @@ The full cod2x-smoke-test.zip includes optional map authoring tools. Player acti
 also work directly from smoke/prebuilt in the branch, without those authoring files.
 
 Existing installations, including Steam, are supported. No separate game copy or
-map bake is needed. Restore original files returns the client files backed up on
-the first install. Repeat installs preserve those backups. Tools & details contains
+map bake is needed; the modified CoD2x loader is included. Restore original files
+returns the backed-up client. If CoD2x replaces the loader after smoke is installed,
+Try smoke saves the newer client for restoration, retaining earlier backups.
+Repeat installs otherwise preserve the existing baseline. Tools & details contains
 validation and logs and opens on errors. The full ZIP also offers Map authoring
 there. WebView2 is required; Python is bundled only in the full authoring package.
 See DESKTOP-TOOL.txt for details. A separate game copy is optional for developers.
@@ -44,8 +46,8 @@ PowerShell check without launching:
 
 REMOVAL
 Close CoD2 and run Uninstall-Smoke-Test.cmd. Original backups are preserved
-across reinstalls/updates. Changed installed files or corrupt backups are reported
-before overwriting anything. Backups, unrelated files and game-created logs/configs
+across reinstalls/updates. Changed installed files or corrupt backups stop removal.
+Backups, unrelated files and game-created logs/configs
 are retained. No global execution policy or updater endpoint is changed.
 
 CONTENTS

@@ -22,20 +22,20 @@
       "sha256": "3fa1a68b23267ae6f9322e59a598b7ba78ffafea6cee055c27014ccff31b799f"
     },
     "DESKTOP-TOOL.txt": {
-      "bytes": 5602,
-      "sha256": "06d47a43a56ac92857cd218ffae57419bbd83a5c3ff5f3980d3264de3060ea37"
+      "bytes": 5908,
+      "sha256": "78276e048b2400822f3cfb8540d15b32e3aae12e3ed371d6b60b8e477749dd63"
     },
     "READ-ME-FIRST.txt": {
-      "bytes": 4114,
-      "sha256": "a78b438dc2a04dc7f6a1cf58f7e640c99131368d162a385bdad418763802b5ba"
+      "bytes": 4248,
+      "sha256": "2a77910b67a33a286d9f8b1635b516bce4c55dc2d1e501f9ca410a0f1fa01499"
     },
     "Setup-Smoke-Test.cmd": {
       "bytes": 173,
       "sha256": "c84d9011c2665e06689c76f3da25f435b4a5ae068289a78b1bcd938b97a44fb8"
     },
     "Smoke-Test.ps1": {
-      "bytes": 15933,
-      "sha256": "838f26ed864be970067cadde3b9c4fbc6df54ca4ab36978089cef6012b2cdfb7"
+      "bytes": 16809,
+      "sha256": "b9800f208174392cacfa76a5bcfd5f23387fd2eeb24d548311e69843e8bf5043"
     },
     "Start-Smoke-Test.cmd": {
       "bytes": 192,

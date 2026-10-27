@@ -126,10 +126,13 @@ function Read-Receipt([string]$Game) {
     return $receipt
 }
 
-function Assert-OwnedFiles([string]$Game, $Receipt) {
+function Assert-OwnedFiles([string]$Game, $Receipt, [switch]$Reinstall) {
     foreach ($file in $Receipt.files) {
         $hash = File-Hash (Safe-Path $Game $file.path)
         if ($null -ne $hash -and $hash -ne $file.installedHash) {
+            # A normal CoD2x install/update can replace the smoke loader between runs.
+            # Reinstall saves that client as the new restoration baseline below.
+            if ($Reinstall -and $file.path -eq 'mss32.dll') { continue }
             throw "Installed file changed since setup: $($file.path). Preserve that change before reinstalling or uninstalling."
         }
     }
@@ -254,7 +257,7 @@ try {
     if (-not $seen.ContainsKey('mapkit-smoke/smoke.shaders') -and -not $seen.ContainsKey('mapkit-smoke/smoke.hlsl')) {
         throw 'Package is missing compiled shaders or a development shader source.'
     }
-    if ($receipt) { Assert-OwnedFiles $game $receipt }
+    if ($receipt) { Assert-OwnedFiles $game $receipt -Reinstall }
     if ($CheckOnly) { Write-Output "Setup checks passed for $($payload.Count) files; no files changed."; exit 0 }
     Assert-Stopped
     $backupPrefix = 'cod2-smoke-test-backups/' + [Guid]::NewGuid().ToString('N')
@@ -265,11 +268,18 @@ try {
             $target = Safe-Path $game $file.path
             $data = [IO.File]::ReadAllBytes($file.source)
             $originals[$target] = if (Test-Path -LiteralPath $target) { [IO.File]::ReadAllBytes($target) } else { $null }
-            if (-not $entries.ContainsKey($file.path)) {
+            $updatedLoader = $file.path -eq 'mss32.dll' -and $entries.ContainsKey($file.path) -and
+                $null -ne $originals[$target] -and (File-Hash $target) -ne $entries[$file.path].installedHash
+            if (-not $entries.ContainsKey($file.path) -or $updatedLoader) {
                 $backup = $null; $originalHash = $null
                 if ($null -ne $originals[$target]) {
-                    $originalHash = File-Hash $target; $backup = $backupPrefix + '/' + $file.path
+                    $backup = $backupPrefix + '/' + $file.path
                     Write-Atomic (Safe-Path $game $backup) $originals[$target]
+                    $originalHash = File-Hash (Safe-Path $game $backup)
+                }
+                if ($updatedLoader) {
+                    Write-Atomic (Safe-Path $game ($backupPrefix + '/previous-install.json')) ([IO.File]::ReadAllBytes($receiptPath))
+                    Write-Output 'Preserved the updated CoD2x loader. Restore original files will return this client; earlier backups are retained.'
                 }
                 $entries[$file.path] = [pscustomobject]@{ path = $file.path; backup = $backup; originalHash = $originalHash; installedHash = $file.hash }
             } else { $entries[$file.path].installedHash = $file.hash }

@@ -10,10 +10,11 @@ compatibility, backs up replaced client files, installs smoke, and opens Toujane
 locally. No separate game copy, Git repo, Python or map bake is required.
 Microsoft Edge WebView2 Runtime is required to open the tool.
 
-Restore original files returns the client backed up on the first installation.
-Keep the full ZIP contents together until you have restored. Repeated installs
-preserve original backups. Setup/restoration retain maps, player configs, backups
-and unrelated files. Other CoD clients must be closed before launching.
+Restore original files returns the client backed up before smoke. Repeated installs
+keep that backup. If CoD2x replaces the loader later, Try smoke backs up that newer
+client for restoration and retains earlier backups. A separate CoD2x installation
+is not required. Keep the ZIP contents together until you have restored.
+Setup/restoration retain maps, player configs and unrelated files.
 
 Tools & details contains validation and the activity log. It opens on errors.
 Copy log copies the visible log; nothing is uploaded. This is a player preview;

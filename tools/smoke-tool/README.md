@@ -26,11 +26,14 @@ then launches Toujane locally with DX9 and smoke enabled. Join a team and throw 
 Shoot it to try carving. Visual coverage, particle ordering and FPS still need an
 in-game check. An unsupported renderer is rejected before replacing client files.
 
-**Restore original files** returns the client files backed up on the first install.
-Repeat installs keep those original backups. Maps, player configs and unrelated
+**Restore original files** returns the client files backed up before smoke.
+Repeat installs preserve those backups. If a later CoD2x install/update replaces
+`mss32.dll`, Try smoke backs up that newer client as the restoration baseline,
+retaining earlier backups and their receipt. A separate CoD2x install is unnecessary:
+the smoke package includes its modified loader. Maps, player configs and unrelated
 files are not installed over or removed by setup/restoration. Game-created logs and
-configs remain. If a game is running or installed files have changed independently,
-the tool reports the problem instead of killing the game or overwriting those edits.
+configs remain. Running games, edits to other installed files and corrupt backups
+still stop setup/restoration; those changes are not silently discarded.
 
 The main screen shows the game picker, Try smoke and Restore original files.
 **Tools & details** is collapsed until opened or an operation fails. It contains:
