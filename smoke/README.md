@@ -53,7 +53,9 @@ here; no MSVC renderer build or private source checkout is required.
 
 The toolchain root must contain `mingw32/bin/gcc.exe`, `mingw32/bin/g++.exe` and
 `usr/bin/nasm.exe`. Override `-MsysDirectory` if the required MSYS utilities are elsewhere.
-Output is `smoke/out/cod2x-smoke-test.zip` and `smoke/out/package/`.
+Output is `smoke/out/cod2x-smoke-test.zip` and its SHA256 sidecar. Temporary packaging
+files are removed after success. Pass `-KeepExpanded` to retain `smoke/out/package/`;
+that explicit mode preserves any previous expanded output for recovery.
 The normal upstream CMake target `mss32` also builds the bridge; the helper additionally
 stages the DLL, updates package hashes and creates the ZIP. It never installs or launches.
 

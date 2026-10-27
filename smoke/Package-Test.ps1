@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$BridgeDll)
+param([string]$BridgeDll, [switch]$KeepExpanded)
 $ErrorActionPreference = 'Stop'
 $rebuilt = $PSBoundParameters.ContainsKey('BridgeDll')
 $source = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
@@ -18,6 +18,15 @@ function In-Output([string]$Path) {
     return $resolved
 }
 function Hash([string]$Path) { return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
+function Remove-NewStage([string]$Path) {
+    $target = In-Output $Path
+    if ($target -ne $stage -or [IO.Path]::GetFileName($target) -notmatch '^package\.next\.[a-f0-9]{32}$') {
+        throw "Only this invocation's freshly created staging directory can be removed."
+    }
+    $links = @(Get-ChildItem -LiteralPath $target -Recurse -Force | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint })
+    if ($links.Count) { throw "Refusing to remove linked generated output: $target" }
+    Remove-Item -LiteralPath $target -Recurse -Force
+}
 function Hash-Source([string]$Path) {
     $hash = [Security.Cryptography.SHA256]::Create()
     try {
@@ -70,18 +79,22 @@ Save-Json (Join-Path $stage 'manifest.json') $manifest
 $sums = @($files.Keys | ForEach-Object { "$($files[$_].sha256)  $_" })
 $sums += "$(Hash (Join-Path $stage 'manifest.json'))  manifest.json"
 [IO.File]::WriteAllText((Join-Path $stage 'SHA256SUMS.txt'), ($sums -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
-$package = In-Output (Join-Path $out 'package')
-if (Test-Path -LiteralPath $package) {
-    $previous = In-Output (Join-Path $out ('package.previous.' + [DateTime]::UtcNow.Ticks))
-    [IO.Directory]::Move($package, $previous)
-}
-[IO.Directory]::Move($stage, $package)
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $zip = In-Output (Join-Path $out 'cod2x-smoke-test.zip')
 $pending = In-Output (Join-Path $out ('cod2x-smoke-test.next.' + [Guid]::NewGuid().ToString('N') + '.zip'))
-[IO.Compression.ZipFile]::CreateFromDirectory($package, $pending, [IO.Compression.CompressionLevel]::Optimal, $false)
+[IO.Compression.ZipFile]::CreateFromDirectory($stage, $pending, [IO.Compression.CompressionLevel]::Optimal, $false)
 if (Test-Path -LiteralPath $zip) { [IO.File]::Replace($pending, $zip, [NullString]::Value) }
 else { [IO.File]::Move($pending, $zip) }
 [IO.File]::WriteAllText(($zip + '.sha256'), (Hash $zip) + "`n")
-Write-Output "Test package: $package"
+if ($KeepExpanded) {
+    $package = In-Output (Join-Path $out 'package')
+    $previous = $null
+    if (Test-Path -LiteralPath $package) {
+        $previous = In-Output (Join-Path $out ('package.previous.' + [DateTime]::UtcNow.Ticks))
+        [IO.Directory]::Move($package, $previous)
+    }
+    [IO.Directory]::Move($stage, $package)
+    # Expanded output is explicitly requested; preserve its previous copy for recovery.
+    Write-Output "Expanded test package: $package"
+} else { Remove-NewStage $stage }
 Write-Output "Test ZIP: $zip"

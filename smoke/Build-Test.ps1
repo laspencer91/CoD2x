@@ -4,7 +4,8 @@ param(
     [string]$CMake = 'cmake',
     [string]$Ninja = 'ninja',
     [string]$MsysDirectory = 'C:\msys64',
-    [switch]$BuildOnly
+    [switch]$BuildOnly,
+    [switch]$KeepExpanded
 )
 $ErrorActionPreference = 'Stop'
 $source = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
@@ -30,6 +31,6 @@ try {
     if ($LASTEXITCODE) { throw 'CoD2x bridge build failed.' }
 } finally { $env:PATH = $previousPath }
 if (-not $BuildOnly) {
-    & (Join-Path $PSScriptRoot 'Package-Test.ps1') -BridgeDll (Join-Path $source 'bin\windows\mss32.build.dll')
+    & (Join-Path $PSScriptRoot 'Package-Test.ps1') -BridgeDll (Join-Path $source 'bin\windows\mss32.build.dll') -KeepExpanded:$KeepExpanded
 }
 Write-Output 'Local test build completed. No game was installed, launched or uploaded.'
