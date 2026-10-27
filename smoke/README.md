@@ -10,7 +10,9 @@ been pushed or approved for competitive/general-player distribution.
 - `smoke/prebuilt`: ready-to-test binaries, compiled shaders, noise, all 15 stock-map
   occupancy grids, 21 separate optional custom/test occupancy packages and setup scripts.
 - `tools/smoke-bake`: optional compiled-map occupancy baker (prebuilt voxelizer plus
-  standard-library Python BSP exporter/package wrapper).
+  standard-library Python BSP exporter/package wrapper). See its
+  [bake and installation instructions](../tools/smoke-bake/README.md#bake-and-install)
+  for output paths and where to copy the occupancy IWD.
 - `smoke/Build-Test.ps1`: rebuild the CoD2x bridge and assemble a fresh test ZIP using
   the pinned prebuilt smoke component.
 
