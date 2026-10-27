@@ -1,0 +1,188 @@
+/*
+ * ProMod X Map Kit design tokens.
+ * Every colour, surface, font and timing used by components lives here.
+ * Components reference these variables only; no raw hex values in component CSS
+ * except inside the GlowButton skin table (which is itself a token set).
+ */
+:root {
+  /* Surfaces */
+  --bg-app: #111212;
+  --bg-window: radial-gradient(ellipse 120% 90% at 85% -10%, #2a2723, #171717 58%, #101111);
+  --bg-deep: #151616;
+  --bg-sunken: rgba(10, 11, 11, 0.55);
+  --bg-log: rgba(6, 7, 7, 0.75);
+  --bg-side: rgba(12, 13, 13, 0.5);
+  --bg-placeholder: radial-gradient(ellipse 70% 58% at 50% 44%, #2a2d2b, #151616 78%);
+  --panel: linear-gradient(180deg, rgba(38, 39, 38, 0.94) 0%, rgba(36, 37, 36, 0.78) 45%, rgba(34, 35, 34, 0.5) 100%);
+  --panel-hover: rgba(52, 54, 53, 0.9);
+  --panel-raised: linear-gradient(180deg, rgba(40, 41, 40, 0.99), rgba(30, 31, 30, 0.98));
+  --panel-accent: linear-gradient(180deg, rgba(29, 82, 41, 0.32) 0%, rgba(38, 39, 38, 0.8) 45%, rgba(34, 35, 34, 0.5) 100%);
+  --panel-danger: linear-gradient(180deg, rgba(79, 29, 22, 0.42) 0%, rgba(38, 39, 38, 0.8) 50%, rgba(34, 35, 34, 0.5) 100%);
+  --rail-bg: linear-gradient(90deg, rgba(14, 15, 15, 0.8), rgba(14, 15, 15, 0.45));
+  --topbar-bg: linear-gradient(180deg, rgba(16, 17, 17, 0.97), rgba(16, 17, 17, 0.75));
+  --bottombar-bg: rgba(14, 15, 15, 0.97);
+  --scrim: rgba(8, 9, 9, 0.8);
+  --scrim-light: rgba(8, 9, 9, 0.6);
+  --shadow-raised: 0 24px 60px rgba(0, 0, 0, 0.6);
+  --shadow-pop: 0 18px 40px rgba(0, 0, 0, 0.55);
+  --tint-1: rgba(255, 255, 255, 0.03);
+  --tint-2: rgba(255, 255, 255, 0.06);
+  --tint-3: rgba(255, 255, 255, 0.1);
+  --line: rgba(255, 255, 255, 0.06);
+  --line-strong: rgba(255, 255, 255, 0.12);
+
+  /* Text */
+  --text-hi: #f2f4f2;
+  --text-white: #ffffff;
+  --text: #e8eae8;
+  --text-2: #cfd3d0;
+  --text-rest: #b4b8b5;
+  --text-muted: #9aa09c;
+  --text-label: #868c88;
+  --text-faint: #686e6a;
+  --grey-line: #4d504e;
+  --grey-line-2: #3a3d3b;
+
+  /* Brand + semantic */
+  --green: #62d27f;
+  --green-hot: #9af5ae;
+  --green-dim: #2f7a45;
+  --green-glow: rgba(98, 210, 127, 0.7);
+  --green-tint: rgba(98, 210, 127, 0.1);
+  --amber: #e6bd5c;
+  --flare: #ec7a67;
+  --info: #a9c6dc;
+  --player: #82b1d3;
+
+  /* The brand accent: selection, focus, primary actions. --green above stays the "ok" status colour. */
+  --accent: var(--green);
+  --accent-rgb: 98 210 127;
+  --accent-hot: var(--green-hot);
+  --accent-dim: var(--green-dim);
+  --accent-glow: var(--green-glow);
+  --accent-tint: var(--green-tint);
+  --accent-deep: #2a7039;
+  --accent-deeper: #143c1d;
+
+  /* Typography */
+  --font-display: var(--font-cond);
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-cond: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-semi: 'Barlow Semi Condensed', 'Barlow', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --font-icon: 'Material Symbols Rounded';
+  --num-shadow: 1px 1px 0 rgba(0, 0, 0, 0.85), 2px 2px 3px rgba(0, 0, 0, 0.6);
+  --title-size: 46px;
+
+  /* Shape + spacing */
+  --tick: 11px;
+  --gap-row: 3px;
+  --gap-chip: 2px;
+  --gap-tile: 8px;
+  --gap-group: 22px;
+  --page-pad: 26px 32px 56px;
+  --page-max: 1120px;
+  --titlebar-h: 40px;
+  --rail-w: 188px;
+  --rail-w-collapsed: 60px;
+  --bottomnav-h: 56px;
+  --console-bar-h: 30px;
+
+  /* Motion */
+  --dur: 0.2s;
+  --dur-fast: 0.12s;
+  --ease: ease;
+}
+
+/* Compact density (Settings › Appearance) */
+:root[data-density='compact'] {
+  --gap-group: 16px;
+  --page-pad: 18px 22px 40px;
+  --title-size: 38px;
+  --console-bar-h: 28px;
+}
+
+/* Layout modes, set on <html> by useLayout() */
+:root[data-layout='compact'] { --page-pad: 22px 24px 48px; }
+:root[data-layout='side'] { --page-pad: 18px 16px 40px; --title-size: 34px; }
+
+/*
+ * Status tones. Put data-tone on any element and read --tone-fg / --tone-bg / --tone-line.
+ * Every tone is always paired with a distinct icon shape (see lib/status.ts).
+ */
+[data-tone='ok']   { --tone-fg: var(--green);     --tone-bg: rgba(98, 210, 127, 0.13);  --tone-line: rgba(98, 210, 127, 0.45); }
+[data-tone='warn'] { --tone-fg: var(--amber);     --tone-bg: rgba(230, 189, 92, 0.13);  --tone-line: rgba(230, 189, 92, 0.5); }
+[data-tone='bad']  { --tone-fg: var(--flare);     --tone-bg: rgba(236, 122, 103, 0.13); --tone-line: rgba(236, 122, 103, 0.5); }
+[data-tone='idle'] { --tone-fg: var(--text-muted);--tone-bg: rgba(255, 255, 255, 0.06); --tone-line: rgba(255, 255, 255, 0.12); }
+[data-tone='run']  { --tone-fg: var(--green-hot); --tone-bg: rgba(154, 245, 174, 0.12); --tone-line: rgba(154, 245, 174, 0.5); }
+[data-tone='info'] { --tone-fg: var(--info);      --tone-bg: rgba(130, 177, 211, 0.12); --tone-line: rgba(130, 177, 211, 0.45); }
+
+/*
+ * The COD2 target (VITE_COD2=1; main.tsx sets data-target on <html>): the game's own look. Warm charcoal behind
+ * black translucent panels, gold for the brand as on the menus and the logo's 2, serif titles like the in-game
+ * dialogs, and no corner ticks. Status keeps its own hues, moved off the gold: an olive "ok" and an orange "warn".
+ */
+:root[data-target='cod2'] {
+  --bg-app: #141210;
+  --bg-window: radial-gradient(ellipse 110% 85% at 50% -12%, #3a322a, #1e1b18 52%, #121010);
+  --bg-deep: #161310;
+  --bg-sunken: rgba(8, 7, 6, 0.6);
+  --bg-log: rgba(6, 5, 4, 0.82);
+  --bg-side: rgba(10, 9, 8, 0.5);
+  --bg-placeholder: radial-gradient(ellipse 70% 58% at 50% 44%, #2d2721, #161310 78%);
+  --panel: linear-gradient(180deg, rgba(12, 10, 9, 0.8), rgba(12, 10, 9, 0.58));
+  --panel-hover: rgba(48, 41, 32, 0.8);
+  --panel-raised: linear-gradient(180deg, rgba(30, 26, 22, 0.99), rgba(19, 17, 14, 0.99));
+  --panel-accent: linear-gradient(180deg, rgba(214, 168, 78, 0.13) 0%, rgba(12, 10, 9, 0.78) 55%, rgba(12, 10, 9, 0.58) 100%);
+  --panel-danger: linear-gradient(180deg, rgba(120, 36, 24, 0.4) 0%, rgba(12, 10, 9, 0.78) 55%, rgba(12, 10, 9, 0.58) 100%);
+  --rail-bg: linear-gradient(90deg, rgba(8, 7, 6, 0.72), rgba(8, 7, 6, 0.4));
+  --topbar-bg: linear-gradient(180deg, rgba(9, 8, 7, 0.98), rgba(9, 8, 7, 0.82));
+  --bottombar-bg: rgba(9, 8, 7, 0.97);
+  --scrim: rgba(6, 5, 4, 0.82);
+  --scrim-light: rgba(6, 5, 4, 0.62);
+  --tint-1: rgba(255, 238, 205, 0.03);
+  --tint-2: rgba(255, 238, 205, 0.06);
+  --tint-3: rgba(255, 238, 205, 0.1);
+  --line: rgba(214, 168, 78, 0.12);
+  --line-strong: rgba(214, 168, 78, 0.26);
+
+  --text-hi: #f5eedd;
+  --text-white: #fffaf0;
+  --text: #ebe4d3;
+  --text-2: #d6cdb9;
+  --text-rest: #bbb19c;
+  --text-muted: #a39981;
+  --text-label: #8f8571;
+  --text-faint: #6c6456;
+  --grey-line: #564d40;
+  --grey-line-2: #3e372e;
+
+  --accent: #d6a84e;
+  --accent-rgb: 214 168 78;
+  --accent-hot: #f3d58f;
+  --accent-dim: #8a6a2c;
+  --accent-glow: rgba(214, 168, 78, 0.6);
+  --accent-tint: rgba(214, 168, 78, 0.1);
+  --accent-deep: #7a5414;
+  --accent-deeper: #3d2a09;
+  --gold-text: linear-gradient(180deg, #f8e3a6 0%, #e0b25a 48%, #b47f2c 100%);
+  --steel-text: linear-gradient(180deg, #f4f6f7 0%, #b9c1c6 46%, #7d868c 54%, #d7dcdf 100%);
+
+  --green: #9cc56b;
+  --green-hot: #c3e59a;
+  --amber: #f0902e;
+  --flare: #e2614b;
+  --info: #b6c6d0;
+
+  --font-display: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  --title-size: 40px;
+  --tick: 0px;
+}
+:root[data-target='cod2'][data-density='compact'] { --title-size: 33px; }
+:root[data-target='cod2'][data-layout='side'] { --title-size: 30px; }
+:root[data-target='cod2'] [data-tone='ok']   { --tone-bg: rgba(156, 197, 107, 0.13); --tone-line: rgba(156, 197, 107, 0.45); }
+:root[data-target='cod2'] [data-tone='warn'] { --tone-bg: rgba(240, 144, 46, 0.13);  --tone-line: rgba(240, 144, 46, 0.5); }
+:root[data-target='cod2'] [data-tone='bad']  { --tone-bg: rgba(226, 97, 75, 0.14);   --tone-line: rgba(226, 97, 75, 0.5); }
+:root[data-target='cod2'] [data-tone='idle'] { --tone-bg: rgba(255, 238, 205, 0.06); --tone-line: rgba(255, 238, 205, 0.14); }
+:root[data-target='cod2'] [data-tone='run']  { --tone-fg: var(--accent-hot); --tone-bg: rgba(243, 213, 143, 0.12); --tone-line: rgba(243, 213, 143, 0.5); }
+:root[data-target='cod2'] [data-tone='info'] { --tone-bg: rgba(182, 198, 208, 0.1);  --tone-line: rgba(182, 198, 208, 0.4); }

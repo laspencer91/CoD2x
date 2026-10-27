@@ -8,7 +8,9 @@ terrain collision, voxelizes them at 50 cm, and packages the grid with the BSP/g
 CRC binding and public metadata. It does not compile map geometry, bake lighting,
 edit materials or change the BSP. It contains no editor and no stock game assets.
 
-Requires Windows and Python 3.10 or later. The voxelizer is prebuilt; the Python
+The portable ZIP's `CoD2SmokeTool.exe` offers a **Bake occupancy** screen and includes
+its own Python runtime. No Python installation is needed when using that interface.
+The command below requires Windows and Python 3.10 or later. The voxelizer is prebuilt; the Python
 wrapper/exporter uses only the standard library for the supported world-only bake.
 No Pillow, game installation or extracted models are required. Static prop meshes
 are deliberately ignored so tanks and small objects do not trap smoke.

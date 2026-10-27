@@ -4,12 +4,31 @@ import hashlib
 import json
 import re
 import shutil
+import struct
 import subprocess
 import tempfile
 import zipfile
+import zlib
 from pathlib import Path
 
 from cod2kit import smoke_bake
+
+
+def validate_package(package, source):
+    """Check the actual packaged bytes and their exact BSP binding before publishing."""
+    prefix = 'maps/mp/' + source.stem
+    with zipfile.ZipFile(package) as archive:
+        expected = {prefix + suffix for suffix in ('.smokegrid', '.smokebind', '.smoke.json')}
+        if set(archive.namelist()) != expected or len(archive.infolist()) != len(expected) or archive.testzip():
+            raise ValueError('Invalid occupancy package contents or ZIP checksum')
+        grid = archive.read(prefix + '.smokegrid')
+        smoke_bake.inspect_grid(grid)
+        magic, bsp_crc, grid_crc = struct.unpack('<4sII', archive.read(prefix + '.smokebind'))
+        if (magic, bsp_crc, grid_crc) != (b'PSB1', zlib.crc32(source.read_bytes()), zlib.crc32(grid)):
+            raise ValueError('Occupancy package BSP/grid binding mismatch')
+        metadata = json.loads(archive.read(prefix + '.smoke.json'))
+        if metadata['gridSha256'] != hashlib.sha256(grid).hexdigest():
+            raise ValueError('Occupancy package grid hash mismatch')
 
 
 def main():
@@ -43,10 +62,13 @@ def main():
             (workspace / 'game').mkdir()
 
             def run(command, cwd, progress):
-                result = subprocess.run([str(part) for part in command], cwd=cwd, capture_output=True, text=True)
-                for line in (result.stdout + result.stderr).splitlines():
-                    progress(line)
-                result.check_returncode()
+                with subprocess.Popen([str(part) for part in command], cwd=cwd,
+                                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True) as process:
+                    for line in process.stdout:
+                        progress(line.rstrip())
+                    code = process.wait()
+                    if code:
+                        raise subprocess.CalledProcessError(code, command)
 
             destination = output / source.stem
             report = smoke_bake.bake(workspace, source, destination, run,
@@ -57,6 +79,7 @@ def main():
             try:
                 with zipfile.ZipFile(pending, 'w', zipfile.ZIP_DEFLATED) as archive:
                     smoke_bake.package_grid(archive, source.stem, destination, report)
+                validate_package(pending, source)
                 pending.replace(package)
             finally:
                 pending.unlink(missing_ok=True)

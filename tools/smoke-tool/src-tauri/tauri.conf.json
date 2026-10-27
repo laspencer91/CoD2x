@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CoD2 Smoke Tool",
+  "version": "0.1.0",
+  "identifier": "dev.loganspencer.cod2smoketool",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1436",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{"title":"CoD2 Smoke Tool","width":1040,"height":820,"minWidth":760,"minHeight":680,"center":true,"backgroundColor":"#141210"}],
+    "security": {"csp":"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src ipc: http://ipc.localhost"}
+  },
+  "bundle": {"active":false,"icon":[]}
+}
