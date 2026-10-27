@@ -35,6 +35,12 @@ then launches Toujane locally with DX9 and smoke enabled. Join a team and throw 
 Shoot it to try carving. Visual coverage, particle ordering and FPS still need an
 in-game check. An unsupported renderer is rejected before replacing client files.
 
+For Steam editions, keep Steam open and signed in. The launcher finds the Steam
+client via its registry entries or installation folder, including separate library
+drives, and adds that directory to the child's PATH. It does not copy Steam DLLs
+or alter the user's system PATH. Missing Steam client files stop Try before setup.
+The success message confirms a startup request, not completed game initialization.
+
 **Restore original files** returns the client files backed up before smoke.
 Repeat installs preserve those backups. If a later CoD2x install/update replaces
 `mss32.dll`, Try smoke backs up that newer client as the restoration baseline,

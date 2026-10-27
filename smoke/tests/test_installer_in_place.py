@@ -32,7 +32,7 @@ class InPlaceInstaller(unittest.TestCase):
     }
 }
 function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle) {
-    $record = @{ executable = $FilePath; arguments = $ArgumentList } | ConvertTo-Json
+    $record = @{ executable = $FilePath; arguments = $ArgumentList; path = $env:PATH; render = $env:COD2_SMOKE_RENDER } | ConvertTo-Json
     [IO.File]::WriteAllText((Join-Path $WorkingDirectory 'fixture-launch.json'), $record)
 }
 
@@ -40,6 +40,9 @@ function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle
         (self.bundle / 'Smoke-Test.ps1').write_text(script[:start] + fixture + script[end:], encoding='utf-8')
         self.game = root / 'Steam/steamapps/common/Call of Duty 2'
         self.game.mkdir(parents=True)
+        self.steam = root / 'Steam'
+        (self.steam / 'steam.exe').write_bytes(b'Steam client fixture; never execute')
+        (self.steam / 'Steam.dll').write_bytes(b'Steam library fixture; never load')
         (self.game / 'CoD2MP_s.exe').write_bytes(b'Fixture only; never execute')
         # Preserve a real version resource without executing the DLL. An overlay
         # distinguishes this previous client from the bundle's smoke loader.
@@ -179,6 +182,38 @@ function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle
             self.assertIn('CoD2x is not installed', self.run_action(action, succeeds=False))
         self.assert_original()
         self.assertFalse((self.game / 'cod2-smoke-test-backups').exists())
+
+    def test_external_steam_client_directory_is_in_child_search_path(self):
+        external = Path(self.temp.name) / 'Steam Client With Spaces'
+        external.mkdir()
+        (self.steam / 'steam.exe').rename(external / 'steam.exe')
+        (self.steam / 'Steam.dll').rename(external / 'Steam.dll')
+        self.set_steam_candidates(self.steam, external)
+        output = self.run_action('Try')
+        self.assertIn("game's DLL search path", output)
+        launch = json.loads((self.game / 'fixture-launch.json').read_text())
+        self.assertEqual(launch['path'].split(';')[0], str(external))
+        self.assertEqual(launch['render'], '1')
+        self.assertFalse((self.game / 'Steam.dll').exists())
+        self.run_action('Uninstall')
+        self.assert_original()
+
+    def test_missing_steam_files_stop_try_before_installing(self):
+        self.set_steam_candidates(self.steam)
+        (self.steam / 'Steam.dll').unlink()
+        self.assertIn('Steam client files could not be found', self.run_action('Try', succeeds=False))
+        self.assert_original()
+        self.assertFalse((self.game / 'cod2-smoke-test-backups').exists())
+        self.assertFalse((self.game / 'fixture-launch.json').exists())
+
+    def set_steam_candidates(self, *paths):
+        # Isolate the test from real Steam registry entries on the host PC.
+        script_path = self.bundle / 'Smoke-Test.ps1'
+        script = script_path.read_text()
+        start = script.index('function Get-SteamDirectories(')
+        end = script.index('function Find-SteamDirectory(', start)
+        literals = ','.join("'" + str(path).replace("'", "''") + "'" for path in paths)
+        script_path.write_text(script[:start] + 'function Get-SteamDirectories($Game) { @(' + literals + ') }\n\n' + script[end:])
 
     def test_missing_original_library_stops_setup_and_old_installed_launch(self):
         self.run_action('Install')

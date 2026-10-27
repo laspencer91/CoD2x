@@ -44,6 +44,34 @@ function File-Hash([string]$Path) {
     return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
+function Get-SteamDirectories([string]$Game) {
+    # A Steam library may be on a different drive from the Steam client.
+    for ($folder = Get-Item -LiteralPath $Game; $null -ne $folder; $folder = $folder.Parent) {
+        if ($folder.Name -eq 'steamapps' -and $folder.Parent) { $folder.Parent.FullName }
+    }
+    foreach ($entry in @(
+        @('HKCU:\Software\Valve\Steam', 'SteamPath'),
+        @('HKLM:\SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath'),
+        @('HKLM:\SOFTWARE\Valve\Steam', 'InstallPath')
+    )) {
+        try { Get-ItemPropertyValue -LiteralPath $entry[0] -Name $entry[1] -ErrorAction Stop } catch { }
+    }
+    Join-Path ([Environment]::GetFolderPath('ProgramFilesX86')) 'Steam'
+}
+
+function Find-SteamDirectory([string]$Game) {
+    foreach ($candidate in @(Get-SteamDirectories $Game)) {
+        if (-not [IO.Path]::IsPathRooted($candidate)) { continue }
+        $directory = [IO.Path]::GetFullPath($candidate)
+        if ((Test-Path -LiteralPath (Join-Path $directory 'steam.exe') -PathType Leaf) -and
+            (Test-Path -LiteralPath (Join-Path $directory 'Steam.dll') -PathType Leaf)) { return $directory }
+    }
+    if (($Game -split '[/\\]') -contains 'steamapps') {
+        throw 'Steam client files could not be found. Open Steam on this PC, repair its installation if needed, then retry Try smoke.'
+    }
+    return $null
+}
+
 function Test-CoD2xLoader([string]$Path) {
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
     if ([Diagnostics.FileVersionInfo]::GetVersionInfo($Path).ProductName -eq 'CoD2x') { return $true }
@@ -207,6 +235,7 @@ try {
     if ($Action -eq 'Try') {
         # Check launch conflicts before replacing anything in the normal game folder.
         Assert-Stopped -Launching
+        $null = Find-SteamDirectory $game
         $next = @('-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath,
             '-GameDirectory', $game, '-Map', $Map, '-Look', $Look)
         if ($CheckOnly) {
@@ -256,16 +285,21 @@ try {
             '+set', 'r_fullscreen', '0', '+set', 'g_gametype', 'tdm', '+exec', "smoke_look_$Look.cfg", '+devmap', $Map)
         if ($CheckOnly -or $Action -eq 'Verify') { Write-Output ('Installed files verified. Launch arguments: ' + ($arguments -join ' ')); exit 0 }
         Assert-Stopped -Launching
+        $steamDirectory = Find-SteamDirectory $game
         $saved = @{}
-        foreach ($key in @('COD2_SMOKE_DIAGNOSTICS', 'COD2_SMOKE_RENDER', 'COD2_SMOKE_DEV', 'COD2_SMOKE_LOG')) { $saved[$key] = [Environment]::GetEnvironmentVariable($key, 'Process') }
+        foreach ($key in @('PATH', 'COD2_SMOKE_DIAGNOSTICS', 'COD2_SMOKE_RENDER', 'COD2_SMOKE_DEV', 'COD2_SMOKE_LOG')) { $saved[$key] = [Environment]::GetEnvironmentVariable($key, 'Process') }
         try {
             $env:COD2_SMOKE_DIAGNOSTICS = '1'; $env:COD2_SMOKE_RENDER = '1'
             $env:COD2_SMOKE_DEV = $null; $env:COD2_SMOKE_LOG = $null
+            if ($steamDirectory) {
+                $env:PATH = $steamDirectory + [IO.Path]::PathSeparator + $saved['PATH']
+                Write-Output "Steam client directory added to the game's DLL search path: $steamDirectory"
+            }
             Start-Process -FilePath (Safe-Path $game 'CoD2MP_s.exe') -WorkingDirectory $game -ArgumentList $arguments -WindowStyle Normal | Out-Null
         } finally {
             foreach ($key in $saved.Keys) { [Environment]::SetEnvironmentVariable($key, $saved[$key], 'Process') }
         }
-        Write-Output "Started smoke test on $Map."
+        Write-Output "Requested CoD2 startup on $Map. If the game reports a Steam error, confirm Steam is open and signed in."
         exit 0
     }
 

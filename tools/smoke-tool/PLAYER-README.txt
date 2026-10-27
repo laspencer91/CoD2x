@@ -8,6 +8,8 @@ CoD2 Smoke - player preview
 CoD2x is required: https://github.com/callofduty2x/CoD2x
 If it is missing or incomplete, Try smoke and Launch installed stay disabled.
 Install/reinstall CoD2x in the selected game folder, then click Recheck.
+For the Steam edition, keep Steam open and signed in. The launcher discovers its
+client folder and adds it to the game's DLL search path for that launch only.
 
 Existing CoD2 1.3 installations with CoD2x are supported, including Steam. The tool checks
 compatibility, backs up replaced client files, installs smoke, and opens Toujane

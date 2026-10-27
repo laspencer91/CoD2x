@@ -562,7 +562,7 @@ pub fn execute(
                             .into(),
                     );
                     installer(root, "Try", &game, &request.map, false, log)?;
-                    "Smoke launched. Join a team and throw a smoke grenade. Restore original files returns your previous client."
+                    "CoD2 start requested. Join a team and throw a smoke grenade. Restore original files returns your previous client."
                 }
                 Action::Check => {
                     installer(root, "Install", &game, "", true, log)?;
@@ -590,7 +590,7 @@ pub fn execute(
                         request.map
                     ));
                     installer(root, "Launch", &game, &request.map, false, log)?;
-                    "Test launched. Join a team and throw a smoke. Visual behavior and FPS still need an in-game check."
+                    "CoD2 start requested. Join a team and throw a smoke. Visual behavior and FPS still need an in-game check."
                 }
                 _ => unreachable!(),
             }
