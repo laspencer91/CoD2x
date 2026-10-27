@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Logan Spencer. GPL-3.0 + supplied licenses/smoke/NOTICE.md.
 [CmdletBinding()]
 param(
-    [ValidateSet('Install', 'Launch', 'Uninstall', 'Verify')] [string]$Action = 'Install',
+    [ValidateSet('Try', 'Install', 'Launch', 'Uninstall', 'Verify')] [string]$Action = 'Install',
     [string]$GameDirectory,
     [ValidatePattern('^mp_[a-z0-9_]{1,28}$')] [string]$Map = 'mp_toujane',
     [ValidateSet('wide', 'wide_fx', 'lively', 'warm', 'soft')] [string]$Look = 'wide',
@@ -28,7 +28,7 @@ function Safe-Path([string]$Root, [string]$Relative) {
     foreach ($part in ($Relative -split '[/\\]')) {
         if ((Test-Path -LiteralPath $cursor) -and
             ((Get-Item -LiteralPath $cursor -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
-            throw "Use a test folder without links or junctions: $cursor"
+            throw "Game folders using links or junctions are not supported: $cursor"
         }
         $cursor = Join-Path $cursor $part
     }
@@ -155,17 +155,34 @@ try {
         Add-Type -AssemblyName System.Windows.Forms
         $picker = New-Object System.Windows.Forms.OpenFileDialog
         try {
-            $picker.Title = 'Select CoD2MP_s.exe in a separate CoD2 test copy'
+            $picker.Title = 'Select your CoD2MP_s.exe'
             $picker.Filter = 'Call of Duty 2 Multiplayer|CoD2MP_s.exe'
             if ($picker.ShowDialog() -ne [Windows.Forms.DialogResult]::OK) { Write-Output 'Cancelled.'; exit 0 }
             $GameDirectory = [IO.Path]::GetDirectoryName($picker.FileName)
         } finally { $picker.Dispose() }
     }
     $game = [IO.Path]::GetFullPath($GameDirectory).TrimEnd('\')
-    if ($game -match '(?i)(^|[\\/])steamapps([\\/]|$)') { throw 'Choose a separate test copy outside the Steam library, for example C:\Games\CoD2-Smoke-Test.' }
     if (-not (Test-Path -LiteralPath (Safe-Path $game 'CoD2MP_s.exe') -PathType Leaf)) { throw 'Choose the game folder containing CoD2MP_s.exe.' }
     $receipt = Read-Receipt $game
     $receiptPath = Safe-Path $game $receiptName
+
+    if ($Action -eq 'Try') {
+        # Check launch conflicts before replacing anything in the normal game folder.
+        Assert-Stopped -Launching
+        $next = @('-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', $PSCommandPath,
+            '-GameDirectory', $game, '-Map', $Map, '-Look', $Look)
+        if ($CheckOnly) {
+            & (Join-Path $PSHOME 'powershell.exe') @next -Action Install -CheckOnly
+            if ($LASTEXITCODE) { throw 'Compatibility checks failed. No game files were changed.' }
+            Write-Output 'Ready to try smoke: install with backups, then launch the selected map.'
+            exit 0
+        }
+        & (Join-Path $PSHOME 'powershell.exe') @next -Action Install
+        if ($LASTEXITCODE) { throw 'Smoke installation failed; see the preceding error.' }
+        & (Join-Path $PSHOME 'powershell.exe') @next -Action Launch
+        if ($LASTEXITCODE) { throw 'Smoke is installed, but the game could not start. Retry Try smoke, or choose Restore original files.' }
+        exit 0
+    }
 
     if ($Action -eq 'Uninstall') {
         if (-not $receipt) { throw 'No smoke test installation was recorded in this folder.' }
@@ -189,7 +206,7 @@ try {
     }
 
     if ($Action -in @('Launch', 'Verify')) {
-        if (-not $receipt) { throw 'Run Setup-Smoke-Test.cmd first.' }
+        if (-not $receipt) { throw 'Smoke is not installed. Click Try smoke first, or run Setup-Smoke-Test.cmd.' }
         foreach ($file in $receipt.files) {
             if ((File-Hash (Safe-Path $game $file.path)) -ne $file.installedHash) { throw "Installed file is missing or changed: $($file.path)" }
         }

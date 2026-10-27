@@ -3,7 +3,9 @@ Snapshot: 2026-10-27
 
 PRIVATE DEVELOPER TEST
 This package contains prebuilt smoke binaries and map data. It is not approved for
-competitive or general-player distribution. Use a separate CoD2 installation.
+competitive or general-player distribution. Invited testers can use their existing
+CoD2 installation, including Steam, with client backups and one-click restoration.
+A separate installation remains optional for developers.
 
 COMPLETED RELIABILITY CHANGES
 - Particle attenuation requires a successful world smoke composite. Attempted

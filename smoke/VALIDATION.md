@@ -10,7 +10,7 @@ Validated on October 27, 2026. No game was launched and nothing was pushed.
 - The implementation workspace passes 118 Python tests and nine native probes.
   Thirteen installer cases include compiled-only setup, updates, preserved backups,
   changed-file rejection and install/uninstall rollback under file locks.
-- The five branch checks pass:
+- The eight branch checks pass:
   `python -B -m unittest discover -s smoke/tests -v`.
   They verify prebuilt file/source hashes, 32-bit PE targets, all shader variants,
   data-only occupancy contents and baker imports without Python site packages.
@@ -38,7 +38,7 @@ does not invalidate installation hashes. Bridge source hashes normalize CRLF to 
 - Four Rust tests cover map/path rejection, Steam VDF path parsing, bundle hash/path
   validation, and continuing process logs after a non-UTF8 line.
 - Two headless browser UI tests pass using a mocked Tauri command interface. Setup,
-  Quick Test requests, Steam restrictions, error recovery, restore cancellation,
+  Try smoke requests, automatic Steam selection, error recovery, restore cancellation,
   bake requests/results and compact layouts are covered. Screenshots of the Setup
   and Bake screens at 1040px and the compact Bake screen at 760px were inspected.
 - The assembled portable EXE's read-only `--validate-bundle` check passes against
@@ -59,6 +59,18 @@ does not invalidate installation hashes. Bridge source hashes normalize CRLF to 
 The complete test ZIP includes the EXE and supporting files. No app installer,
 Node.js, or system Python is required by users; Microsoft WebView2 is required.
 The desktop tool is unsigned, with no updater or background service.
+
+## Existing-installation flow
+
+Steam and other existing installation folders are accepted by the UI, native
+backend and installer. Try smoke checks launch conflicts before installation,
+then installs with backups and launches; Authoring is a separate tab.
+Three installer regressions exercise the actual runtime payload in a temporary
+Steam-shaped folder: check-only performs no writes, Try installs and launches via
+a fixture recorder, repeat installation preserves the first client backup, restore
+returns its original bytes, and player config/mod files survive. Unsupported renderer
+and launch-conflict cases leave the original client untouched. Host process checks
+and game launch are isolated in these fixtures; no actual game binary is run.
 
 Live mode-2 particle coverage, additional GPUs, reset/round/killcam behavior,
 multi-client authoritative carving, large-volume limits and cropped map bounds

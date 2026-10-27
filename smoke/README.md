@@ -24,15 +24,18 @@ availability terms still need to be settled before publishing this binary-compon
 
 ## Review and test
 
-Open `CoD2SmokeTool.exe` in the extracted test ZIP for the portable Setup, Bake
-and Quick Test interface. It reuses the existing installer and includes a private
+Open `CoD2SmokeTool.exe` in the extracted ZIP, check the detected game folder,
+and click **Try smoke**. Existing installations, including Steam, are supported.
+It validates compatibility, backs up replaced client files, installs and launches
+Toujane. **Restore original files** returns the previous client. A separate game
+copy is optional. Baking is available under **Authoring**. The tool includes a private
 Python runtime for baking; WebView2 is required. See the
 [desktop tool guide](../tools/smoke-tool/README.md). No app installer is used.
 The prebuilt EXE in the branch is staged with `tools/smoke-tool/Build-Desktop.ps1`;
 assemble the complete portable layout with `smoke/Package-Test.ps1` before using it.
 
-The command-line setup remains available. Read `prebuilt/READ-ME-FIRST.txt` and `prebuilt/TESTING-NOTES.txt`. Make a separate
-CoD2 test copy, run `prebuilt/Setup-Smoke-Test.cmd`, select that copy's `CoD2MP_s.exe`,
+The command-line setup remains available. Read `prebuilt/READ-ME-FIRST.txt` and `prebuilt/TESTING-NOTES.txt`.
+Run `prebuilt/Setup-Smoke-Test.cmd`, select your installation's `CoD2MP_s.exe`,
 then run `prebuilt/Start-Smoke-Test.cmd`. `Uninstall-Smoke-Test.cmd` restores backed-up
 files. No Steam installation is modified by this branch's assembly tools.
 

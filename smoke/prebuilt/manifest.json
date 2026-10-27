@@ -19,31 +19,31 @@
   "files": {
     "CoD2SmokeTool.exe": {
       "bytes": 4795904,
-      "sha256": "c5d7910e3767210fce15e7566730a21bbc7072465aaf2a84a4d3481b9c96ffc2"
+      "sha256": "ecbd8ce8721b4f5900fabe053e449716aa3e0a0fb0739933d861ae3d189f6b50"
     },
     "DESKTOP-TOOL.txt": {
-      "bytes": 4036,
-      "sha256": "52476fa3f0349f4894caef623a6b7a2e6b30f655ed6f61476270b4d8288c41cf"
+      "bytes": 4877,
+      "sha256": "bcfc360f24fc5a97dddb2878592c30d2316a46c0ff260511685b1d3c4fb74848"
     },
     "READ-ME-FIRST.txt": {
-      "bytes": 3682,
-      "sha256": "040017628bead7d06a261c07e5eff5d8b9dc3001aefc405cb2edde90ad291248"
+      "bytes": 3769,
+      "sha256": "81b5a47d59009d8b0a6a62a5bfd9b5e227a01ec2840ace5201a824cf70ca19a0"
     },
     "Setup-Smoke-Test.cmd": {
       "bytes": 173,
       "sha256": "c84d9011c2665e06689c76f3da25f435b4a5ae068289a78b1bcd938b97a44fb8"
     },
     "Smoke-Test.ps1": {
-      "bytes": 15003,
-      "sha256": "929e299bf3355a7715307d63b18a76193b0612ad5602e47fa2ca0c327d8ff90b"
+      "bytes": 15930,
+      "sha256": "17c8caf3f2e4376742471a54755ff76d60474ae3e0a2da112a897f82a084f713"
     },
     "Start-Smoke-Test.cmd": {
       "bytes": 192,
       "sha256": "d9a6e07b0a33ca0d6e488fe680c230a67a4484ecae7a166006f75bfc456868dd"
     },
     "TESTING-NOTES.txt": {
-      "bytes": 5773,
-      "sha256": "74ba90c70ae8647e412556a199fbfb460ba1d03a27333fdca5b4f87105073965"
+      "bytes": 5918,
+      "sha256": "2b78975170ddc4df916fa796d42fc48b420c2421ce5e05c52ce29c21efefd3e3"
     },
     "Uninstall-Smoke-Test.cmd": {
       "bytes": 175,

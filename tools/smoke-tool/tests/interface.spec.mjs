@@ -10,9 +10,9 @@ test.beforeEach(async ({ page }) => {
       invoke: async (command, args) => {
         if (command === 'plugin:event|listen') return 1;
         if (command === 'bootstrap') return {
-          bundleRoot: 'C:\\Smoke Tool', rememberedGame: 'C:\\Games\\CoD2-Smoke-Test',
-          candidates: [{path:'C:\\Games\\CoD2-Smoke-Test',source:'Previous selection',steam:false,installed:true},
-            {path:'C:\\Games\\Steam\\steamapps\\common\\Call of Duty 2',source:'Steam library',steam:true,installed:false}],
+          bundleRoot: 'C:\\Smoke Tool', rememberedGame: '',
+          candidates: [{path:'C:\\Games\\Steam\\steamapps\\common\\Call of Duty 2',source:'Steam library',steam:true,installed:false},
+            {path:'C:\\Games\\Call of Duty 2',source:'Game folder',steam:false,installed:true}],
           suggestedOutput:'C:\\Maps\\smoke-output', bakerAvailable:true,
         };
         if (command === 'pick_path') return args.kind === 'maps' ? ['C:\\Maps\\mp_example.d3dbsp'] : [];
@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
           window.requests.push(args.request);
           await new Promise(resolve => setTimeout(resolve, 150));
           if (window.failNext) { window.failNext = false; throw 'Unsupported DX9 renderer. No game files were changed.'; }
-          return { message: args.request.action === 'quickTest' ? 'Test launched.' : 'Checks passed.',
+          return { message: args.request.action === 'trySmoke' ? 'Smoke launched.' : 'Checks passed.',
             outputs: args.request.action === 'bake' ? ['C:\\Maps\\smoke-output\\mp_example\\mapkit_smoke_mp_example.iwd'] : [] };
         }
         throw new Error('Unexpected command: ' + command);
@@ -31,28 +31,28 @@ test.beforeEach(async ({ page }) => {
   await expect(page.getByRole('status')).toContainText('Ready.');
 });
 
-test('setup, launch request, Steam restriction and actionable errors', async ({ page }, info) => {
+test('one click Try smoke auto-selects Steam and recovers from compatibility errors', async ({ page }, info) => {
   await expect(page.getByRole('heading', {name:'Smoke Tool',exact:true})).toBeVisible();
   await page.screenshot({path:info.outputPath('setup.png'),fullPage:true});
-  await page.getByRole('button', {name:'Quick test',exact:false}).click();
-  await expect(page.getByRole('button', {name:'Install smoke'})).toBeDisabled();
-  await expect(page.getByRole('status')).toHaveText('Test launched.');
-  expect(await page.evaluate(() => window.requests.at(-1))).toMatchObject({action:'quickTest',map:'mp_toujane',gameDirectory:'C:\\Games\\CoD2-Smoke-Test'});
+  const tryButton = page.getByRole('button', {name:'▶ Try smoke',exact:true});
+  await expect(page.getByLabel('CoD2 game folder')).toHaveValue('C:\\Games\\Steam\\steamapps\\common\\Call of Duty 2');
+  await tryButton.click();
+  await expect(tryButton).toBeDisabled();
+  await expect(page.getByRole('status')).toHaveText('Smoke launched.');
+  expect(await page.evaluate(() => window.requests.at(-1))).toMatchObject({action:'trySmoke',map:'mp_toujane',gameDirectory:'C:\\Games\\Steam\\steamapps\\common\\Call of Duty 2'});
   await page.evaluate(() => {window.failNext=true;});
-  await page.getByRole('button', {name:'Check compatibility'}).click();
+  await tryButton.click();
   await expect(page.getByRole('status')).toContainText('Unsupported DX9 renderer');
-  await expect(page.getByRole('button', {name:'Install smoke'})).toBeEnabled();
-  await page.getByRole('button', {name:/Steam library/}).click();
-  await expect(page.getByRole('button', {name:'Install smoke'})).toBeDisabled();
-  await expect(page.getByText('Steam installation detected.',{exact:false})).toBeVisible();
+  await expect(tryButton).toBeEnabled();
+  await expect(page.getByText('Advanced options',{exact:true})).toBeVisible();
 });
 
 test('bake selection, output guidance, compact layout and restore cancellation', async ({ page }, info) => {
-  await page.getByRole('button',{name:'Restore originals…'}).click();
+  await page.getByRole('button',{name:'Restore original files…'}).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.getByRole('button',{name:'Cancel',exact:true}).click();
   expect(await page.evaluate(() => window.requests.length)).toBe(0);
-  await page.getByRole('button',{name:/Bake occupancy/}).click();
+  await page.getByRole('button',{name:/Authoring/}).click();
   await expect(page.getByRole('button',{name:'Bake occupancy',exact:true})).toBeDisabled();
   await page.getByRole('button',{name:'Select maps…'}).click();
   await page.getByRole('button',{name:'Bake occupancy',exact:true}).click();

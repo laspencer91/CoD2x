@@ -6,23 +6,37 @@ together. No tool installer, system Python or Node.js is required to use it.
 Microsoft Edge WebView2 Runtime is required; this portable build does not install
 or download it automatically. There is no updater or background service.
 
-## Setup and quick test
+## Try smoke
 
-The tool detects a previous test folder, common game folders, the CoD2 registry
-entry and Steam libraries. Steam copies are detection sources only: select a
-separate test copy outside Steam, or browse to its `CoD2MP_s.exe`.
+1. Extract the complete ZIP and open `CoD2SmokeTool.exe`.
+2. Check the detected game folder, or browse to your `CoD2MP_s.exe`.
+3. Close CoD clients/servers and click **Try smoke**.
+
+Your existing installation is supported, including Steam. No separate copy or map
+bake is required. The tool detects previous selections, common folders, the CoD2
+registry entry and Steam libraries, and selects a detected installation automatically.
+Try smoke checks for launch conflicts before changing files, validates compatibility,
+backs up replaced client files, installs the supplied runtime and stock occupancy,
+then launches Toujane locally with DX9 and smoke enabled. Join a team and throw a smoke.
+Shoot it to try carving. Visual coverage, particle ordering and FPS still need an
+in-game check. An unsupported renderer is rejected before replacing client files.
+
+**Restore original files** returns the client files backed up on the first install.
+Repeat installs keep those original backups. Maps, player configs and unrelated
+files are not installed over or removed by setup/restoration. Game-created logs and
+configs remain. If a game is running or installed files have changed independently,
+the tool reports the problem instead of killing the game or overwriting those edits.
+
+Advanced options retain the individual actions:
 
 - **Check compatibility:** validate the bundle and supported DX9 renderer without
   changing game files.
-- **Install smoke:** run the existing installer with its backups and rollback.
+- **Install without launching:** run the installer with its backups and rollback.
 - **Verify installed:** check the installed runtime hashes and DX9 renderer.
-- **Restore originals:** run the existing uninstaller; retain backups and unrelated files.
-- **Quick test:** verify the installation, then launch the selected map locally
-  with DX9 and smoke enabled. It does not silently install missing components.
-  Close other CoD clients/servers first. Join a team and throw normal smokes;
-  coverage, carving, particle ordering and FPS still require an in-game check.
+- **Launch installed:** verify the installation and launch the selected map without
+  installing. The selected map also applies to the main Try smoke action.
 
-## Bake occupancy
+## Authoring: bake occupancy
 
 Choose one or more compiled `mp_*.d3dbsp` maps and an output folder. Radiant `.map`
 sources must be compiled first. The tool uses its private embedded Python and
@@ -32,7 +46,7 @@ run off the UI thread, with an activity log. Only one operation runs at a time.
 Wait for an operation to finish before closing the tool.
 
 Output: `<output>/<map>/mapkit_smoke_<map>.iwd`. Keep that IWD intact and copy it
-to `<CoD2 test copy>/mapkit_smoke_test/`, or the active server mod directory.
+to `<CoD2>/mapkit_smoke_test/`, or the active server mod directory.
 Distribute it to clients with the exact matching map. The package contains no
 map BSP. Restart CoD2 after copying; regenerate occupancy when the BSP changes.
 All 15 stock MP maps already have occupancy in the supplied setup payload.

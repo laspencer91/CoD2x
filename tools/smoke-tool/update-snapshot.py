@@ -8,7 +8,7 @@ manifest = json.loads((root / 'manifest.json').read_text())
 files = manifest['files']
 prefix = 'tools/smoke-bake/python/'
 files = {name: entry for name, entry in files.items() if not name.startswith(prefix)}
-payload = [root / name for name in ('CoD2SmokeTool.exe', 'DESKTOP-TOOL.txt', 'READ-ME-FIRST.txt', 'licenses/LICENSE-LibreBaskerville.txt', 'licenses/LICENSE-Barlow.txt')]
+payload = [root / name for name in ('CoD2SmokeTool.exe', 'DESKTOP-TOOL.txt', 'Smoke-Test.ps1', 'READ-ME-FIRST.txt', 'TESTING-NOTES.txt', 'licenses/LICENSE-LibreBaskerville.txt', 'licenses/LICENSE-Barlow.txt')]
 payload += [p for p in (root / prefix).rglob('*') if p.is_file()]
 for path in payload:
     if path.is_symlink():

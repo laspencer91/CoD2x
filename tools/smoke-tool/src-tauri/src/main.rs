@@ -35,7 +35,7 @@ async fn pick_path(kind: String) -> Result<Vec<String>, String> {
         let dialog = rfd::FileDialog::new();
         let paths = match kind.as_str() {
             "game" => dialog
-                .set_title("Select CoD2MP_s.exe in your test copy")
+                .set_title("Select your CoD2MP_s.exe")
                 .add_filter("CoD2 Multiplayer", &["exe"])
                 .pick_file()
                 .map(|p| vec![p]),

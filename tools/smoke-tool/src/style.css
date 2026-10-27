@@ -39,6 +39,10 @@ input { width: 100%; min-width: 0; min-height: 38px; border: 1px solid var(--lin
 .notice { font-size: 12px; line-height: 1.6; margin: 12px 0; }
 .warning { color: var(--amber); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.try-button { min-height: 44px; min-width: 185px; font-size: 16px; }
+summary { cursor: pointer; color: var(--text-rest); font-size: 13px; }
+.options[open] > summary { margin-bottom: 18px; }
+.log-panel > summary { padding: 12px 14px; background: var(--bg-side); }
 .detected { display: flex; flex-direction: column; gap: 4px; margin-top: 9px; max-height: 130px; overflow: auto; }
 .candidate { text-align: left; display: flex; align-items: center; gap: 18px; padding: 7px 10px; min-height: 32px; border-color: var(--line); }
 .candidate span:first-child { color: var(--text-muted); flex-shrink: 0; font-size: 11px; }

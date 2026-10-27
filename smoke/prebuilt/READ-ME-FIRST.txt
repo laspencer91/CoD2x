@@ -6,21 +6,22 @@ Copyright (c) 2026 Logan Spencer. Keep the supplied license/attribution notices.
 PRIVATE REVIEW SNAPSHOT. Read TESTING-NOTES.txt before testing.
 
 SETUP
-The portable GUI is CoD2SmokeTool.exe in the extracted ZIP root. It provides
-Setup, Bake occupancy, and Quick Test (verify installed files, then launch).
-Keep the complete ZIP contents together. WebView2 is required; Python is bundled.
-See DESKTOP-TOOL.txt for GUI instructions. The scripts below also remain usable.
+1. Extract the entire ZIP, keeping its contents together, and open CoD2SmokeTool.exe.
+2. Check the detected CoD2 installation, or browse to your CoD2MP_s.exe.
+3. Close CoD clients/servers and click Try smoke. It checks compatibility, backs up
+   replaced client files, installs smoke and opens Toujane locally with DX9 enabled.
+4. Join a team, select a weapon, and throw smoke grenades. Shoot smoke to carve it.
 
-1. Make a separate copy of your CoD2 1.3 installation, for example
-   C:\Games\CoD2-Smoke-Test. The scripts do not copy the base game for you.
-2. Extract the entire test ZIP to a writable folder, keeping its contents together.
-   A branch checkout can run the same scripts directly from smoke/prebuilt.
-3. Run Setup-Smoke-Test.cmd and select CoD2MP_s.exe in that TEST copy.
-   Setup verifies the DX9 renderer and runtime file hashes, backs up replacements
-   and remembers the folder. Steam library targets are refused.
-4. Close CoD2/CoD4/MWR clients and servers, then run Start-Smoke-Test.cmd.
-   It supplies the environment flags, forces DX9 and opens Toujane locally.
-5. Join a team, select a weapon and throw normal smoke grenades.
+Existing installations, including Steam, are supported. No separate game copy or
+map bake is needed. Restore original files returns the client files backed up on
+the first install. Repeat installs preserve those backups. Authoring contains the
+optional map baker. WebView2 is required; Python is bundled for baking.
+See DESKTOP-TOOL.txt for details. A separate game copy is optional for developers.
+
+The scripts remain available: Setup-Smoke-Test.cmd installs, Start-Smoke-Test.cmd
+launches, and Uninstall-Smoke-Test.cmd restores previous client files. They also
+work directly from smoke/prebuilt in a branch checkout. For a combined CLI action:
+  powershell -NoProfile -ExecutionPolicy Bypass -File .\Smoke-Test.ps1 -Action Try
 
 Console commands:
   /cg_drawFPS 1
@@ -32,7 +33,7 @@ Console commands:
 
 From Command Prompt in the extracted bundle:
   Start-Smoke-Test.cmd -Map mp_burgundy -Look wide_fx
-Pass -GameDirectory "C:\Games\CoD2-Smoke-Test" to choose a folder explicitly.
+Pass -GameDirectory "C:\Games\Call of Duty 2" to choose a folder explicitly.
 PowerShell check without launching:
   powershell -NoProfile -ExecutionPolicy Bypass -File .\Smoke-Test.ps1 -Action Verify
 

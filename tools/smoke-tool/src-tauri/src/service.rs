@@ -32,6 +32,7 @@ pub enum Action {
     Verify,
     Uninstall,
     QuickTest,
+    TrySmoke,
     Bake,
     ValidateBundle,
     OpenOutput,
@@ -356,7 +357,7 @@ fn installer(
         .args(["-Action", action, "-GameDirectory"])
         .arg(game)
         .current_dir(root);
-    if action == "Launch" {
+    if action == "Launch" || action == "Try" {
         command.args(["-Map", map]);
     }
     if check_only {
@@ -465,11 +466,19 @@ pub fn execute(
             if !game.join("CoD2MP_s.exe").is_file() {
                 return Err("Choose the folder containing CoD2MP_s.exe.".into());
             }
-            if is_steam(&game) {
-                return Err("Select a separate test copy outside Steam. The Steam installation is only a detection source.".into());
-            }
             validate_bundle(root, log)?;
             match action {
+                Action::TrySmoke => {
+                    if !valid_map(&request.map) {
+                        return Err("Enter a map name such as mp_toujane.".into());
+                    }
+                    log(
+                        "Checking compatibility, preserving original files and preparing smoke..."
+                            .into(),
+                    );
+                    installer(root, "Try", &game, &request.map, false, log)?;
+                    "Smoke launched. Join a team and throw a smoke grenade. Restore original files returns your previous client."
+                }
                 Action::Check => {
                     installer(root, "Install", &game, "", true, log)?;
                     "Compatibility checks passed. No game files were changed."
