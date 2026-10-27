@@ -34,8 +34,8 @@
       "sha256": "c84d9011c2665e06689c76f3da25f435b4a5ae068289a78b1bcd938b97a44fb8"
     },
     "Smoke-Test.ps1": {
-      "bytes": 15930,
-      "sha256": "17c8caf3f2e4376742471a54755ff76d60474ae3e0a2da112a897f82a084f713"
+      "bytes": 15933,
+      "sha256": "838f26ed864be970067cadde3b9c4fbc6df54ca4ab36978089cef6012b2cdfb7"
     },
     "Start-Smoke-Test.cmd": {
       "bytes": 192,

@@ -282,7 +282,7 @@ try {
     try { Write-Json $settingsPath @{ gameDirectory = $game } }
     catch { Write-Warning "Installed, but could not remember the folder. Pass -GameDirectory `"$game`" when starting." }
     Write-Output "Installed and verified $($payload.Count) files in $game"
-    Write-Output 'Next: double-click Start-Smoke-Test.cmd. Uninstall-Smoke-Test.cmd restores the original files.'
+    Write-Output 'Smoke is ready. Use Try smoke or Launch installed to play; Restore original files reverses setup.'
 } catch {
     Write-Host ('ERROR: ' + $_.Exception.Message) -ForegroundColor Red
     exit 1
