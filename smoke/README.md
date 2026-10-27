@@ -25,8 +25,11 @@ availability terms still need to be settled before publishing this binary-compon
 ## Review and test
 
 Send testers `smoke/out/cod2x-smoke-player.zip` (build with
-`./smoke/Package-Test.ps1 -PlayerOnly`). It contains no baker or Python files.
-The full `cod2x-smoke-test.zip` retains the authoring tools.
+`./smoke/Package-Test.ps1 -PlayerOnly`). It contains only the desktop tool,
+setup/restore script, runtime, default smoke look, all 15 stock-map bakes,
+compatibility/integrity metadata, short instructions and license notices.
+Tests, sources, Python, developer notes and custom-map bakes are excluded.
+The full `cod2x-smoke-test.zip` retains authoring tools and optional custom bakes.
 
 Open `CoD2SmokeTool.exe` in the extracted ZIP, check the detected game folder,
 and click **Try smoke**. Existing installations, including Steam, are supported.

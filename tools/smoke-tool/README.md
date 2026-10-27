@@ -7,8 +7,9 @@ Microsoft Edge WebView2 Runtime is required; this portable build does not instal
 or download it automatically. There is no updater or background service.
 
 Send testers **cod2x-smoke-player.zip**. It contains the GUI, installer, runtime
-and all occupancy packages, with no baker, Python runtime or Python source.
-The full **cod2x-smoke-test.zip** additionally includes the map authoring tool.
+and all 15 stock-map occupancy grids with the default smoke look. It excludes
+tests, source files, the baker, Python, developer notes and custom-map bakes.
+The full **cod2x-smoke-test.zip** includes authoring and optional custom bakes.
 
 ## Try smoke
 

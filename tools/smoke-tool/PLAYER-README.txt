@@ -16,13 +16,14 @@ preserve original backups. Setup/restoration retain maps, player configs, backup
 and unrelated files. Other CoD clients must be closed before launching.
 
 Tools & details contains validation and the activity log. It opens on errors.
-Copy log copies the visible log; nothing is uploaded. TESTING-NOTES.txt describes
-known test limitations. This preview has not been approved for competition.
+Copy log copies the visible log; nothing is uploaded. This is a player preview;
+multiplayer, demos, particle ordering and GPU compatibility still need acceptance
+testing. It has not been approved for competition.
 
-All 15 stock MP smoke occupancy grids are included. Optional custom/test grids
-require their exact matching maps. No game executable, renderer, BSP, textures or
-models are supplied. This player package contains no map baker or Python runtime,
-and no smoke/voxelizer C++ or HLSL source. Installer scripts remain readable.
+All 15 stock MP smoke occupancy grids and the default smoke look are included.
+No game executable, renderer, BSP, textures or models are supplied. There are no
+custom-map bakes, map baker, Python, tests or implementation source. Keep the
+supporting files beside the EXE; they handle setup, validation and restoration.
 
 Volumetric Smoke System by Logan - contact at logan@loganspencer.dev
 Copyright (c) 2026 Logan Spencer. Retain the supplied license/attribution notices.
