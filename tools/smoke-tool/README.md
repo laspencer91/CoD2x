@@ -6,6 +6,10 @@ together. No tool installer, system Python or Node.js is required to use it.
 Microsoft Edge WebView2 Runtime is required; this portable build does not install
 or download it automatically. There is no updater or background service.
 
+Send testers **cod2x-smoke-player.zip**. It contains the GUI, installer, runtime
+and all occupancy packages, with no baker, Python runtime or Python source.
+The full **cod2x-smoke-test.zip** additionally includes the map authoring tool.
+
 ## Try smoke
 
 1. Extract the complete ZIP and open `CoD2SmokeTool.exe`.
@@ -27,16 +31,20 @@ files are not installed over or removed by setup/restoration. Game-created logs 
 configs remain. If a game is running or installed files have changed independently,
 the tool reports the problem instead of killing the game or overwriting those edits.
 
-Advanced options retain the individual actions:
+The main screen shows the game picker, Try smoke and Restore original files.
+**Tools & details** is collapsed until opened or an operation fails. It contains:
 
 - **Check compatibility:** validate the bundle and supported DX9 renderer without
   changing game files.
-- **Install without launching:** run the installer with its backups and rollback.
 - **Verify installed:** check the installed runtime hashes and DX9 renderer.
 - **Launch installed:** verify the installation and launch the selected map without
   installing. The selected map also applies to the main Try smoke action.
 
 ## Authoring: bake occupancy
+
+Open **Tools & details > Map authoring** in the full ZIP. The player ZIP and the
+checkout's prebuilt runtime have no authoring entry. Baking files are required only
+for Bake; their absence cannot block Try smoke, compatibility checks or restoration.
 
 Choose one or more compiled `mp_*.d3dbsp` maps and an output folder. Radiant `.map`
 sources must be compiled first. The tool uses its private embedded Python and
@@ -63,6 +71,7 @@ on the build machine. From the branch root:
 ```powershell
 ./tools/smoke-tool/Build-Desktop.ps1
 ./smoke/Package-Test.ps1
+./smoke/Package-Test.ps1 -PlayerOnly
 ```
 
 The build pins the official Python 3.14.10 embeddable archive by SHA256 and
@@ -73,6 +82,8 @@ included). Its installer actions call `Smoke-Test.ps1`; the baker calls
 
 `CoD2SmokeTool.exe --validate-bundle` performs the read-only bundle check without
 opening a window. The application EXE is a local unsigned test build.
+`--validate-runtime` checks only player dependencies and also works directly in
+the checkout's `smoke/prebuilt` directory. The full authoring ZIP is required for baking.
 
 Development checks:
 

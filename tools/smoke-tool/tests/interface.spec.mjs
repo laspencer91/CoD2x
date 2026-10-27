@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
           bundleRoot: 'C:\\Smoke Tool', rememberedGame: '',
           candidates: [{path:'C:\\Games\\Steam\\steamapps\\common\\Call of Duty 2',source:'Steam library',steam:true,installed:false},
             {path:'C:\\Games\\Call of Duty 2',source:'Game folder',steam:false,installed:true}],
-          suggestedOutput:'C:\\Maps\\smoke-output', bakerAvailable:true,
+          suggestedOutput:'C:\\Maps\\smoke-output', bakerAvailable:!window.playerOnly,
         };
         if (command === 'pick_path') return args.kind === 'maps' ? ['C:\\Maps\\mp_example.d3dbsp'] : [];
         if (command === 'run_job') {
@@ -32,9 +32,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('one click Try smoke auto-selects Steam and recovers from compatibility errors', async ({ page }, info) => {
-  await expect(page.getByRole('heading', {name:'Smoke Tool',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading', {name:'CoD2 Smoke',exact:true})).toBeVisible();
   await page.screenshot({path:info.outputPath('setup.png'),fullPage:true});
-  const tryButton = page.getByRole('button', {name:'▶ Try smoke',exact:true});
+  const tryButton = page.getByRole('button', {name:'Try smoke',exact:true});
+  await expect(page.getByRole('button', {name:'Check compatibility'})).not.toBeVisible();
   await expect(page.getByLabel('CoD2 game folder')).toHaveValue('C:\\Games\\Steam\\steamapps\\common\\Call of Duty 2');
   await tryButton.click();
   await expect(tryButton).toBeDisabled();
@@ -44,22 +45,35 @@ test('one click Try smoke auto-selects Steam and recovers from compatibility err
   await tryButton.click();
   await expect(page.getByRole('status')).toContainText('Unsupported DX9 renderer');
   await expect(tryButton).toBeEnabled();
-  await expect(page.getByText('Advanced options',{exact:true})).toBeVisible();
+  await expect(page.getByRole('button', {name:'Check compatibility'})).toBeVisible();
 });
 
 test('bake selection, output guidance, compact layout and restore cancellation', async ({ page }, info) => {
-  await page.getByRole('button',{name:'Restore original files…'}).click();
+  await page.getByRole('button',{name:'Restore original files',exact:true}).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.getByRole('button',{name:'Cancel',exact:true}).click();
   expect(await page.evaluate(() => window.requests.length)).toBe(0);
-  await page.getByRole('button',{name:/Authoring/}).click();
+  await page.getByText('Tools & details',{exact:true}).click();
+  await page.getByRole('button',{name:'Map authoring',exact:true}).click();
   await expect(page.getByRole('button',{name:'Bake occupancy',exact:true})).toBeDisabled();
   await page.getByRole('button',{name:'Select maps…'}).click();
   await page.getByRole('button',{name:'Bake occupancy',exact:true}).click();
   await expect(page.getByText('Ready to install', {exact:true})).toBeVisible();
   expect(await page.evaluate(() => window.requests.at(-1))).toMatchObject({action:'bake',inputs:['C:\\Maps\\mp_example.d3dbsp'],output:'C:\\Maps\\smoke-output'});
   await page.screenshot({path:info.outputPath('bake.png'),fullPage:true});
-  await page.setViewportSize({width:760,height:680});
+  await page.setViewportSize({width:760,height:560});
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({path:info.outputPath('compact.png'),fullPage:true});
+});
+
+test('player package keeps Try available and hides authoring', async ({ page }, info) => {
+  await page.addInitScript(() => { window.playerOnly = true; });
+  await page.reload();
+  await expect(page.getByRole('button',{name:'Try smoke',exact:true})).toBeEnabled();
+  await page.getByText('Tools & details',{exact:true}).click();
+  await expect(page.getByRole('button',{name:'Map authoring',exact:true})).toHaveCount(0);
+  await page.getByRole('button',{name:'Check compatibility',exact:true}).click();
+  await expect(page.getByRole('status')).toContainText('Checks passed.');
+  await page.getByText('Tools & details',{exact:true}).click();
+  await page.screenshot({path:info.outputPath('player.png'),fullPage:true});
 });

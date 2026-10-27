@@ -26,6 +26,7 @@ function App() {
   const [tone, setTone] = useState('idle');
   const [logs, setLogs] = useState<string[]>([]);
   const [restore, setRestore] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const logEnd = useRef<HTMLDivElement>(null);
   const log = (line: string) => setLogs(old => [...old.slice(-799), line]);
 
@@ -51,11 +52,11 @@ function App() {
         unlisten = stop;
         await refresh(true);
         if (!disposed) { setReady(true); setStatus('Ready. Select your game and click Try smoke.'); }
-      } catch (error) { if (!disposed) { setStatus(String(error)); setTone('bad'); } }
+      } catch (error) { if (!disposed) { setStatus(String(error)); setTone('bad'); setDetailsOpen(true); } }
     })();
     return () => { disposed = true; unlisten?.(); };
   }, []);
-  useEffect(() => { logEnd.current?.scrollIntoView({ block: 'nearest' }); }, [logs]);
+  useEffect(() => { if (detailsOpen) logEnd.current?.scrollIntoView({ block: 'nearest' }); }, [logs, detailsOpen]);
 
   async function pick(kind: 'game' | 'maps' | 'output') {
     try {
@@ -64,53 +65,52 @@ function App() {
       if (kind === 'game') setGame(paths[0].replace(/[\\/][^\\/]+$/, ''));
       else if (kind === 'maps') { setInputs(paths); setOutputs([]); }
       else { setOutput(paths[0]); setOutputs([]); }
-    } catch (error) { setStatus(String(error)); setTone('bad'); }
+    } catch (error) { setStatus(String(error)); setTone('bad'); setDetailsOpen(true); }
   }
   async function job(action: Action) {
     if (busy) return;
     setBusy(true); setStatus(titles[action] + '...'); setTone('run');
-    if (action === 'bake') setOutputs([]);
+    if (action === 'bake') { setOutputs([]); setDetailsOpen(true); }
     log('\n— ' + titles[action] + ' —');
     try {
       const result = await invoke<Result>('run_job', { request: { action, gameDirectory: game.trim(), map: map.trim(), inputs, output: output.trim() } });
       setStatus(result.message); setTone('ok');
       if (action === 'bake') setOutputs(result.outputs);
       try { await refresh(); } catch (error) { log('Could not refresh installation detection: ' + String(error)); }
-    } catch (error) { setStatus(String(error)); setTone('bad'); log(String(error)); }
+    } catch (error) { setStatus(String(error)); setTone('bad'); setDetailsOpen(true); log(String(error)); }
     finally { setBusy(false); }
   }
   const disabled = busy || !ready;
   const gameDisabled = disabled || !game.trim();
   return <div className="shell">
-    <header><div className="brand-mark" aria-hidden="true">2</div><div><div className="eyebrow">CALL OF DUTY 2 · VOLUMETRIC SMOKE</div><h1>Smoke Tool</h1></div><span className="version">LOCAL TEST · 0.1</span></header>
-    <nav aria-label="Tool sections"><button aria-current={tab === 'setup' ? 'page' : undefined} onClick={() => setTab('setup')}>01 <span>Try smoke</span></button><button aria-current={tab === 'bake' ? 'page' : undefined} onClick={() => setTab('bake')}>02 <span>Authoring</span></button></nav>
+    <header><div><h1>CoD2 Smoke</h1><p>Try volumetric smoke in your game.</p></div>{tab === 'bake' && <button className="quiet" onClick={() => setTab('setup')}>← Back to smoke</button>}</header>
     <main>
       {tab === 'setup' ? <>
-        <section className="panel accent"><div className="section-heading"><div><h2>Try volumetric smoke</h2><p>Use your existing CoD2 installation. Steam installations are supported.</p></div><span className="tag">LOCAL GAME</span></div>
-          <label htmlFor="game">CoD2 game folder</label><div className="field-row"><input id="game" value={game} disabled={disabled} onChange={e => setGame(e.target.value)} placeholder="Choose the folder containing CoD2MP_s.exe"/><button disabled={disabled} onClick={() => void pick('game')}>Browse…</button></div>
-          {!!data?.candidates.length && <div className="detected">{data.candidates.map(c => <button className="candidate" disabled={disabled} key={c.path} onClick={() => setGame(c.path)}><span>{c.source}{c.installed ? ' · smoke installed' : ''}</span><span title={c.path}>{c.path}</span></button>)}</div>}
-          <p className="notice">Checks compatibility, backs up your existing client files, and opens {map === 'mp_toujane' ? 'Toujane' : map} with smoke enabled. No separate game copy or map bake is needed.</p>
-          <div className="actions"><button className="primary try-button" disabled={gameDisabled || !map.trim()} onClick={() => void job('trySmoke')}>▶ Try smoke</button><button disabled={gameDisabled} onClick={() => setRestore(true)}>Restore original files…</button></div>
-          <p className="notice">Join a team and throw a smoke grenade. Shoot through it to carve holes. Close CoD clients and servers before starting.</p>
+        <section className="try-panel">
+          <label htmlFor="game">CoD2 game folder</label><div className="field-row"><input id="game" list="detected-games" value={game} disabled={disabled} onChange={e => setGame(e.target.value)} placeholder="Choose the folder containing CoD2MP_s.exe"/><datalist id="detected-games">{data?.candidates.map(c => <option key={c.path} value={c.path} label={c.source}/>)}</datalist><button disabled={disabled} onClick={() => void pick('game')}>Browse…</button></div>
+          <p className="notice">Your existing client files are backed up before opening {map === 'mp_toujane' ? 'Toujane' : map} locally.</p>
+          <div className="actions"><button className="primary try-button" disabled={gameDisabled || !map.trim()} onClick={() => void job('trySmoke')}>Try smoke</button><button className="quiet" disabled={gameDisabled} onClick={() => setRestore(true)}>Restore original files</button></div>
+          <p className="notice">In game: join a team, throw a smoke, then shoot through it.</p>
         </section>
-        <details className="panel options"><summary>Advanced options</summary>
-          <div className="test-row"><div><label htmlFor="map">Test map</label><input id="map" list="stock-maps" value={map} disabled={disabled} onChange={e => setMap(e.target.value)} spellCheck={false}/><datalist id="stock-maps">{stockMaps.map(name => <option key={name} value={'mp_' + name}/>)}</datalist></div><button disabled={gameDisabled || !map.trim()} onClick={() => void job('quickTest')}>Launch installed</button></div>
-          <div className="actions"><button disabled={gameDisabled} onClick={() => void job('check')}>Check compatibility</button><button disabled={gameDisabled} onClick={() => void job('verify')}>Verify installed</button><button disabled={gameDisabled} onClick={() => void job('install')}>Install without launching</button></div>
-        </details>
       </> : <>
         <section className="panel"><div className="section-heading"><div><h2>Bake map occupancy</h2><p>Generate smoke collision data from compiled CoD2 maps.</p></div><span className="tag">50 CM GRID</span></div>
           <label>Compiled maps (.d3dbsp)</label><div className="map-list">{inputs.length ? inputs.map(path => <div title={path} key={path}>{path}</div>) : <span>No maps selected. Radiant .map sources must be compiled first.</span>}</div><div className="actions"><button disabled={disabled} onClick={() => void pick('maps')}>Select maps…</button>{!!inputs.length && <button className="quiet" disabled={disabled} onClick={() => { setInputs([]); setOutputs([]); }}>Clear selection</button>}</div>
           <label htmlFor="output">Bake output folder</label><div className="field-row"><input id="output" value={output} disabled={disabled} onChange={e => { setOutput(e.target.value); setOutputs([]); }}/><button disabled={disabled} onClick={() => void pick('output')}>Browse…</button></div>
           <p className="notice">Includes world brushes and terrain. Small static props are ignored. Full collision bounds are used; oversized maps report an error rather than silently reducing coverage.</p>
           <div className="actions"><button className="primary" disabled={disabled || !data?.bakerAvailable || !inputs.length || !output.trim()} onClick={() => void job('bake')}>Bake {inputs.length > 1 ? `${inputs.length} maps` : 'occupancy'}</button><button disabled={disabled || !output.trim()} onClick={() => void job('openOutput')}>Open output folder</button></div>
-          {data && !data.bakerAvailable && <p className="warning">Bundled Python is missing. Use the complete portable ZIP to bake without installing Python.</p>}
+          {data && !data.bakerAvailable && <p className="warning">The baker is not included in this package. Use the authoring ZIP to bake maps.</p>}
           {!!outputs.length && <div className="results"><strong>Ready to install</strong>{outputs.map(path => <code key={path}>{path}</code>)}<p>Copy these IWDs into &lt;CoD2&gt;\mapkit_smoke_test\ for this launcher, or your active server mod. Distribute with the matching map; re-bake when its BSP changes.</p></div>}
         </section>
       </>}
       <div className="status" data-tone={tone} role="status"><span className={busy ? 'status-dot working' : 'status-dot'}/><span>{status}</span></div>
-      <details className="log-panel" open={busy || tone === 'bad' || tab === 'bake'}><summary>Details & activity</summary><div className="log-heading"><h2>Activity</h2><div><button disabled={disabled} onClick={() => void job('validateBundle')}>Validate bundle</button><button disabled={!logs.length} onClick={() => { void navigator.clipboard.writeText(logs.join('\n')).catch(error => { setStatus('Could not copy log: ' + String(error)); setTone('bad'); }); }}>Copy log</button></div></div><div className="log" role="log" aria-label="Activity log"><pre>{logs.length ? logs.join('\n') : 'Operations and validation results appear here.'}</pre><div ref={logEnd}/></div></details>
+      <details className="log-panel" open={detailsOpen} onToggle={event => setDetailsOpen(event.currentTarget.open)}><summary>Tools & details</summary>
+        <div className="tools">
+          {tab === 'setup' && <><label htmlFor="map">Test map</label><div className="field-row"><input id="map" list="stock-maps" value={map} disabled={disabled} onChange={e => setMap(e.target.value)} spellCheck={false}/><datalist id="stock-maps">{stockMaps.map(name => <option key={name} value={'mp_' + name}/>)}</datalist></div>
+          <div className="actions"><button disabled={gameDisabled} onClick={() => void job('check')}>Check compatibility</button><button disabled={gameDisabled} onClick={() => void job('verify')}>Verify installed</button><button disabled={gameDisabled || !map.trim()} onClick={() => void job('quickTest')}>Launch installed</button>{data?.bakerAvailable && <button disabled={disabled} onClick={() => { setTab('bake'); setDetailsOpen(false); }}>Map authoring</button>}</div></>}
+        </div>
+        <div className="log-heading"><h2>Activity</h2><div><button disabled={disabled} onClick={() => void job('validateBundle')}>Validate bundle</button><button disabled={!logs.length} onClick={() => { void navigator.clipboard.writeText(logs.join('\n')).catch(error => { setStatus('Could not copy log: ' + String(error)); setTone('bad'); }); }}>Copy log</button></div></div><div className="log" role="log" aria-label="Activity log"><pre>{logs.length ? logs.join('\n') : 'Operations and validation results appear here.'}</pre><div ref={logEnd}/></div></details>
     </main>
-    <footer><span>Volumetric Smoke System by Logan</span><span title={data?.bundleRoot}>Portable tool · private test build</span></footer>
+    <footer><span>Volumetric Smoke System by Logan</span></footer>
     {restore && <div className="modal-backdrop"><section className="modal" role="dialog" aria-modal="true" aria-labelledby="restore-title"><h2 id="restore-title">Restore original files?</h2><p>This removes the installed smoke runtime from:</p><code>{game}</code><p>Your previous client files are restored. Backups, maps and unrelated files are kept.</p><div className="actions"><button autoFocus onClick={() => setRestore(false)}>Cancel</button><button className="primary" onClick={() => { setRestore(false); void job('uninstall'); }}>Restore original files</button></div></section></div>}
   </div>;
 }

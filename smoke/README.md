@@ -24,15 +24,21 @@ availability terms still need to be settled before publishing this binary-compon
 
 ## Review and test
 
+Send testers `smoke/out/cod2x-smoke-player.zip` (build with
+`./smoke/Package-Test.ps1 -PlayerOnly`). It contains no baker or Python files.
+The full `cod2x-smoke-test.zip` retains the authoring tools.
+
 Open `CoD2SmokeTool.exe` in the extracted ZIP, check the detected game folder,
 and click **Try smoke**. Existing installations, including Steam, are supported.
 It validates compatibility, backs up replaced client files, installs and launches
 Toujane. **Restore original files** returns the previous client. A separate game
-copy is optional. Baking is available under **Authoring**. The tool includes a private
-Python runtime for baking; WebView2 is required. See the
+copy is optional. The game picker and two main actions are shown first; additional
+controls and logs are under **Tools & details**. The full ZIP offers **Map authoring**
+there and includes private Python for baking. WebView2 is required. See the
 [desktop tool guide](../tools/smoke-tool/README.md). No app installer is used.
 The prebuilt EXE in the branch is staged with `tools/smoke-tool/Build-Desktop.ps1`;
-assemble the complete portable layout with `smoke/Package-Test.ps1` before using it.
+it can run player actions directly from `smoke/prebuilt`. Assemble the full ZIP
+with `smoke/Package-Test.ps1` to use the baker.
 
 The command-line setup remains available. Read `prebuilt/READ-ME-FIRST.txt` and `prebuilt/TESTING-NOTES.txt`.
 Run `prebuilt/Setup-Smoke-Test.cmd`, select your installation's `CoD2MP_s.exe`,

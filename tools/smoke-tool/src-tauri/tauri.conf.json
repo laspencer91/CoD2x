@@ -10,7 +10,7 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [{"title":"CoD2 Smoke Tool","width":1040,"height":820,"minWidth":760,"minHeight":680,"center":true,"backgroundColor":"#141210"}],
+    "windows": [{"title":"CoD2 Smoke Tool","width":880,"height":620,"minWidth":760,"minHeight":560,"center":true,"backgroundColor":"#141210"}],
     "security": {"csp":"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src ipc: http://ipc.localhost"}
   },
   "bundle": {"active":false,"icon":[]}

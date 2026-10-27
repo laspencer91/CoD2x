@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$BridgeDll, [switch]$KeepExpanded)
+param([string]$BridgeDll, [switch]$KeepExpanded, [switch]$PlayerOnly)
 $ErrorActionPreference = 'Stop'
 $rebuilt = $PSBoundParameters.ContainsKey('BridgeDll')
 $source = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..')).Path
@@ -47,6 +47,7 @@ foreach ($entry in $manifest.files.PSObject.Properties) {
 $stage = In-Output (Join-Path $out ('package.next.' + [Guid]::NewGuid().ToString('N')))
 [IO.Directory]::CreateDirectory($stage) | Out-Null
 foreach ($entry in $manifest.files.PSObject.Properties) {
+    if ($PlayerOnly -and ($entry.Name.StartsWith('tools/smoke-bake/') -or $entry.Name -eq 'DESKTOP-TOOL.txt')) { continue }
     $target = In-Output (Join-Path $stage $entry.Name)
     [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
     Copy-Item -LiteralPath (Join-Path $prebuilt $entry.Name) -Destination $target
@@ -54,10 +55,13 @@ foreach ($entry in $manifest.files.PSObject.Properties) {
 $toolFiles = @('bake.py', 'Bake-Smoke.cmd', 'README.md', 'bin/cod2smoke-bake.exe', 'bin/cod2smoke-bake.json',
     'cod2kit/__init__.py', 'cod2kit/bsp.py', 'cod2kit/maptext.py', 'cod2kit/smoke_geometry.py',
     'cod2kit/smoke_collision.py', 'cod2kit/brushes.py', 'cod2kit/definitions.py', 'cod2kit/files.py', 'cod2kit/smoke_bake.py')
-foreach ($name in $toolFiles) {
+foreach ($name in $(if (-not $PlayerOnly) { $toolFiles })) {
     $target = In-Output (Join-Path $stage ('tools/smoke-bake/' + $name))
     [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
     Copy-Item -LiteralPath (Join-Path $source ('tools/smoke-bake/' + $name)) -Destination $target
+}
+if ($PlayerOnly) {
+    Copy-Item -LiteralPath (Join-Path $source 'tools/smoke-tool/PLAYER-README.txt') -Destination (Join-Path $stage 'READ-ME-FIRST.txt') -Force
 }
 Copy-Item -LiteralPath $BridgeDll -Destination (Join-Path $stage 'runtime\mss32.dll') -Force
 $buildInfo = Get-Content -LiteralPath (Join-Path $stage 'provenance\bridge-build.json') -Raw | ConvertFrom-Json
@@ -75,22 +79,25 @@ foreach ($file in Get-ChildItem -LiteralPath $stage -File -Recurse | Sort-Object
     $files[$name] = [ordered]@{ bytes = $file.Length; sha256 = Hash $file.FullName }
 }
 $manifest.files = $files
+$manifest | Add-Member -NotePropertyName authoringIncluded -NotePropertyValue (-not $PlayerOnly) -Force
 Save-Json (Join-Path $stage 'manifest.json') $manifest
 $sums = @($files.Keys | ForEach-Object { "$($files[$_].sha256)  $_" })
 $sums += "$(Hash (Join-Path $stage 'manifest.json'))  manifest.json"
 [IO.File]::WriteAllText((Join-Path $stage 'SHA256SUMS.txt'), ($sums -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
 Add-Type -AssemblyName System.IO.Compression.FileSystem
-$zip = In-Output (Join-Path $out 'cod2x-smoke-test.zip')
-$pending = In-Output (Join-Path $out ('cod2x-smoke-test.next.' + [Guid]::NewGuid().ToString('N') + '.zip'))
+$stem = if ($PlayerOnly) { 'cod2x-smoke-player' } else { 'cod2x-smoke-test' }
+$zip = In-Output (Join-Path $out ($stem + '.zip'))
+$pending = In-Output (Join-Path $out ($stem + '.next.' + [Guid]::NewGuid().ToString('N') + '.zip'))
 [IO.Compression.ZipFile]::CreateFromDirectory($stage, $pending, [IO.Compression.CompressionLevel]::Optimal, $false)
 if (Test-Path -LiteralPath $zip) { [IO.File]::Replace($pending, $zip, [NullString]::Value) }
 else { [IO.File]::Move($pending, $zip) }
 [IO.File]::WriteAllText(($zip + '.sha256'), (Hash $zip) + "`n")
 if ($KeepExpanded) {
-    $package = In-Output (Join-Path $out 'package')
+    $folder = if ($PlayerOnly) { 'player' } else { 'package' }
+    $package = In-Output (Join-Path $out $folder)
     $previous = $null
     if (Test-Path -LiteralPath $package) {
-        $previous = In-Output (Join-Path $out ('package.previous.' + [DateTime]::UtcNow.Ticks))
+        $previous = In-Output (Join-Path $out ($folder + '.previous.' + [DateTime]::UtcNow.Ticks))
         [IO.Directory]::Move($package, $previous)
     }
     [IO.Directory]::Move($stage, $package)

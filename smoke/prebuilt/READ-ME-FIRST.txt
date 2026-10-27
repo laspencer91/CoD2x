@@ -12,10 +12,15 @@ SETUP
    replaced client files, installs smoke and opens Toujane locally with DX9 enabled.
 4. Join a team, select a weapon, and throw smoke grenades. Shoot smoke to carve it.
 
+For invited players, use cod2x-smoke-player.zip: it has no baker or Python files.
+The full cod2x-smoke-test.zip includes optional map authoring tools. Player actions
+also work directly from smoke/prebuilt in the branch, without those authoring files.
+
 Existing installations, including Steam, are supported. No separate game copy or
 map bake is needed. Restore original files returns the client files backed up on
-the first install. Repeat installs preserve those backups. Authoring contains the
-optional map baker. WebView2 is required; Python is bundled for baking.
+the first install. Repeat installs preserve those backups. Tools & details contains
+validation and logs and opens on errors. The full ZIP also offers Map authoring
+there. WebView2 is required; Python is bundled only in the full authoring package.
 See DESKTOP-TOOL.txt for details. A separate game copy is optional for developers.
 
 The scripts remain available: Setup-Smoke-Test.cmd installs, Start-Smoke-Test.cmd

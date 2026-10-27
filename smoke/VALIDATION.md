@@ -37,10 +37,10 @@ does not invalidate installation hashes. Bridge source hashes normalize CRLF to 
   Frontend type checking and Rust clippy with warnings denied pass.
 - Four Rust tests cover map/path rejection, Steam VDF path parsing, bundle hash/path
   validation, and continuing process logs after a non-UTF8 line.
-- Two headless browser UI tests pass using a mocked Tauri command interface. Setup,
+- Three headless browser UI tests pass using a mocked Tauri command interface. Setup,
   Try smoke requests, automatic Steam selection, error recovery, restore cancellation,
   bake requests/results and compact layouts are covered. Screenshots of the Setup
-  and Bake screens at 1040px and the compact Bake screen at 760px were inspected.
+  and Bake screens at 880px and the compact Bake screen at 760px were inspected.
 - The assembled portable EXE's read-only `--validate-bundle` check passes against
   the actual package, including the private embedded Python runtime.
 - The official Python 3.14.10 Windows x64 embeddable ZIP matches its published
@@ -59,6 +59,13 @@ does not invalidate installation hashes. Bridge source hashes normalize CRLF to 
 The complete test ZIP includes the EXE and supporting files. No app installer,
 Node.js, or system Python is required by users; Microsoft WebView2 is required.
 The desktop tool is unsigned, with no updater or background service.
+
+Runtime validation now checks only the installer, bridge provenance, GUI and runtime
+payload. Missing authoring files cannot block player actions. The regression fixture
+checks missing authoring files both when declared in a full manifest and omitted
+from a player manifest; actual runtime tampering is still rejected. Authoring is
+offered only when its wrapper, interpreter and native baker are all present.
+`-PlayerOnly` assembles a separate manifest/ZIP with no `tools/smoke-bake` files.
 
 ## Existing-installation flow
 

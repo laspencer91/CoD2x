@@ -86,9 +86,18 @@ async fn run_job(
 
 fn main() {
     // A read-only check is also available to build scripts without opening the UI.
-    if std::env::args().nth(1).as_deref() == Some("--validate-bundle") {
-        let result = service::bundle_root()
-            .and_then(|root| service::validate_bundle(&root, &|s| println!("{s}")));
+    let mode = std::env::args().nth(1);
+    if matches!(
+        mode.as_deref(),
+        Some("--validate-bundle" | "--validate-runtime")
+    ) {
+        let result = service::bundle_root().and_then(|root| {
+            if mode.as_deref() == Some("--validate-runtime") {
+                service::validate_runtime(&root, &|s| println!("{s}"))
+            } else {
+                service::validate_bundle(&root, &|s| println!("{s}"))
+            }
+        });
         if let Err(error) = result {
             eprintln!("{error}");
             std::process::exit(1);

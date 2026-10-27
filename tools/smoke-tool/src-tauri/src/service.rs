@@ -216,7 +216,7 @@ pub fn bootstrap() -> Result<Bootstrap, String> {
         .map(PathBuf::from)
         .unwrap_or_else(std::env::temp_dir);
     Ok(Bootstrap {
-        baker_available: root.join("tools/smoke-bake/python/python.exe").is_file(),
+        baker_available: authoring_available(&root),
         bundle_root: root.to_string_lossy().into_owned(),
         candidates,
         suggested_output: local
@@ -237,21 +237,62 @@ struct FileEntry {
     sha256: String,
 }
 
+const RUNTIME_REQUIRED: &[&str] = &[
+    "Smoke-Test.ps1",
+    "provenance/bridge-build.json",
+    "runtime/mss32.dll",
+    "runtime/mapkit-smoke/mapkit_smoke.dll",
+    "runtime/mapkit-smoke/noise128.rgba",
+    "runtime/mapkit-smoke/smoke.shaders",
+    "runtime/mapkit_smoke_test/mapkit_smoke_stock.iwd",
+    "runtime/mapkit_smoke_test/smoke_look_wide.cfg",
+];
+const AUTHORING_REQUIRED: &[&str] = &[
+    "tools/smoke-bake/bake.py",
+    "tools/smoke-bake/python/python.exe",
+    "tools/smoke-bake/bin/cod2smoke-bake.exe",
+];
+
+fn authoring_available(root: &Path) -> bool {
+    AUTHORING_REQUIRED
+        .iter()
+        .all(|name| root.join(name).is_file())
+}
+
+#[derive(Clone, Copy, PartialEq)]
+enum ValidationScope {
+    Runtime,
+    Authoring,
+    Complete,
+}
+
 pub fn validate_bundle(root: &Path, log: &(dyn Fn(String) + Sync)) -> Result<(), String> {
+    validate_files(root, ValidationScope::Complete, log)
+}
+
+pub fn validate_runtime(root: &Path, log: &(dyn Fn(String) + Sync)) -> Result<(), String> {
+    validate_files(root, ValidationScope::Runtime, log)
+}
+
+fn validate_files(
+    root: &Path,
+    scope: ValidationScope,
+    log: &(dyn Fn(String) + Sync),
+) -> Result<(), String> {
     let manifest: Manifest =
         serde_json::from_slice(&fs::read(root.join("manifest.json")).map_err(|e| e.to_string())?)
             .map_err(|e| e.to_string())?;
-    for required in [
-        "Smoke-Test.ps1",
-        "runtime/mss32.dll",
-        "runtime/mapkit-smoke/mapkit_smoke.dll",
-        "tools/smoke-bake/bake.py",
-        "tools/smoke-bake/python/python.exe",
-    ] {
+    let required = RUNTIME_REQUIRED.iter().chain(
+        AUTHORING_REQUIRED
+            .iter()
+            .filter(|_| scope == ValidationScope::Authoring),
+    );
+    for &required in required {
         if !manifest.files.contains_key(required) {
             return Err(format!("Incomplete portable bundle: {required}"));
         }
     }
+    let mut checked = 0;
     for (name, entry) in &manifest.files {
         let path = Path::new(name);
         if name.contains('\\')
@@ -259,6 +300,15 @@ pub fn validate_bundle(root: &Path, log: &(dyn Fn(String) + Sync)) -> Result<(),
             || path.as_os_str().is_empty()
         {
             return Err(format!("Invalid bundle path: {name}"));
+        }
+        if scope == ValidationScope::Runtime
+            && !name.starts_with("runtime/")
+            && !matches!(
+                name.as_str(),
+                "Smoke-Test.ps1" | "provenance/bridge-build.json" | "CoD2SmokeTool.exe"
+            )
+        {
+            continue;
         }
         let mut target = root.to_path_buf();
         for part in path.components() {
@@ -283,10 +333,11 @@ pub fn validate_bundle(root: &Path, log: &(dyn Fn(String) + Sync)) -> Result<(),
                 "Missing or changed bundle file: {name}. Extract a fresh ZIP."
             ));
         }
+        checked += 1;
     }
     log(format!(
         "Bundle validated: {} files match their SHA256 hashes.",
-        manifest.files.len()
+        checked
     ));
     Ok(())
 }
@@ -441,7 +492,7 @@ pub fn execute(
                 inputs.push(source);
             }
             log("Checking bundled tools before baking...".into());
-            validate_bundle(root, log)?;
+            validate_files(root, ValidationScope::Authoring, log)?;
             let baker = root.join("tools/smoke-bake");
             let mut command = Command::new(baker.join("python/python.exe"));
             command
@@ -466,7 +517,7 @@ pub fn execute(
             if !game.join("CoD2MP_s.exe").is_file() {
                 return Err("Choose the folder containing CoD2MP_s.exe.".into());
             }
-            validate_bundle(root, log)?;
+            validate_runtime(root, log)?;
             match action {
                 Action::TrySmoke => {
                     if !valid_map(&request.map) {
@@ -592,13 +643,7 @@ mod tests {
         ));
         fs::create_dir(&root).unwrap();
         let mut files = serde_json::Map::new();
-        for name in [
-            "Smoke-Test.ps1",
-            "runtime/mss32.dll",
-            "runtime/mapkit-smoke/mapkit_smoke.dll",
-            "tools/smoke-bake/bake.py",
-            "tools/smoke-bake/python/python.exe",
-        ] {
+        for &name in RUNTIME_REQUIRED.iter().chain(AUTHORING_REQUIRED.iter()) {
             let path = root.join(name);
             fs::create_dir_all(path.parent().unwrap()).unwrap();
             fs::write(path, b"fixture only; never executed").unwrap();
@@ -613,6 +658,22 @@ mod tests {
         };
         write_manifest(&files);
         assert!(validate_bundle(&root, &|_| {}).is_ok());
+        assert!(authoring_available(&root));
+        for &name in AUTHORING_REQUIRED {
+            fs::remove_file(root.join(name)).unwrap();
+        }
+        // A missing/omitted authoring tool cannot block Try, Check, Install or Restore.
+        assert!(validate_runtime(&root, &|_| {}).is_ok());
+        assert!(!authoring_available(&root));
+        assert!(validate_bundle(&root, &|_| {}).is_err());
+        for &name in AUTHORING_REQUIRED {
+            files.remove(name);
+        }
+        write_manifest(&files);
+        assert!(validate_bundle(&root, &|_| {}).is_ok());
+        assert!(validate_files(&root, ValidationScope::Authoring, &|_| {})
+            .unwrap_err()
+            .contains("tools/smoke-bake/bake.py"));
         fs::write(root.join("runtime/mss32.dll"), b"modified").unwrap();
         assert!(validate_bundle(&root, &|_| {})
             .unwrap_err()
