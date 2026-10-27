@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "feature": "opt-in CoD2 volumetric smoke bridge with local bullet-impact forwarding",
+  "cod2xCommit": "edee5a080c93a7a6a9c752bf0a1da0eab648c671",
+  "configuration": "RelWithDebInfo; no CoD2x debug hot reload",
+  "sha256": "79c211722f3b613e090ece46edc8c73bfc2bdb48862bf79dcaa021169ef21e3b",
+  "rendererSha256": "243505f56ec0f86122fc09b3a6c18f0daf49a00abb2d969147f595991584a6b2",
+  "adapterSha256": "ff1c6684dadfb1216d025cd765e20defda7921ab5a1c35b878efd8da3dc44086",
+  "enableEnvironment": "COD2_SMOKE_DIAGNOSTICS=1",
+  "renderEnvironment": "COD2_SMOKE_RENDER=1",
+  "logEnvironment": "COD2_SMOKE_LOG=<absolute log path>",
+  "pending": [
+    "Complete impact/sky/penetration coverage",
+    "Carving visual and GPU acceptance",
+    "Multiplayer, demo and renderer-reset acceptance"
+  ],
+  "branch": "feature/volumetric-smoke",
+  "stableUpdatesDisabled": true,
+  "sourceHashNormalization": "Text CRLF normalized to LF",
+  "sourceHashes": {
+    "CMakeLists.txt": "a242aaab2907df6faf1c54dd496930ec3b3eb38b9c653df7ad593e3d4338f8d9",
+    "src/mss32/hook.cpp": "b989b6f046e908ff13f76ab4d06965c6e3470536636c9dc503d045a0ef622eb5",
+    "src/mss32/drawing.cpp": "742bfb90f06c956c46dd4e89568c1fc96916997e180cf0157c70d82baee34d50",
+    "src/mss32/updater.cpp": "f95915d8bb36907a0e53a17b347dcd540171830e307eb1cd0f0274994e1c80d8",
+    "src/mss32/smoke_diagnostics.cpp": "ff1c6684dadfb1216d025cd765e20defda7921ab5a1c35b878efd8da3dc44086",
+    "src/mss32/smoke_diagnostics.h": "848152a22253b0937b548c3b96cbf46bf0349f6c3623e413532050ae1938930a",
+    "src/mss32/policy.hpp": "df31961b8007993cd230978f4d8074943478ad8ead52aee8a4614d5d9d201dc5",
+    "src/mss32/mapkit_reload.cpp": "1b5b59ebc975bc6817428ec5601609682eefa51364b714b99f9d606734ce7517",
+    "src/mss32/mapkit_reload.h": "3c224982d648cccf63b60c0dfb2c2f92942a52a1337175ac4bc4bf45cc16634c",
+    "src/shared/weapons.cpp": "7450bce3e9e8c34f50d0a42f30b7d8487508245f699d4702e6fd6e0143274237"
+  }
+}

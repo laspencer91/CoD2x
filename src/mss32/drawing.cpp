@@ -1,4 +1,5 @@
 #include "drawing.h"
+#include "smoke_diagnostics.h"
 
 #include "../shared/cod2_client.h"
 #include "../shared/cod2_dvars.h"
@@ -615,6 +616,12 @@ void CG_BulletHitEvent() {
     ASM__movr(clientNum, "eax");
     ASM__movr(sourceEntityNum, "ecx");
     ASM__movr(end, "esi");
+
+    if (clientNum >= 0 && clientNum < 1024 && smoke_diagnostics_wants_bullets()) {
+        vec3_t start;
+        if (CG_CalcMuzzlePoint(start, clientNum, sourceEntityNum))
+            smoke_diagnostics_bullet(clientNum, cg_entities[clientNum].nextState.weapon, start, *end);
+    }
 
     // CoD2x: Debug bullets
     if (cg_debugBullets->value.boolean) {
@@ -2172,6 +2179,7 @@ void drawing_patch() {
     patch_call(0x004cbd6b, (unsigned int)CG_DrawCrosshairNames);
 
     patch_call(0x004d7bce, (unsigned int)CG_BulletHitEvent);
+    patch_call(0x004d7c47, (unsigned int)CG_BulletHitEvent);
 
     // Make tracers visible also for 1st person view
     //patch_byte(0x004d7a91, 0x74); // Always jump

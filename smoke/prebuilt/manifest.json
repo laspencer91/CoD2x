@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "purpose": "local-cod2x-branch-review",
+  "releaseReady": false,
+  "cod2xCommit": "edee5a080c93a7a6a9c752bf0a1da0eab648c671",
+  "branch": "feature/volumetric-smoke",
+  "stockMaps": 15,
+  "customOccupancyMaps": 21,
+  "developerTestApproved": false,
+  "knownIssuesRemain": true,
+  "implementationSourcesIncluded": false,
+  "shaderSourcesIncluded": false,
+  "stableUpdatesDisabled": true,
+  "validation": {
+    "pythonTests": 118,
+    "nativeProbes": 9,
+    "shaderVariants": 16
+  },
+  "files": {
+    "READ-ME-FIRST.txt": {
+      "bytes": 3313,
+      "sha256": "ea7ed7e9ef028bfe332f3b0989c054a69778a876623c3b970b2365099d0c3fcd"
+    },
+    "Setup-Smoke-Test.cmd": {
+      "bytes": 173,
+      "sha256": "c84d9011c2665e06689c76f3da25f435b4a5ae068289a78b1bcd938b97a44fb8"
+    },
+    "Smoke-Test.ps1": {
+      "bytes": 15003,
+      "sha256": "929e299bf3355a7715307d63b18a76193b0612ad5602e47fa2ca0c327d8ff90b"
+    },
+    "Start-Smoke-Test.cmd": {
+      "bytes": 192,
+      "sha256": "d9a6e07b0a33ca0d6e488fe680c230a67a4484ecae7a166006f75bfc456868dd"
+    },
+    "TESTING-NOTES.txt": {
+      "bytes": 5773,
+      "sha256": "74ba90c70ae8647e412556a199fbfb460ba1d03a27333fdca5b4f87105073965"
+    },
+    "Uninstall-Smoke-Test.cmd": {
+      "bytes": 175,
+      "sha256": "6e29f252f0abc8c74e0171c0f776aca6a8792a2b79c0929aa6ea4f3a8c87816c"
+    },
+    "licenses/smoke/LICENSE": {
+      "bytes": 35823,
+      "sha256": "230184f60bae2feaf244f10a8bac053c8ff33a183bcc365b4d8b876d2b7f4809"
+    },
+    "licenses/smoke/NOTICE.md": {
+      "bytes": 1974,
+      "sha256": "6c22c63ce7119d7978016ceaa491bd35b4d287a95e4de5e4f07b60f99e7aeaca"
+    },
+    "occupancy-inventory.json": {
+      "bytes": 36711,
+      "sha256": "eb1dc64d1301e80018a34bee0760fa98f985030335311dd5b4a7c4b1432f2c22"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit.iwd": {
+      "bytes": 1059,
+      "sha256": "e23908e3f78562623dfe9eed523adb0ca316a0b3274c33493abb61dde11df694"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_bounce.iwd": {
+      "bytes": 1117,
+      "sha256": "b0f5339167a88b17f9b725ae33cb6b35aa4985a08047a6c26c26e7335793b826"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_comp.iwd": {
+      "bytes": 1105,
+      "sha256": "4961bbb9e529cb7186829b1c5316f891cb0fb1bc0cbc7ff027547df390485ea5"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_dark.iwd": {
+      "bytes": 1105,
+      "sha256": "871753afb345ada754c77225de7dbe9aa043620decf30ad2031d4f404c3736c0"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_floor.iwd": {
+      "bytes": 1113,
+      "sha256": "5a676628742ec90cf13d8b4e11bb7fd1486c5aad846f9c4f9aefb3141a638fa5"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_gi_color.iwd": {
+      "bytes": 1132,
+      "sha256": "1b3baa5bd678471b02306e7771c9bb1559d639693b6876f205dca47117f6bfa5"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_gi_gray.iwd": {
+      "bytes": 1126,
+      "sha256": "4f5da9d0c8de4fb20a3080911f3b5123cd9c92d6c18d47dd2da1e1c36585ce3e"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_gi_sky.iwd": {
+      "bytes": 1120,
+      "sha256": "9ca8950d5f8ce82717012ea39d4455ad540c39d7d1de4c45fc29467cbd79b9fe"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_hard.iwd": {
+      "bytes": 1093,
+      "sha256": "078cd99dcd232afdf27b2866413071f2ad3b70d31ab02ff64952f43d06e78104"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_hq.iwd": {
+      "bytes": 1082,
+      "sha256": "f6fdda0fab34c41f7fc26dde5e8acbe9e71f2c948475e02e28d3371b2a034358"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_lit.iwd": {
+      "bytes": 1087,
+      "sha256": "6fcac6af6c9b85107a9af286a7af01d2b5c10c626b5bfc12f32216bad65beaf2"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_local.iwd": {
+      "bytes": 1100,
+      "sha256": "8f1c619c2444b1b782f1091ed47eb80b8d0624b1e2d0c4c7726095b2954f50ed"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_sd.iwd": {
+      "bytes": 1091,
+      "sha256": "bbdfac7c0259787789d9113bf1e486d547451e8603e96f773ab22a254d880a58"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_sd_editor.iwd": {
+      "bytes": 1359,
+      "sha256": "84b70a54cbfef12a73253f54989bb6b02b0edab6156e40843564df3c9c92eecd"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_sd_yard.iwd": {
+      "bytes": 1346,
+      "sha256": "0586c61598cd2b204e5493cb6e4e4768902ae6476da7d582e10f2e9149a543eb"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_smoke_bake_qa.iwd": {
+      "bytes": 1386,
+      "sha256": "72fec4a5367fb609a48010310148bac0af59296f92dd1a3117b18bcf1e57a528"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_soft.iwd": {
+      "bytes": 1092,
+      "sha256": "b3daf15beebc4b38ab37736ad7ab4419f63b577d54aa5808a47abd0e1416c48f"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_terrain.iwd": {
+      "bytes": 1367,
+      "sha256": "9bd2af0fb4e408a0e50cbcaac3438e8a6dc7f914e826d6c5163daa8d7bebdfc7"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_yard.iwd": {
+      "bytes": 1400,
+      "sha256": "8aa233bb591ede615944cc5fbf5f3fa8e8fe562b20d572809ba95e186c07b645"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2kit_yard_lift.iwd": {
+      "bytes": 1432,
+      "sha256": "4d43907a55c2547e8fa2c1ac0c9121a5fdcc9e5c56ffafe8bfbacb8c328975db"
+    },
+    "optional-custom-occupancy/mapkit_smoke_mp_cod2paint_qa.iwd": {
+      "bytes": 1203,
+      "sha256": "75407d962c75abf79cca421fff0211c65dba8bedcd2d1ae48884f8086db93a02"
+    },
+    "provenance/bridge-build.json": {
+      "bytes": 1948,
+      "sha256": "bfc49d5a92d2bc6f2a2265819b696819042d7b55ab23c695e16945db5a9c78b9"
+    },
+    "provenance/smoke-component.json": {
+      "bytes": 356,
+      "sha256": "3ce2511966b721d9e752c1c761b2d12b4f1382ff78417e3e0d8c286976e80f1f"
+    },
+    "runtime/mapkit-smoke/mapkit_smoke.dll": {
+      "bytes": 1077760,
+      "sha256": "e12d42f66f399eafccbe438fbf03a7628174df6c0ebb4ab7c6f8873af5ea4593"
+    },
+    "runtime/mapkit-smoke/noise128.rgba": {
+      "bytes": 8388608,
+      "sha256": "b67672efe1393289a943ed50a6c5c945528140abe8308b0edd70f0f8133a32a7"
+    },
+    "runtime/mapkit-smoke/smoke.shaders": {
+      "bytes": 184164,
+      "sha256": "7358e5bcdff7c6456e6e0b69b6160e1d3df033df8e0de6bc8fee5b2ff3b1b1ac"
+    },
+    "runtime/mapkit_smoke_test/mapkit_smoke_stock.iwd": {
+      "bytes": 435469,
+      "sha256": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf"
+    },
+    "runtime/mapkit_smoke_test/smoke_lightgrid_off.cfg": {
+      "bytes": 293,
+      "sha256": "4da14ad528c03f2b82354412cca8cf1b0d2722809e4357b4296994ae9168793a"
+    },
+    "runtime/mapkit_smoke_test/smoke_look_lively.cfg": {
+      "bytes": 269,
+      "sha256": "c2ea8dcd2c5371224c6a6c65cb5967e1a6740efefe37285ec99159ed543bc59b"
+    },
+    "runtime/mapkit_smoke_test/smoke_look_noise.cfg": {
+      "bytes": 273,
+      "sha256": "085e49af381732ffbff78e7abdca9a70a36c14dd6af5b8635f6077491d501722"
+    },
+    "runtime/mapkit_smoke_test/smoke_look_previous.cfg": {
+      "bytes": 246,
+      "sha256": "fbb614b19fcc26656851b9d3ce2eda9a037fa1836526b00836b4461059ee0393"
+    },
+    "runtime/mapkit_smoke_test/smoke_look_shadow.cfg": {
+      "bytes": 256,
+      "sha256": "076e766bcc6ecef69ec6a25458741252f1a43fec421350a61fa859918f253f3e"
+    },
+    "runtime/mapkit_smoke_test/smoke_look_soft.cfg": {
+      "bytes": 240,
+      "sha256": "b5abae18b0199833791cbbcac8bd435d23615b09ddf0a71d5daa44ad3303e2a8"
+    },
+    "runtime/mapkit_smoke_test/smoke_look_warm.cfg": {
+      "bytes": 181,
+      "sha256": "bae146c1f02b3ed71cdd93bdf41b728e2e5ec295af1c37abf8164c2df3c70bf7"
+    },
+    "runtime/mapkit_smoke_test/smoke_look_wide.cfg": {
+      "bytes": 363,
+      "sha256": "5e651b69ec92678f643af7e58a09a493a90c02bceedff04618d994423dc34b94"
+    },
+    "runtime/mapkit_smoke_test/smoke_look_wide_fx.cfg": {
+      "bytes": 383,
+      "sha256": "ba19e59612f86ef833f6fe334e5da957f060e56e6a7e0d505f7a9a92f94a4eed"
+    },
+    "runtime/mss32.dll": {
+      "bytes": 15971334,
+      "sha256": "79c211722f3b613e090ece46edc8c73bfc2bdb48862bf79dcaa021169ef21e3b"
+    }
+  }
+}

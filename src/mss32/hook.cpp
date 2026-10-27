@@ -23,6 +23,7 @@
 #include "hwid.h"
 #include "radar.h"
 #include "drawing.h"
+#include "smoke_diagnostics.h"
 #include "master_server.h"
 #include "error.h"
 #include "downloading.h"
@@ -81,6 +82,7 @@ void hook_Com_Frame()
         if (hotreload_requested) {
             
             // Unloading
+            if (!smoke_diagnostics_shutdown()) return;
             hotreload_unload();
             debug_unload();
             common_unload();
@@ -94,6 +96,7 @@ void hook_Com_Frame()
     #endif
 
     drawing_install_text_hooks();
+    smoke_diagnostics_frame();
 
     // Only for client
     if (dedicated->value.integer == 0) {
@@ -121,6 +124,7 @@ void hook_Com_Frame()
     ASM_CALL(RETURN_VOID, 0x00434f70);
 
     drawing_install_text_hooks();
+    smoke_diagnostics_frame();
 
     logger_add("Com_Frame finished.");
 }
@@ -150,6 +154,7 @@ int hook_gfxDll() {
     window_rendered();
     updater_renderer();
     drawing_renderer();
+    smoke_diagnostics_renderer_loaded();
 
     // Fix LOD
     //r_lodScale = Dvar_RegisterFloat("r_lodScale", 1f, 1f, 4f, DVAR_CHEAT | DVAR_RENDERER);
@@ -208,6 +213,7 @@ void hook_CL_Init() {
     }
 
     drawing_install_text_hooks();
+    smoke_diagnostics_frame();
 
     logger_add("CL_Init finished.");
 }
@@ -230,6 +236,7 @@ void hook_SV_Init() {
     // Shared & Server 
     freeze_init();
     weapons_init();
+    smoke_diagnostics_register_settings();
     common_init();
     server_init();
     dvar_init();

@@ -92,6 +92,12 @@ if (WIN32)
 
   target_compile_features(mss32 PRIVATE cxx_std_17)
 
+  option(COD2X_SMOKE_TEST_BUILD "Enable opt-in smoke bridge and disable stable updates for local testing" ON)
+  if(COD2X_SMOKE_TEST_BUILD)
+    target_compile_definitions(mss32 PRIVATE COD2X_SMOKE_TEST_BUILD=1)
+  endif()
+
+
   set_target_properties(mss32 PROPERTIES
     PREFIX ""
     OUTPUT_NAME "mss32.build"

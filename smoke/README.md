@@ -1,0 +1,65 @@
+# Volumetric smoke test branch
+
+This local branch adds the CoD2x integration and prebuilt smoke runtime. It has not
+been pushed or approved for competitive/general-player distribution.
+
+## Contents
+
+- `src/mss32/smoke_diagnostics.*`, `policy.hpp`: the small client bridge and settings.
+- `src/mss32/mapkit_reload.*`: optional local Map Kit archive-release/reload bridge.
+- `smoke/prebuilt`: ready-to-test binaries, compiled shaders, noise, all 15 stock-map
+  occupancy grids, 21 separate optional custom/test occupancy packages and setup scripts.
+- `tools/smoke-bake`: optional compiled-map occupancy baker (prebuilt voxelizer plus
+  standard-library Python BSP exporter/package wrapper).
+- `smoke/Build-Test.ps1`: rebuild the CoD2x bridge and assemble a fresh test ZIP using
+  the pinned prebuilt smoke component.
+
+The smoke simulation/rendering implementation and shader source stay in the existing
+separate workspace. This branch carries the native interface and prebuilt component;
+it does not copy the map editor, geometry compiler, lightmapper or source archive.
+Existing license and attribution notices are retained. Public distribution/source
+availability terms still need to be settled before publishing this binary-component layout.
+
+## Review and test
+
+Read `prebuilt/READ-ME-FIRST.txt` and `prebuilt/TESTING-NOTES.txt`. Make a separate
+CoD2 test copy, run `prebuilt/Setup-Smoke-Test.cmd`, select that copy's `CoD2MP_s.exe`,
+then run `prebuilt/Start-Smoke-Test.cmd`. `Uninstall-Smoke-Test.cmd` restores backed-up
+files. No Steam installation is modified by this branch's assembly tools.
+
+The current runtime uses compiled `smoke.shaders`, with no HLSL dependency. Setup
+checks file hashes and the supported stock DX9 renderer. Missing/invalid occupancy,
+policy or GPU depth capability preserves stock smoke. The experimental particle
+mode and latest reliability changes still require live acceptance.
+
+`COD2_SMOKE_DIAGNOSTICS=1` and `COD2_SMOKE_RENDER=1` are explicit test opt-ins supplied
+by Start. `COD2_SMOKE_DEV` is cleared; normal tests use packaged, BSP-bound grids.
+The existing `sv_mapkit_smoke_policy` remains server-controlled; resolution is local.
+
+The Windows branch build defaults `COD2X_SMOKE_TEST_BUILD=ON`. This disables stable
+update checks/download replacement in the test binary, preventing a stable update
+from replacing this branch's bridge. No public update endpoint/channel is changed.
+Set the option OFF for a build with smoke opt-in disabled and upstream update behavior.
+
+## Build
+
+The bridge uses the upstream 32-bit MinGW/NASM/OpenSSL toolchain. The smoke component
+was built separately with MSVC x86 and is supplied prebuilt. Only the bridge is rebuilt
+here; no MSVC renderer build or private source checkout is required.
+
+```powershell
+.\smoke\Build-Test.ps1 -ToolchainDirectory C:\Toolchains\cod2-mingw -CMake cmake -Ninja ninja
+```
+
+The toolchain root must contain `mingw32/bin/gcc.exe`, `mingw32/bin/g++.exe` and
+`usr/bin/nasm.exe`. Override `-MsysDirectory` if the required MSYS utilities are elsewhere.
+Output is `smoke/out/cod2x-smoke-test.zip` and `smoke/out/package/`.
+The normal upstream CMake target `mss32` also builds the bridge; the helper additionally
+stages the DLL, updates package hashes and creates the ZIP. It never installs or launches.
+
+## Remaining work
+
+See the testing notes for details: additional GPU support, complete particle ordering,
+large-volume splitting, same-name map rebinding, round/killcam acceptance, authoritative
+remote sky-shot transport, competitive admission/integrity and six cropped stock-map
+bounds reviews remain open. The occupancy baker is not a lighting or full map compiler.

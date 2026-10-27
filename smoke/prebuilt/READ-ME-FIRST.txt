@@ -1,0 +1,64 @@
+CoD2x volumetric smoke - local branch test
+
+Volumetric Smoke System by Logan - contact at logan@loganspencer.dev
+Copyright (c) 2026 Logan Spencer. Keep the supplied license/attribution notices.
+
+PRIVATE REVIEW SNAPSHOT. Read TESTING-NOTES.txt before testing.
+
+SETUP
+1. Make a separate copy of your CoD2 1.3 installation, for example
+   C:\Games\CoD2-Smoke-Test. The scripts do not copy the base game for you.
+2. Extract the entire test ZIP to a writable folder, keeping its contents together.
+   A branch checkout can run the same scripts directly from smoke/prebuilt.
+3. Run Setup-Smoke-Test.cmd and select CoD2MP_s.exe in that TEST copy.
+   Setup verifies the DX9 renderer and runtime file hashes, backs up replacements
+   and remembers the folder. Steam library targets are refused.
+4. Close CoD2/CoD4/MWR clients and servers, then run Start-Smoke-Test.cmd.
+   It supplies the environment flags, forces DX9 and opens Toujane locally.
+5. Join a team, select a weapon and throw normal smoke grenades.
+
+Console commands:
+  /cg_drawFPS 1
+  /give smoke_grenade_british_mp
+  /give ammo
+  /exec smoke_look_wide_fx.cfg   (experimental particle mode 2)
+  /exec smoke_look_wide.cfg      (mode 0)
+  /seta promod_smoke_resolution half
+
+From Command Prompt in the extracted bundle:
+  Start-Smoke-Test.cmd -Map mp_burgundy -Look wide_fx
+Pass -GameDirectory "C:\Games\CoD2-Smoke-Test" to choose a folder explicitly.
+PowerShell check without launching:
+  powershell -NoProfile -ExecutionPolicy Bypass -File .\Smoke-Test.ps1 -Action Verify
+
+REMOVAL
+Close CoD2 and run Uninstall-Smoke-Test.cmd. Original backups are preserved
+across reinstalls/updates. Changed installed files or corrupt backups are reported
+before overwriting anything. Backups, unrelated files and game-created logs/configs
+are retained. No global execution policy or updater endpoint is changed.
+
+CONTENTS
+The smoke implementation and HLSL source are not in this snapshot. Runtime uses
+the compiled smoke.shaders bundle, DLL and noise texture. The CoD2x bridge source
+and build/package scripts are on the local feature/volumetric-smoke branch.
+The test bridge disables stable auto-updates so they cannot replace this build.
+
+All 15 stock MP occupancy grids are included in mapkit_smoke_stock.iwd. The 21
+custom/test occupancy IWDs are separate and require their exact matching maps.
+No stock game executable, renderer, BSPs, textures or models are shipped here.
+Six stock grids require cropped-bounds review: Brecourt, Carentan, Decoy, Harbor,
+Matmata and Rhine. A passing hash/binding is not a route-coverage guarantee.
+
+Optional authoring tool: tools/smoke-bake in the branch or assembled test ZIP.
+It takes compiled BSPs and makes occupancy, not map geometry or lightmaps.
+Requires Windows and Python 3.10+; the voxelizer is prebuilt and the world-only
+exporter needs only the standard library. Players do not need to run the baker.
+
+LOGS
+  <test game>\mapkit-smoke\client.log
+  %LOCALAPPDATA%\promodx\cod2-smoke\bridge.log
+Return map, repro steps, GPU/resolution and screenshots/video with those logs.
+
+This local snapshot is not approved for competitive/general-player distribution.
+Existing licensing remains in effect; source availability/licensing must be settled
+before publishing the prebuilt-component layout. Nothing has been pushed or uploaded.

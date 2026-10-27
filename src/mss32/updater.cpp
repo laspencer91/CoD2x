@@ -158,7 +158,13 @@ bool updater_downloadDLL(const char *url, const char *downloadPath, char *errorB
 }
 
 
-bool updater_downloadAndReplaceDllFile(const char *url, char *errorBuffer, size_t errorBufferSize) { 
+bool updater_downloadAndReplaceDllFile(const char *url, char *errorBuffer, size_t errorBufferSize) {
+#ifdef COD2X_SMOKE_TEST_BUILD
+    if (errorBuffer && errorBufferSize)
+        snprintf(errorBuffer, errorBufferSize, "Stable auto-updates are disabled in this smoke test build.");
+    return false; // Local test branch never replaces itself with stable builds.
+#endif
+
 
     const char destinationFileName[] = "mss32_new.dll";
     const char oldFileName[] = "mss32_old.dll";
@@ -230,6 +236,10 @@ bool updater_resolveServerAddress() {
 // Sends the HTTPS update check with the same data as the UDP request (runs on a background thread).
 // If it fails, the UDP request is sent as a fallback.
 static void updater_sendHttpsRequest() {
+#ifdef COD2X_SMOKE_TEST_BUILD
+    return; // Local test branch never replaces itself with stable builds.
+#endif
+
     UpdaterHttpsRequest request;
 
     if (dedicated->value.boolean == 0) // Client
@@ -260,6 +270,10 @@ static void updater_sendHttpsRequest() {
 // This function is called on startup to check for updates
 // Original func: 0x0041162f
 bool updater_sendRequest() {
+#ifdef COD2X_SMOKE_TEST_BUILD
+    return false; // Local test branch never replaces itself with stable builds.
+#endif
+
 
     // Resolve the Auto-Update server address if not already resolved
     updater_resolveServerAddress();
@@ -436,6 +450,10 @@ void updater_dialogConfirmed() {
 
 
 void updater_checkForUpdate() {
+#ifdef COD2X_SMOKE_TEST_BUILD
+    return; // Local test branch never replaces itself with stable builds.
+#endif
+
     // Server
     if (dedicated->value.boolean > 0) {
         // Send the request to the Auto-Update server

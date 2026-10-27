@@ -1,0 +1,89 @@
+CoD2 volumetric smoke - testing notes
+Snapshot: 2026-10-27
+
+PRIVATE DEVELOPER TEST
+This package contains prebuilt smoke binaries and map data. It is not approved for
+competitive or general-player distribution. Use a separate CoD2 installation.
+
+COMPLETED RELIABILITY CHANGES
+- Particle attenuation requires a successful world smoke composite. Attempted
+  draws, failed passes and depth prewarming do not activate fading.
+- Invalid or disabled policy clears retained presentation and particle fog.
+  Device reset also clears frame state and cached material classifications.
+- Failed particle overrides restore the native stream and retry the original
+  batch. The D3D fixture verifies the resulting pixels and stream bindings.
+- Bridge logging is best-effort. Failure to open a log does not prevent startup.
+  Default: %LOCALAPPDATA%\promodx\cod2-smoke\bridge.log
+  COD2_SMOKE_LOG can select another location; Unicode paths are supported.
+- Failed preparation, allocation and texture uploads discard the pending job
+  and retry a fresh revision with 100 ms to 2 s exponential backoff.
+- Partial or failed uploads do not swap front textures. Failed unlocks are
+  handled. Only groups sharing a merge/split transaction wait together;
+  unrelated spawns and expirations can publish independently.
+- Missing required lighting is serviced even for offscreen groups. Retained
+  caches re-entering preparation are marked dirty.
+- Weather-only materials no longer trigger early smoke insertion. After a
+  successful composite, compatible blended world indexed batches are considered
+  for attenuation even if absent from the trigger list. Unknown/rejected batches
+  are counted. GPU diagnostics report INTZ and RESZ support separately.
+
+REMAINING LIMITATIONS AND CHECKS
+- Full/half/quarter smoke settings can affect edge opacity. Compare coverage at
+  identical camera positions, including distant cloud fringes.
+- The depth-copy path requires INTZ and RESZ. The current adapter reports both;
+  additional NVIDIA and Intel hardware has not been tested. Missing capabilities
+  retain stock smoke. Mixed-client visibility needs validation before competition.
+- Particle mode 2 still needs live scene coverage checks. Unsupported layouts,
+  blend modes and non-indexed transparent draws are not fully handled. Check
+  muzzle flashes, tracers, blood, ambient effects and transparent world surfaces.
+- Groups exceeding a device's volume extent are diagnosed and throttled.
+  Splitting them remains open. Retained fronts are not a complete fallback for
+  every hard allocation/upload failure or newly oversized merged group.
+- Same-name maps loaded from different servers need stronger map identity and
+  binding refresh; do not assume matching map names imply identical BSP bytes.
+- The Map Kit reload bridge still needs a timeout when a devmap command fails.
+- run-qa.ps1 can leave its scripted smoke QA override installed in the private
+  workspace. The override is not included in this archive's runtime folder.
+- Check late-round smoke across round restarts, reconnects, killcams and demos.
+  Check alt-tab, vid_restart, policy changes and device-reset recovery.
+- Authoritative remote sky-shot transport, competitive admission/version checks,
+  trusted shader/noise validation and Linux server acceptance remain open.
+- Six stock-map grids use cropped candidate bounds requiring route/roof checks:
+  Brecourt, Carentan, Decoy, Harbor, Matmata and Rhine.
+
+VALIDATION
+- Matching CoD2x bridge and smoke renderer build successfully.
+- 118 Python tests, nine native probes and 16 shader variants pass.
+- Thirteen installer tests cover compatibility/hash/path checks, backup preservation,
+  reinstall/update, changed files, corrupt backups and locked-file rollback during
+  both installation and removal. Fixtures contain no executable game binaries.
+- Preparation regressions cover retry backoff, connected merge/split publication,
+  and independent spawn/expiry while another group waits.
+- The real-D3D fixture injects a failed override, renders the native fallback,
+  compares all pixels for alpha/additive/premultiplied blending and checks state.
+  Its output image was inspected; soft edges remain clean.
+- ZIP integrity, per-file SHA256 and all 36 occupancy bindings were checked.
+- Latest reliability/particle changes have not had live game acceptance.
+  Synthetic probe costs do not establish player FPS or complete scene ordering.
+- Mode 2 is optional. The included launch instructions select mode 0.
+
+OCCUPANCY AND DISTRIBUTION
+All 15 installed stock MP maps are in one occupancy-only IWD. The 21 optional
+custom/test occupancy packages are separate and require their exact matching
+custom maps. Original BSPs, textures, models and other stock assets are not
+supplied. BSP/grid hashes detect stale data, not client authenticity.
+
+Preserve the included source, licenses and copyright/attribution notices.
+The worker architecture retains its one-snapshot and one-texture-commit-attempt
+budget per rendered frame. No game launch, installation or upload is performed
+by assembling this archive. Setup/launch/uninstall scripts act only when run.
+
+BRANCH FOLLOW-UP
+- All 16 shader variants load from smoke.shaders without source. Validation rejects
+  malformed, truncated, duplicate, wrong-profile, corrupt-hash and incompatible bundles.
+  A stale loose shader does not override a compiled bundle.
+- The standalone baker reproduced the existing Toujane and terrain-fixture grids
+  byte for byte using Python with site packages disabled.
+- The test CoD2x bridge was rebuilt on this branch with stable updates disabled.
+- The optional baker is available separately from the player runtime; its core
+  voxelizer is prebuilt. This is not the editor, lighting baker or full map compiler.

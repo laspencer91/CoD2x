@@ -1,0 +1,5 @@
+{
+  "schema": 1,
+  "sha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+  "description": "Prebuilt world/terrain smoke voxelizer; 50 cm cells; 16M-cell limit; source retained in owner workspace."
+}

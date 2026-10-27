@@ -1,0 +1,1130 @@
+{
+  "schema": 1,
+  "purpose": "private-test",
+  "releaseReady": false,
+  "complete": true,
+  "expectedMaps": 36,
+  "bakedMaps": 36,
+  "stockBundleReady": true,
+  "stockBundleSha256": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+  "stockBundleBytes": 435469,
+  "maps": [
+    {
+      "map": "mp_breakout",
+      "kind": "stock",
+      "sourceSha256": "9510851d75cb245cdc7b4df0496622df2f91ea7235c8515a59cfe33b8bc60443",
+      "gridSha256": "283da298baaf418cda0f54682037ab65604f4e5346139faf523dbc277405db15",
+      "dimensions": [
+        516,
+        519,
+        45
+      ],
+      "solidCells": 1399287,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        295.2756042480469,
+        236.22047424316406,
+        -216.53543090820312
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        10452.755996704102,
+        10452.75598526001,
+        669.2913475036621
+      ],
+      "gridBytes": 133305,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_brecourt",
+      "kind": "stock",
+      "sourceSha256": "d71c05e41f876d110d6edc46201b4334576a6a51fdafaa2bb71e9ec8f8172acd",
+      "gridSha256": "a80868f8f5e9df9a7ee25249c3b65cce4ca7f43251b6f33432e269801b91356e",
+      "dimensions": [
+        447,
+        318,
+        48
+      ],
+      "solidCells": 752560,
+      "boundsPolicy": "hints",
+      "boundsSource": "hints",
+      "origin": [
+        -4350.3935546875,
+        -3700.787353515625,
+        -275.5905456542969
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        4448.819110870361,
+        2559.0552139282227,
+        669.2913513183594
+      ],
+      "gridBytes": 42936,
+      "boundsReviewRequired": true,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_burgundy",
+      "kind": "stock",
+      "sourceSha256": "7c647cfd685c957843247d3d3d9d5373c1a5d7a1fe8a52e6783cbe60492321b2",
+      "gridSha256": "f21dea6978f6622d103bd872699c70637422edb327abb074e67a143f6dec3363",
+      "dimensions": [
+        277,
+        309,
+        43
+      ],
+      "solidCells": 516828,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -1633.8582763671875,
+        -1614.1732177734375,
+        -196.85040283203125
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        3818.8976707458496,
+        4468.503993988037,
+        649.6062965393066
+      ],
+      "gridBytes": 44745,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_carentan",
+      "kind": "stock",
+      "sourceSha256": "c31cf3a7f92667ffe47ecf1e5187def0c9e2ba89b21bc95b516107851cdd4427",
+      "gridSha256": "4115d4b353c76eed1c64581a6f15f96a4beea50a818c1d9eb11fe0acd6c41e0c",
+      "dimensions": [
+        219,
+        301,
+        51
+      ],
+      "solidCells": 625512,
+      "boundsPolicy": "hints",
+      "boundsSource": "hints",
+      "origin": [
+        -1811.023681640625,
+        -1830.7086181640625,
+        -295.2756042480469
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        2499.999973297119,
+        4094.4882774353027,
+        708.6614112854004
+      ],
+      "gridBytes": 68210,
+      "boundsReviewRequired": true,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit",
+      "kind": "custom",
+      "sourceSha256": "d78dc41f16638191aa105e9c8c48b281ab7e26c75bb298a62bbb0a2f79dfb2f1",
+      "gridSha256": "8b3d9977b1df5e7b2ece0102bbb16aa1e6d08e2972a2652ddd84e10c6af4fc7a",
+      "dimensions": [
+        56,
+        56,
+        9
+      ],
+      "solidCells": 5648,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        118.11023712158203
+      ],
+      "gridBytes": 373,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_bounce",
+      "kind": "custom",
+      "sourceSha256": "ccfd2757d6dc8945526f4059d5789bfdc2b1985d10d7e294b6ea6d7320a6758b",
+      "gridSha256": "b51fcfe961d85447fe215eb68fb076c552e6c4d4bf62e89077ec0eeb8ca250cc",
+      "dimensions": [
+        56,
+        56,
+        13
+      ],
+      "solidCells": 6848,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        196.85039520263672
+      ],
+      "gridBytes": 665,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_comp",
+      "kind": "custom",
+      "sourceSha256": "d19af827fc358cfbbb2b5733df2d638a11d81701bfdc1ab7a89461d89db9d2bf",
+      "gridSha256": "b51fcfe961d85447fe215eb68fb076c552e6c4d4bf62e89077ec0eeb8ca250cc",
+      "dimensions": [
+        56,
+        56,
+        13
+      ],
+      "solidCells": 6848,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        196.85039520263672
+      ],
+      "gridBytes": 665,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_dark",
+      "kind": "custom",
+      "sourceSha256": "ac3bed0bcbef16199807aab98b768d29908893b49d9fcb622cce46b2e0a4a4ce",
+      "gridSha256": "b51fcfe961d85447fe215eb68fb076c552e6c4d4bf62e89077ec0eeb8ca250cc",
+      "dimensions": [
+        56,
+        56,
+        13
+      ],
+      "solidCells": 6848,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        196.85039520263672
+      ],
+      "gridBytes": 665,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_floor",
+      "kind": "custom",
+      "sourceSha256": "74fe75f0f82e6a832ccbec1fbc51dd47c1dd3bda14f01d5ae9245a6cf376f855",
+      "gridSha256": "b51fcfe961d85447fe215eb68fb076c552e6c4d4bf62e89077ec0eeb8ca250cc",
+      "dimensions": [
+        56,
+        56,
+        13
+      ],
+      "solidCells": 6848,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        196.85039520263672
+      ],
+      "gridBytes": 665,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_gi_color",
+      "kind": "custom",
+      "sourceSha256": "4158b7c8d9f25e07b89ceb77f95d1d4677741440c3033a999d2485a3b88c766e",
+      "gridSha256": "b51fcfe961d85447fe215eb68fb076c552e6c4d4bf62e89077ec0eeb8ca250cc",
+      "dimensions": [
+        56,
+        56,
+        13
+      ],
+      "solidCells": 6848,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        196.85039520263672
+      ],
+      "gridBytes": 665,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_gi_gray",
+      "kind": "custom",
+      "sourceSha256": "651546bb04dede337c5bcbafc85bd4ddb3ef9c82526b5e52a5e9d5d1f573079c",
+      "gridSha256": "b51fcfe961d85447fe215eb68fb076c552e6c4d4bf62e89077ec0eeb8ca250cc",
+      "dimensions": [
+        56,
+        56,
+        13
+      ],
+      "solidCells": 6848,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        196.85039520263672
+      ],
+      "gridBytes": 665,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_gi_sky",
+      "kind": "custom",
+      "sourceSha256": "b3dc086bb9257f21d07fd2d45c3c2a9404977dc03e918e453460ee870df42f5e",
+      "gridSha256": "b51fcfe961d85447fe215eb68fb076c552e6c4d4bf62e89077ec0eeb8ca250cc",
+      "dimensions": [
+        56,
+        56,
+        13
+      ],
+      "solidCells": 6848,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        196.85039520263672
+      ],
+      "gridBytes": 665,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_hard",
+      "kind": "custom",
+      "sourceSha256": "64a1194ba71c19d58e1c10e9222945975b5a256a214366ddf88345b80c85ac90",
+      "gridSha256": "8b3d9977b1df5e7b2ece0102bbb16aa1e6d08e2972a2652ddd84e10c6af4fc7a",
+      "dimensions": [
+        56,
+        56,
+        9
+      ],
+      "solidCells": 5648,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        118.11023712158203
+      ],
+      "gridBytes": 373,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_hq",
+      "kind": "custom",
+      "sourceSha256": "e4047953bb41a90e4ecd2a1d977c3bc33e04c3381caf38ddc9bfb9a43f1a713c",
+      "gridSha256": "8b3d9977b1df5e7b2ece0102bbb16aa1e6d08e2972a2652ddd84e10c6af4fc7a",
+      "dimensions": [
+        56,
+        56,
+        9
+      ],
+      "solidCells": 5648,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        118.11023712158203
+      ],
+      "gridBytes": 373,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_lit",
+      "kind": "custom",
+      "sourceSha256": "72e612f559b56befb3022edefc6ebf4df528c7a0b4d536ab5c91477b6f334d2f",
+      "gridSha256": "8b3d9977b1df5e7b2ece0102bbb16aa1e6d08e2972a2652ddd84e10c6af4fc7a",
+      "dimensions": [
+        56,
+        56,
+        9
+      ],
+      "solidCells": 5648,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        118.11023712158203
+      ],
+      "gridBytes": 373,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_local",
+      "kind": "custom",
+      "sourceSha256": "da189a4875bb4296df8eff836efdf8171af89706de344ddbc6695d2e6ea59253",
+      "gridSha256": "8b3d9977b1df5e7b2ece0102bbb16aa1e6d08e2972a2652ddd84e10c6af4fc7a",
+      "dimensions": [
+        56,
+        56,
+        9
+      ],
+      "solidCells": 5648,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        118.11023712158203
+      ],
+      "gridBytes": 373,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_sd",
+      "kind": "custom",
+      "sourceSha256": "4636107efd9010b756206ffb1903a675f6279adae834f3bca67fb3095f02e9bd",
+      "gridSha256": "64bc6fe3e9c38564e3dd7b47d093a0b4753a36e8bfdb2a14bcf21f5b03aa7fd1",
+      "dimensions": [
+        56,
+        56,
+        9
+      ],
+      "solidCells": 5760,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        118.11023712158203
+      ],
+      "gridBytes": 403,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_sd_editor",
+      "kind": "custom",
+      "sourceSha256": "c0775da0f999024d595306eff5606c139bdb4505465aba8a361ef3b353e9f469",
+      "gridSha256": "5b3ee29d5125cea8334a0f7c11172cd779e2b06c162705695990140198917f6f",
+      "dimensions": [
+        60,
+        44,
+        10
+      ],
+      "solidCells": 5466,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -590.5512084960938,
+        -433.07086181640625,
+        -39.370079040527344
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        590.5511627197266,
+        433.0708770751953,
+        157.48031616210938
+      ],
+      "gridBytes": 1493,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_sd_yard",
+      "kind": "custom",
+      "sourceSha256": "239b1b353c425c06728ac3470d9632c44601a8b74a79be58f7c6945be554451d",
+      "gridSha256": "5b3ee29d5125cea8334a0f7c11172cd779e2b06c162705695990140198917f6f",
+      "dimensions": [
+        60,
+        44,
+        10
+      ],
+      "solidCells": 5466,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -590.5512084960938,
+        -433.07086181640625,
+        -39.370079040527344
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        590.5511627197266,
+        433.0708770751953,
+        157.48031616210938
+      ],
+      "gridBytes": 1493,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_smoke_bake_qa",
+      "kind": "custom",
+      "sourceSha256": "36bf971014e83a9e62830e6ab09b482b1c1a2e014280bc970b20147148385796",
+      "gridSha256": "5b3ee29d5125cea8334a0f7c11172cd779e2b06c162705695990140198917f6f",
+      "dimensions": [
+        60,
+        44,
+        10
+      ],
+      "solidCells": 5466,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -590.5512084960938,
+        -433.07086181640625,
+        -39.370079040527344
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        590.5511627197266,
+        433.0708770751953,
+        157.48031616210938
+      ],
+      "gridBytes": 1493,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_soft",
+      "kind": "custom",
+      "sourceSha256": "85924472725a9c83ab1f66ae41727217ab86bc7ac777df1b2b7869279a9b9ee5",
+      "gridSha256": "8b3d9977b1df5e7b2ece0102bbb16aa1e6d08e2972a2652ddd84e10c6af4fc7a",
+      "dimensions": [
+        56,
+        56,
+        9
+      ],
+      "solidCells": 5648,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        118.11023712158203
+      ],
+      "gridBytes": 373,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_terrain",
+      "kind": "custom",
+      "sourceSha256": "edfba6109744d33a46a2ad247d9a97b8ba0f1f34578e830f2ee46ebee0dca0ed",
+      "gridSha256": "c115bd695d9cc03cf7a69bca9cf021483d9c97ce08711a1ba983b78d97ebfac1",
+      "dimensions": [
+        56,
+        56,
+        17
+      ],
+      "solidCells": 7825,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        275.5905532836914
+      ],
+      "gridBytes": 1005,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_yard",
+      "kind": "custom",
+      "sourceSha256": "89ea9c1f53858db1b6070224fb161398882744bc89856e81e5b4bfed22aa03c4",
+      "gridSha256": "3fd8ffa4149e10246616ee73bd6328254a29b6567fa11cc0ad12ff03a52b15d3",
+      "dimensions": [
+        94,
+        68,
+        18
+      ],
+      "solidCells": 24090,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -925.1968383789062,
+        -669.2913208007812,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        925.1968765258789,
+        669.2913665771484,
+        295.2755928039551
+      ],
+      "gridBytes": 4770,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2kit_yard_lift",
+      "kind": "custom",
+      "sourceSha256": "bc4428faffcc3499c4656573504362b3f0a972e5d748d5e127a4fee9cd90530b",
+      "gridSha256": "3fd8ffa4149e10246616ee73bd6328254a29b6567fa11cc0ad12ff03a52b15d3",
+      "dimensions": [
+        94,
+        68,
+        18
+      ],
+      "solidCells": 24090,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -925.1968383789062,
+        -669.2913208007812,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        925.1968765258789,
+        669.2913665771484,
+        295.2755928039551
+      ],
+      "gridBytes": 4770,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_cod2paint_qa",
+      "kind": "custom",
+      "sourceSha256": "874e236b2a5ac9d9c2775fee23499ce319506958c11b762e48a76e9f40e98eec",
+      "gridSha256": "a9387384d2c2317aa20e51150d53c9ae872d9099de73219a003b7bd948d6fbc5",
+      "dimensions": [
+        56,
+        56,
+        17
+      ],
+      "solidCells": 7680,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -551.1810913085938,
+        -551.1810913085938,
+        -59.055118560791016
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        551.1811218261719,
+        551.1811218261719,
+        275.5905532836914
+      ],
+      "gridBytes": 949,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_dawnville",
+      "kind": "stock",
+      "sourceSha256": "6a32209f85e772c7ac9505514db90b81d853657d7244fb38894d5b13274933e4",
+      "gridSha256": "3089ca8bd542070d396c0f322b30144b1492a75b2a85a6233d44aabd5cc9f594",
+      "dimensions": [
+        419,
+        294,
+        70
+      ],
+      "solidCells": 564525,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -4448.81884765625,
+        -19114.173828125,
+        -216.53543090820312
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        3799.2127113342285,
+        -13326.77220916748,
+        1161.417335510254
+      ],
+      "gridBytes": 134661,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_decoy",
+      "kind": "stock",
+      "sourceSha256": "4d61ee5b1372fe5c8951f368fbd69ecd8997b09ecac4b98a5e41ab2cc983cc31",
+      "gridSha256": "b51d63523acb447efc80baf354e992adf7cdd98c79cc762f53fa32d91c7dcfa1",
+      "dimensions": [
+        283,
+        174,
+        48
+      ],
+      "solidCells": 81269,
+      "boundsPolicy": "hints",
+      "boundsSource": "hints",
+      "origin": [
+        5000.0,
+        -15000.0,
+        -846.4567260742188
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        10570.86618423462,
+        -11574.803123474121,
+        98.4251708984375
+      ],
+      "gridBytes": 34166,
+      "boundsReviewRequired": true,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_downtown",
+      "kind": "stock",
+      "sourceSha256": "8d24dba003827d8d6e11bd01924431fdc727841dc2c2a14ec2e9d6c6f3deef7c",
+      "gridSha256": "c9ab6475a98096db3a5ab4f01bdb9d3e56ef29930c8cc1694dde74c53dec1436",
+      "dimensions": [
+        409,
+        426,
+        74
+      ],
+      "solidCells": 1067651,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -2775.590576171875,
+        -4960.6298828125,
+        -216.53543090820312
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        5275.590587615967,
+        3425.196952819824,
+        1240.1574935913086
+      ],
+      "gridBytes": 197062,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_farmhouse",
+      "kind": "stock",
+      "sourceSha256": "5e68fcde49a4d889f2a26fa79ce98f563df7c21a6b047d00c09b0c366157cda3",
+      "gridSha256": "20316bd6e68c43e51857f9bae0d7cd124ba27efe3199bebd047c89eba96a41f7",
+      "dimensions": [
+        513,
+        546,
+        46
+      ],
+      "solidCells": 1299503,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -5787.40185546875,
+        -5334.6455078125,
+        -216.53543090820312
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        4311.023418426514,
+        5413.386070251465,
+        688.9763870239258
+      ],
+      "gridBytes": 68695,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_harbor",
+      "kind": "stock",
+      "sourceSha256": "02ce67da9a7c0ba58c5cbce97e5f7ac85c1745bd77a12537bc527111d9ff9d82",
+      "gridSha256": "87777d7c781379592a7fac84afd862fe34adf95979f33c7ac97c3f7f43a7fe77",
+      "dimensions": [
+        359,
+        216,
+        49
+      ],
+      "solidCells": 653851,
+      "boundsPolicy": "hints",
+      "boundsSource": "hints",
+      "origin": [
+        -12362.205078125,
+        -9586.6142578125,
+        -157.48031616210938
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        -5295.275890350342,
+        -5334.645721435547,
+        807.0866203308105
+      ],
+      "gridBytes": 97239,
+      "boundsReviewRequired": true,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_leningrad",
+      "kind": "stock",
+      "sourceSha256": "19230d4b5a2837c385fc40fa7f552e0a52035b2803845337218c5619f4b660e3",
+      "gridSha256": "b19c05930d6dfcaa4fb8b15351bd3261712940dabf534063aa2fd3a79a17eea2",
+      "dimensions": [
+        264,
+        257,
+        68
+      ],
+      "solidCells": 724426,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -2972.44091796875,
+        -2657.480224609375,
+        -354.3307189941406
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        2224.4095153808594,
+        2401.5749320983887,
+        984.2519683837891
+      ],
+      "gridBytes": 88802,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_matmata",
+      "kind": "stock",
+      "sourceSha256": "9d4d3c62e3723c658afb6a44383390b90d66bd8546e25f534ab855d992edab19",
+      "gridSha256": "aac66208217457285d3cb921060a078ffe5e093a72d5d231262b172db030c660",
+      "dimensions": [
+        240,
+        249,
+        48
+      ],
+      "solidCells": 393664,
+      "boundsPolicy": "hints",
+      "boundsSource": "hints",
+      "origin": [
+        2007.8740234375,
+        3740.157470703125,
+        -216.53543090820312
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        6732.283508300781,
+        8641.73231124878,
+        728.3464660644531
+      ],
+      "gridBytes": 77197,
+      "boundsReviewRequired": true,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_railyard",
+      "kind": "stock",
+      "sourceSha256": "3dde34eab4495ba1c6dabcb45c4f0092c38daed327a56cf48f906fe2feb7e838",
+      "gridSha256": "72c31d18d19ae1208b4a1fa0d6d0433a90dccf1ca99c49fabdda4ef3e6996336",
+      "dimensions": [
+        440,
+        449,
+        59
+      ],
+      "solidCells": 635333,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -4901.57470703125,
+        -2381.889892578125,
+        -157.48031616210938
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        3759.8426818847656,
+        6456.692852020264,
+        1003.9370155334473
+      ],
+      "gridBytes": 131825,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_rhine",
+      "kind": "stock",
+      "sourceSha256": "9daea5384168879692b9ec34ac526fdc2d9e91f044302d8325790d547ca4feaa",
+      "gridSha256": "7f14d5b9072992eb6445b4b4cca957a08202aa76bb106701c28e8659efb397d2",
+      "dimensions": [
+        328,
+        201,
+        46
+      ],
+      "solidCells": 677496,
+      "boundsPolicy": "hints",
+      "boundsSource": "hints",
+      "origin": [
+        2204.724365234375,
+        13937.0078125,
+        216.53543090820312
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        8661.41732788086,
+        17893.700756072998,
+        1122.047248840332
+      ],
+      "gridBytes": 98078,
+      "boundsReviewRequired": true,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_toujane",
+      "kind": "stock",
+      "sourceSha256": "f68f6424fc6f9ee2465e23da1fbe5c502fbeee97357efe347515e00379dd3b85",
+      "gridSha256": "78bb137427271498ee0d598df9435d4c11eb400646d58f2f2b9f16fb879edc99",
+      "dimensions": [
+        347,
+        374,
+        36
+      ],
+      "solidCells": 723252,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        -2263.779541015625,
+        -1062.9921875,
+        -157.48031616210938
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        4566.929172515869,
+        6299.212593078613,
+        551.1811065673828
+      ],
+      "gridBytes": 69414,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    },
+    {
+      "map": "mp_trainstation",
+      "kind": "stock",
+      "sourceSha256": "ee31b0cae4c509441a4f9a5f29792bd1d9fdcdba2c4207f5027efa4dbe90a73b",
+      "gridSha256": "dad3aed9c17f047433b5e15496063996a78d933b838055b4fa713024f8a446f0",
+      "dimensions": [
+        396,
+        370,
+        51
+      ],
+      "solidCells": 1335296,
+      "boundsPolicy": "collision",
+      "boundsSource": "collision",
+      "origin": [
+        1574.80322265625,
+        -7125.984375,
+        -295.2756042480469
+      ],
+      "cellSize": 19.685039520263672,
+      "worldMax": [
+        9370.078872680664,
+        157.4802474975586,
+        708.6614112854004
+      ],
+      "gridBytes": 134074,
+      "boundsReviewRequired": false,
+      "limitations": [
+        "Static prop meshes intentionally excluded from smoke occupancy; world brushes and terrain remain solid. Render depth still occludes smoke against props.",
+        "Moving brush entities are excluded. Without --game, static props are excluded."
+      ]
+    }
+  ],
+  "failures": []
+}

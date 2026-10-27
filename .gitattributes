@@ -2,3 +2,9 @@
 Dockerfile    text eol=lf
 .dockerignore text eol=lf
 compose.yaml  text eol=lf
+smoke/prebuilt/** -text -whitespace
+smoke/prebuilt/**/*.dll -diff
+smoke/prebuilt/**/*.rgba -diff
+smoke/prebuilt/**/*.shaders -diff
+smoke/prebuilt/**/*.iwd -diff
+tools/smoke-bake/bin/*.exe -text -diff
