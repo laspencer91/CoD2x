@@ -6,6 +6,11 @@ together. No tool installer, system Python or Node.js is required to use it.
 Microsoft Edge WebView2 Runtime is required; this portable build does not install
 or download it automatically. There is no updater or background service.
 
+Production builds must embed the interface: use `npm run build:app` (Tauri CLI),
+or pass `--features custom-protocol` to `cargo build --release`. Release builds
+and package validation reject development mode. No localhost server is required
+to run the extracted portable app.
+
 Send testers **cod2x-smoke-player.zip**. It contains the GUI, installer, runtime
 and all 15 stock-map occupancy grids with the default smoke look. It excludes
 tests, source files, the baker, Python, developer notes and custom-map bakes.

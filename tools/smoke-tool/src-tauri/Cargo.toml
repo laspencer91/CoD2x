@@ -8,6 +8,9 @@ description = "Portable CoD2 smoke setup and occupancy tool"
 name = "CoD2SmokeTool"
 path = "src/main.rs"
 
+[features]
+custom-protocol = ["tauri/custom-protocol"]
+
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 

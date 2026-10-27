@@ -58,7 +58,12 @@ if ($unchanged) {
     }
     [IO.Directory]::Move($stage, $destination)
 }
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'src-tauri/target/release/CoD2SmokeTool.exe') -Destination (Join-Path $prebuilt 'CoD2SmokeTool.exe') -Force
+$targetRoot = Join-Path $PSScriptRoot 'src-tauri/target'
+if ($env:CARGO_TARGET_DIR) {
+    $targetRoot = if ([IO.Path]::IsPathRooted($env:CARGO_TARGET_DIR)) { $env:CARGO_TARGET_DIR }
+        else { Join-Path $PSScriptRoot $env:CARGO_TARGET_DIR }
+}
+Copy-Item -LiteralPath (Join-Path $targetRoot 'release/CoD2SmokeTool.exe') -Destination (Join-Path $prebuilt 'CoD2SmokeTool.exe') -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'README.md') -Destination (Join-Path $prebuilt 'DESKTOP-TOOL.txt') -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'src/fonts/LICENSE-LibreBaskerville.txt') -Destination (Join-Path $prebuilt 'licenses/LICENSE-LibreBaskerville.txt') -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'node_modules/@fontsource/barlow/LICENSE') -Destination (Join-Path $prebuilt 'licenses/LICENSE-Barlow.txt') -Force

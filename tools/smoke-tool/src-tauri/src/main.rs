@@ -100,6 +100,10 @@ fn main() {
         mode.as_deref(),
         Some("--validate-bundle" | "--validate-runtime")
     ) {
+        if cfg!(dev) {
+            eprintln!("This is a development build and cannot be packaged. Rebuild with the custom-protocol feature.");
+            std::process::exit(1);
+        }
         let result = service::bundle_root().and_then(|root| {
             if mode.as_deref() == Some("--validate-runtime") {
                 service::validate_runtime(&root, &|s| println!("{s}"))

@@ -56,6 +56,8 @@ foreach ($entry in $manifest.files.PSObject.Properties) {
         throw "Prebuilt input hash/path mismatch: $($entry.Name)"
     }
 }
+& (Join-Path $prebuilt 'CoD2SmokeTool.exe') --validate-runtime | Write-Output
+if ($LASTEXITCODE) { throw 'Portable desktop validation failed. Rebuild the production tool before packaging.' }
 $stage = In-Output (Join-Path $out ('package.next.' + [Guid]::NewGuid().ToString('N')))
 [IO.Directory]::CreateDirectory($stage) | Out-Null
 foreach ($entry in $manifest.files.PSObject.Properties) {
