@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Logan Spencer. GPL-3.0 + supplied licenses/smoke/NOTICE.md.
 [CmdletBinding()]
 param(
-    [ValidateSet('Try', 'Install', 'Launch', 'Uninstall', 'Verify')] [string]$Action = 'Install',
+    [ValidateSet('Try', 'Install', 'Launch', 'Uninstall', 'Verify', 'Inspect')] [string]$Action = 'Install',
     [string]$GameDirectory,
     [ValidatePattern('^mp_[a-z0-9_]{1,28}$')] [string]$Map = 'mp_toujane',
     [ValidateSet('wide', 'wide_fx', 'lively', 'warm', 'soft')] [string]$Look = 'wide',
@@ -42,6 +42,33 @@ function Safe-Path([string]$Root, [string]$Relative) {
 function File-Hash([string]$Path) {
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
     return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+
+function Test-CoD2xLoader([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    if ([Diagnostics.FileVersionInfo]::GetVersionInfo($Path).ProductName -eq 'CoD2x') { return $true }
+    # Some upstream/MinGW builds have no readable product-version strings.
+    # Recognize their original-library loader and its specific CoD2x error text.
+    $data = [IO.File]::ReadAllBytes($Path)
+    if ($data.Length -lt 64 -or $data[0] -ne 0x4d -or $data[1] -ne 0x5a) { return $false }
+    $text = [Text.Encoding]::ASCII.GetString($data)
+    return $text.Contains('mss32_original.dll') -and $text.Contains('CoD2x is not installed correctly.')
+}
+
+function Get-CoD2xStatus([string]$Game) {
+    if (-not (Test-CoD2xLoader (Safe-Path $Game 'mss32.dll'))) {
+        return [ordered]@{ ready = $false; message = 'CoD2x is not installed in this folder. Install CoD2x first, then click Recheck.' }
+    }
+    $original = Safe-Path $Game 'mss32_original.dll'
+    if (-not (Test-Path -LiteralPath $original -PathType Leaf)) {
+        return [ordered]@{ ready = $false; message = 'CoD2x installation is incomplete: mss32_original.dll is missing. Reinstall CoD2x, then click Recheck.' }
+    }
+    $bridge = Get-Content -LiteralPath (Join-Path $bundle 'provenance/bridge-build.json') -Raw | ConvertFrom-Json
+    if ($bridge.originalMss32Sha256 -notmatch '^[a-f0-9]{64}$') { throw 'The bundle is missing its CoD2x sound-library compatibility hash. Extract the updated ZIP.' }
+    if ((File-Hash $original) -ne $bridge.originalMss32Sha256) {
+        return [ordered]@{ ready = $false; message = 'CoD2x sound library is not the supported version. Reinstall CoD2x, then click Recheck.' }
+    }
+    return [ordered]@{ ready = $true; message = 'CoD2x detected. Your current client will be backed up before smoke is installed.' }
 }
 
 function Assert-RuntimePath([string]$Relative) {
@@ -166,6 +193,14 @@ try {
     }
     $game = [IO.Path]::GetFullPath($GameDirectory).TrimEnd('\')
     if (-not (Test-Path -LiteralPath (Safe-Path $game 'CoD2MP_s.exe') -PathType Leaf)) { throw 'Choose the game folder containing CoD2MP_s.exe.' }
+    if ($Action -eq 'Inspect') {
+        Get-CoD2xStatus $game | ConvertTo-Json -Compress
+        exit 0
+    }
+    if ($Action -in @('Try', 'Install', 'Launch', 'Verify')) {
+        $clientStatus = Get-CoD2xStatus $game
+        if (-not $clientStatus.ready) { throw $clientStatus.message }
+    }
     $receipt = Read-Receipt $game
     $receiptPath = Safe-Path $game $receiptName
 

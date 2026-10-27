@@ -18,24 +18,24 @@
   },
   "files": {
     "CoD2SmokeTool.exe": {
-      "bytes": 4797440,
-      "sha256": "3fa1a68b23267ae6f9322e59a598b7ba78ffafea6cee055c27014ccff31b799f"
+      "bytes": 4664832,
+      "sha256": "2909543b1a4338dd1178348214a85c1cb0982ec1feb3de7232e31d9f5b420483"
     },
     "DESKTOP-TOOL.txt": {
-      "bytes": 5908,
-      "sha256": "78276e048b2400822f3cfb8540d15b32e3aae12e3ed371d6b60b8e477749dd63"
+      "bytes": 6296,
+      "sha256": "03b3f0b6ba8d69847bf47bf7e6d3a895210e06bf5cc93980ae73523eee9d7290"
     },
     "READ-ME-FIRST.txt": {
-      "bytes": 4248,
-      "sha256": "2a77910b67a33a286d9f8b1635b516bce4c55dc2d1e501f9ca410a0f1fa01499"
+      "bytes": 4395,
+      "sha256": "cdd265612bea518ae6cbfa7ba472ba7e12115922d9633bcdf9f77d2cc9acbe03"
     },
     "Setup-Smoke-Test.cmd": {
       "bytes": 173,
       "sha256": "c84d9011c2665e06689c76f3da25f435b4a5ae068289a78b1bcd938b97a44fb8"
     },
     "Smoke-Test.ps1": {
-      "bytes": 16809,
-      "sha256": "b9800f208174392cacfa76a5bcfd5f23387fd2eeb24d548311e69843e8bf5043"
+      "bytes": 18956,
+      "sha256": "07e9ff1924aa214a6d55b66f8fb9e3e7ff6272c138aba14b21a8472cb622b573"
     },
     "Start-Smoke-Test.cmd": {
       "bytes": 192,
@@ -154,8 +154,8 @@
       "sha256": "75407d962c75abf79cca421fff0211c65dba8bedcd2d1ae48884f8086db93a02"
     },
     "provenance/bridge-build.json": {
-      "bytes": 1948,
-      "sha256": "bfc49d5a92d2bc6f2a2265819b696819042d7b55ab23c695e16945db5a9c78b9"
+      "bytes": 2041,
+      "sha256": "bac74d8a50f29be08303e50d3e620005d5bebc1192256e01d994f38f9ababe38"
     },
     "provenance/smoke-component.json": {
       "bytes": 356,

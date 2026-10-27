@@ -7,7 +7,8 @@ PRIVATE REVIEW SNAPSHOT. Read TESTING-NOTES.txt before testing.
 
 SETUP
 1. Extract the entire ZIP, keeping its contents together, and open CoD2SmokeTool.exe.
-2. Check the detected CoD2 installation, or browse to your CoD2MP_s.exe.
+2. Select a CoD2 1.3 folder with CoD2x already installed. Missing/incomplete CoD2x
+   disables Try smoke and Launch installed. Install CoD2x, then click Recheck.
 3. Close CoD clients/servers and click Try smoke. It checks compatibility, backs up
    replaced client files, installs smoke and opens Toujane locally with DX9 enabled.
 4. Join a team, select a weapon, and throw smoke grenades. Shoot smoke to carve it.
@@ -17,7 +18,8 @@ The full cod2x-smoke-test.zip includes optional map authoring tools. Player acti
 also work directly from smoke/prebuilt in the branch, without those authoring files.
 
 Existing installations, including Steam, are supported. No separate game copy or
-map bake is needed; the modified CoD2x loader is included. Restore original files
+map bake is needed. CoD2x must be installed first; the tool then replaces its loader
+with the smoke-enabled version. Restore original files
 returns the backed-up client. If CoD2x replaces the loader after smoke is installed,
 Try smoke saves the newer client for restoration, retaining earlier backups.
 Repeat installs otherwise preserve the existing baseline. Tools & details contains

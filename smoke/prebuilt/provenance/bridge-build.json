@@ -5,6 +5,7 @@
   "configuration": "RelWithDebInfo; no CoD2x debug hot reload",
   "sha256": "79c211722f3b613e090ece46edc8c73bfc2bdb48862bf79dcaa021169ef21e3b",
   "rendererSha256": "243505f56ec0f86122fc09b3a6c18f0daf49a00abb2d969147f595991584a6b2",
+  "originalMss32Sha256": "7855b8fbae917cb8449f2d4361ab61b5ecec4df0a11130d797cb0aa99b4260ea",
   "adapterSha256": "ff1c6684dadfb1216d025cd765e20defda7921ab5a1c35b878efd8da3dc44086",
   "enableEnvironment": "COD2_SMOKE_DIAGNOSTICS=1",
   "renderEnvironment": "COD2_SMOKE_RENDER=1",

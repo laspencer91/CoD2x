@@ -79,7 +79,8 @@ Copy-Item -LiteralPath $BridgeDll -Destination (Join-Path $stage 'runtime\mss32.
 $buildInfo = Get-Content -LiteralPath (Join-Path $stage 'provenance\bridge-build.json') -Raw | ConvertFrom-Json
 if ($PlayerOnly) {
     if ($buildInfo.rendererSha256 -notmatch '^[a-f0-9]{64}$') { throw 'Missing supported renderer hash.' }
-    $buildInfo = [ordered]@{ rendererSha256 = $buildInfo.rendererSha256 }
+    if ($buildInfo.originalMss32Sha256 -notmatch '^[a-f0-9]{64}$') { throw 'Missing supported CoD2x sound-library hash.' }
+    $buildInfo = [ordered]@{ rendererSha256 = $buildInfo.rendererSha256; originalMss32Sha256 = $buildInfo.originalMss32Sha256 }
 } else {
     $buildInfo.sha256 = Hash (Join-Path $stage 'runtime\mss32.dll')
     if ($rebuilt) {

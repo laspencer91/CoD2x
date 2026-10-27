@@ -41,13 +41,18 @@ function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle
         self.game = root / 'Steam/steamapps/common/Call of Duty 2'
         self.game.mkdir(parents=True)
         (self.game / 'CoD2MP_s.exe').write_bytes(b'Fixture only; never execute')
-        self.original = b'Existing CoD2x bridge fixture; preserve these exact bytes'
+        # Preserve a real version resource without executing the DLL. An overlay
+        # distinguishes this previous client from the bundle's smoke loader.
+        self.original = (PREBUILT / 'runtime/mss32.dll').read_bytes() + b'Previous CoD2x fixture'
         (self.game / 'mss32.dll').write_bytes(self.original)
+        self.sound = b'Original Miles audio fixture; never execute'
+        (self.game / 'mss32_original.dll').write_bytes(self.sound)
         renderer = b'DX9 renderer fixture; never load'
         (self.game / 'gfx_d3d_mp_x86_s.dll').write_bytes(renderer)
         bridge_path = self.bundle / 'provenance/bridge-build.json'
         bridge = json.loads(bridge_path.read_text())
         bridge['rendererSha256'] = hashlib.sha256(renderer).hexdigest()
+        bridge['originalMss32Sha256'] = hashlib.sha256(self.sound).hexdigest()
         bridge_path.write_text(json.dumps(bridge), encoding='utf-8')
         self.config = self.game / 'players/Player/config_mp.cfg'
         self.config.parent.mkdir(parents=True)
@@ -101,7 +106,7 @@ function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle
         previous_receipt = receipt_path.read_bytes()
         previous = json.loads(previous_receipt)
         previous_loader = next(f for f in previous['files'] if f['path'] == 'mss32.dll')
-        updated_client = b'New CoD2x installed after smoke; keep this version'
+        updated_client = self.original + b'New CoD2x installed after smoke; keep this version'
         (self.game / 'mss32.dll').write_bytes(updated_client)
         backups_before = set((self.game / 'cod2-smoke-test-backups').iterdir())
 
@@ -133,7 +138,7 @@ function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle
         self.run_action('Install')
         receipt_path = self.game / 'cod2-smoke-test-install.json'
         previous_receipt = receipt_path.read_bytes()
-        updated_client = b'New CoD2x client; restore on failed smoke install'
+        updated_client = self.original + b'New CoD2x client; restore on failed smoke install'
         (self.game / 'mss32.dll').write_bytes(updated_client)
         script_path = self.bundle / 'Smoke-Test.ps1'
         script = script_path.read_text()
@@ -161,6 +166,39 @@ function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle
     def test_try_rejects_unsupported_renderer_before_replacing_client(self):
         (self.game / 'gfx_d3d_mp_x86_s.dll').write_bytes(b'Unsupported renderer fixture')
         self.assertIn('Unsupported DX9 renderer', self.run_action('Try', succeeds=False))
+        self.assert_original()
+
+    def test_stock_cod2_blocks_inspect_install_and_launch_without_writes(self):
+        self.original = self.sound
+        (self.game / 'mss32.dll').write_bytes(self.original)
+        (self.game / 'mss32_original.dll').unlink()
+        status = json.loads(self.run_action('Inspect'))
+        self.assertFalse(status['ready'])
+        self.assertIn('Install CoD2x first', status['message'])
+        for action in ('Try', 'Install', 'Launch', 'Verify'):
+            self.assertIn('CoD2x is not installed', self.run_action(action, succeeds=False))
+        self.assert_original()
+        self.assertFalse((self.game / 'cod2-smoke-test-backups').exists())
+
+    def test_missing_original_library_stops_setup_and_old_installed_launch(self):
+        self.run_action('Install')
+        receipt_path = self.game / 'cod2-smoke-test-install.json'
+        before = receipt_path.read_bytes()
+        (self.game / 'mss32_original.dll').unlink()
+        status = json.loads(self.run_action('Inspect'))
+        self.assertFalse(status['ready'])
+        for action in ('Try', 'Install', 'Launch', 'Verify'):
+            self.assertIn('mss32_original.dll is missing', self.run_action(action, succeeds=False))
+        self.assertEqual(receipt_path.read_bytes(), before)
+        self.assertFalse((self.game / 'fixture-launch.json').exists())
+        # A broken prerequisite must not prevent recovery to the previous client.
+        self.run_action('Uninstall')
+        self.assert_original()
+
+    def test_unsupported_original_library_is_rejected_without_writes(self):
+        (self.game / 'mss32_original.dll').write_bytes(b'Wrong sound library')
+        self.assertFalse(json.loads(self.run_action('Inspect'))['ready'])
+        self.assertIn('sound library is not the supported version', self.run_action('Try', succeeds=False))
         self.assert_original()
 
 

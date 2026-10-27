@@ -29,6 +29,10 @@ input { width: 100%; min-width: 0; min-height: 38px; border: 1px solid var(--lin
 .field-row { display: flex; gap: 8px; }
 .field-row button { flex-shrink: 0; }
 .notice { font-size: 12px; line-height: 1.6; margin: 12px 0; }
+.client-check { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.client-check .notice { flex: 1; }
+.client-check[data-ready="false"] .notice { color: var(--amber); }
+.client-check button { flex-shrink: 0; min-height: 28px; font-size: 12px; padding: 4px 10px; }
 .warning { color: var(--amber); }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .try-button { min-height: 44px; min-width: 185px; font-size: 16px; }

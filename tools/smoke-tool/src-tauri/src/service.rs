@@ -45,6 +45,12 @@ pub struct JobResult {
     pub outputs: Vec<String>,
 }
 
+#[derive(Deserialize, Serialize)]
+pub struct ClientStatus {
+    pub ready: bool,
+    pub message: String,
+}
+
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Candidate {
@@ -384,14 +390,7 @@ fn run(command: &mut Command, log: &(dyn Fn(String) + Sync)) -> Result<(), Strin
     })
 }
 
-fn installer(
-    root: &Path,
-    action: &str,
-    game: &Path,
-    map: &str,
-    check_only: bool,
-    log: &(dyn Fn(String) + Sync),
-) -> Result<(), String> {
+fn installer_command(root: &Path, action: &str, game: &Path) -> Result<Command, String> {
     let system = std::env::var_os("SystemRoot")
         .map(PathBuf::from)
         .ok_or("SystemRoot is unavailable")?;
@@ -408,6 +407,41 @@ fn installer(
         .args(["-Action", action, "-GameDirectory"])
         .arg(game)
         .current_dir(root);
+    Ok(command)
+}
+
+pub fn inspect_game(root: &Path, game_directory: &str) -> Result<ClientStatus, String> {
+    let game = absolute_path(game_directory)?;
+    if !game.join("CoD2MP_s.exe").is_file() {
+        return Err("Choose the folder containing CoD2MP_s.exe.".into());
+    }
+    validate_runtime(root, &|_| {})?;
+    let output = hidden(&mut installer_command(root, "Inspect", &game)?)
+        .stdin(Stdio::null())
+        .output()
+        .map_err(|e| e.to_string())?;
+    if !output.status.success() {
+        return Err(format!(
+            "{}{}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        )
+        .trim()
+        .to_owned());
+    }
+    serde_json::from_slice(&output.stdout)
+        .map_err(|e| format!("Could not inspect CoD2x installation: {e}"))
+}
+
+fn installer(
+    root: &Path,
+    action: &str,
+    game: &Path,
+    map: &str,
+    check_only: bool,
+    log: &(dyn Fn(String) + Sync),
+) -> Result<(), String> {
+    let mut command = installer_command(root, action, game)?;
     if action == "Launch" || action == "Try" {
         command.args(["-Map", map]);
     }

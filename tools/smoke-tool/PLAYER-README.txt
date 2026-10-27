@@ -1,19 +1,23 @@
 CoD2 Smoke - player preview
 
-1. Extract the entire ZIP and open CoD2SmokeTool.exe.
-2. Check the detected CoD2 folder, or use Browse to select CoD2MP_s.exe.
-3. Close other CoD clients/servers and click Try smoke.
+1. Install CoD2x into your Call of Duty 2 version 1.3 game folder first.
+2. Extract the entire ZIP, open CoD2SmokeTool.exe and select that game folder.
+3. Wait for "CoD2x detected", close other CoD clients/servers and click Try smoke.
 4. Join a team, throw a smoke grenade, and shoot through it to try carving.
 
-Your existing CoD2 1.3 installation is supported, including Steam. The tool checks
+CoD2x is required: https://github.com/callofduty2x/CoD2x
+If it is missing or incomplete, Try smoke and Launch installed stay disabled.
+Install/reinstall CoD2x in the selected game folder, then click Recheck.
+
+Existing CoD2 1.3 installations with CoD2x are supported, including Steam. The tool checks
 compatibility, backs up replaced client files, installs smoke, and opens Toujane
 locally. No separate game copy, Git repo, Python or map bake is required.
 Microsoft Edge WebView2 Runtime is required to open the tool.
 
 Restore original files returns the client backed up before smoke. Repeated installs
 keep that backup. If CoD2x replaces the loader later, Try smoke backs up that newer
-client for restoration and retains earlier backups. A separate CoD2x installation
-is not required. Keep the ZIP contents together until you have restored.
+client for restoration and retains earlier backups. Keep the ZIP contents together
+until you have restored.
 Setup/restoration retain maps, player configs and unrelated files.
 
 Tools & details contains validation and the activity log. It opens on errors.

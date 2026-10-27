@@ -8,6 +8,7 @@ type Candidate = { path: string; source: string; steam: boolean; installed: bool
 type Bootstrap = { bundleRoot: string; candidates: Candidate[]; suggestedOutput: string; rememberedGame: string; bakerAvailable: boolean };
 type Action = 'check' | 'install' | 'verify' | 'uninstall' | 'quickTest' | 'trySmoke' | 'bake' | 'validateBundle' | 'openOutput';
 type Result = { message: string; outputs: string[] };
+type ClientStatus = { ready: boolean; message: string };
 const titles: Record<Action, string> = { check: 'Checking compatibility', install: 'Installing smoke', verify: 'Verifying installation', uninstall: 'Restoring original files', quickTest: 'Preparing quick test', trySmoke: 'Preparing smoke', bake: 'Baking occupancy', validateBundle: 'Validating bundle', openOutput: 'Opening output' };
 const stockMaps = ['toujane','burgundy','brecourt','breakout','carentan','dawnville','decoy','downtown','farmhouse','harbor','leningrad','matmata','railyard','rhine','trainstation'];
 const desktop = '__TAURI_INTERNALS__' in window;
@@ -27,6 +28,9 @@ function App() {
   const [logs, setLogs] = useState<string[]>([]);
   const [restore, setRestore] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [client, setClient] = useState<(ClientStatus & { game: string })>();
+  const [checkingClient, setCheckingClient] = useState(false);
+  const [checkRevision, setCheckRevision] = useState(0);
   const logEnd = useRef<HTMLDivElement>(null);
   const log = (line: string) => setLogs(old => [...old.slice(-799), line]);
 
@@ -51,12 +55,27 @@ function App() {
         if (disposed) { stop(); return; }
         unlisten = stop;
         await refresh(true);
-        if (!disposed) { setReady(true); setStatus('Ready. Select your game and click Try smoke.'); }
+        if (!disposed) { setReady(true); setStatus('Ready. Select a game folder with CoD2x installed.'); }
       } catch (error) { if (!disposed) { setStatus(String(error)); setTone('bad'); setDetailsOpen(true); } }
     })();
     return () => { disposed = true; unlisten?.(); };
   }, []);
   useEffect(() => { if (detailsOpen) logEnd.current?.scrollIntoView({ block: 'nearest' }); }, [logs, detailsOpen]);
+  useEffect(() => {
+    if (!ready || !game.trim()) { setClient(undefined); setCheckingClient(false); return; }
+    let disposed = false;
+    const selectedGame = game.trim();
+    setCheckingClient(true);
+    const timer = window.setTimeout(async () => {
+      try {
+        const result = await invoke<ClientStatus>('inspect_game', { gameDirectory: selectedGame });
+        if (!disposed) setClient({ ...result, game: selectedGame });
+      } catch (error) {
+        if (!disposed) setClient({ ready: false, message: String(error), game: selectedGame });
+      } finally { if (!disposed) setCheckingClient(false); }
+    }, 300);
+    return () => { disposed = true; window.clearTimeout(timer); };
+  }, [game, ready, checkRevision]);
 
   async function pick(kind: 'game' | 'maps' | 'output') {
     try {
@@ -78,18 +97,21 @@ function App() {
       if (action === 'bake') setOutputs(result.outputs);
       try { await refresh(); } catch (error) { log('Could not refresh installation detection: ' + String(error)); }
     } catch (error) { setStatus(String(error)); setTone('bad'); setDetailsOpen(true); log(String(error)); }
-    finally { setBusy(false); }
+    finally { setBusy(false); setCheckRevision(old => old + 1); }
   }
   const disabled = busy || !ready;
   const gameDisabled = disabled || !game.trim();
+  const clientReady = !checkingClient && client?.game === game.trim() && client.ready;
+  const clientMessage = checkingClient ? 'Checking CoD2x installation...' :
+    client?.game === game.trim() ? client.message : 'Select a CoD2 folder. CoD2x must be installed before trying smoke.';
   return <div className="shell">
     <header><div><h1>CoD2 Smoke</h1><p>Try volumetric smoke in your game.</p></div>{tab === 'bake' && <button className="quiet" onClick={() => setTab('setup')}>← Back to smoke</button>}</header>
     <main>
       {tab === 'setup' ? <>
         <section className="try-panel">
           <label htmlFor="game">CoD2 game folder</label><div className="field-row"><input id="game" list="detected-games" value={game} disabled={disabled} onChange={e => setGame(e.target.value)} placeholder="Choose the folder containing CoD2MP_s.exe"/><datalist id="detected-games">{data?.candidates.map(c => <option key={c.path} value={c.path} label={c.source}/>)}</datalist><button disabled={disabled} onClick={() => void pick('game')}>Browse…</button></div>
-          <p className="notice">Your existing client files are backed up before opening {map === 'mp_toujane' ? 'Toujane' : map} locally.</p>
-          <div className="actions"><button className="primary try-button" disabled={gameDisabled || !map.trim()} onClick={() => void job('trySmoke')}>Try smoke</button><button className="quiet" disabled={gameDisabled} onClick={() => setRestore(true)}>Restore original files</button></div>
+          <div className="client-check" data-ready={Boolean(clientReady)}><p className="notice" aria-live="polite" data-testid="cod2x-status">{clientMessage}</p><button className="quiet" disabled={gameDisabled || checkingClient} onClick={() => setCheckRevision(old => old + 1)}>Recheck</button></div>
+          <div className="actions"><button className="primary try-button" disabled={gameDisabled || !clientReady || !map.trim()} onClick={() => void job('trySmoke')}>Try smoke</button><button className="quiet" disabled={gameDisabled} onClick={() => setRestore(true)}>Restore original files</button></div>
           <p className="notice">In game: join a team, throw a smoke, then shoot through it.</p>
         </section>
       </> : <>
@@ -106,7 +128,7 @@ function App() {
       <details className="log-panel" open={detailsOpen} onToggle={event => setDetailsOpen(event.currentTarget.open)}><summary>Tools & details</summary>
         <div className="tools">
           {tab === 'setup' && <><label htmlFor="map">Test map</label><div className="field-row"><input id="map" list="stock-maps" value={map} disabled={disabled} onChange={e => setMap(e.target.value)} spellCheck={false}/><datalist id="stock-maps">{stockMaps.map(name => <option key={name} value={'mp_' + name}/>)}</datalist></div>
-          <div className="actions"><button disabled={gameDisabled} onClick={() => void job('check')}>Check compatibility</button><button disabled={gameDisabled} onClick={() => void job('verify')}>Verify installed</button><button disabled={gameDisabled || !map.trim()} onClick={() => void job('quickTest')}>Launch installed</button>{data?.bakerAvailable && <button disabled={disabled} onClick={() => { setTab('bake'); setDetailsOpen(false); }}>Map authoring</button>}</div></>}
+          <div className="actions"><button disabled={gameDisabled} onClick={() => void job('check')}>Check compatibility</button><button disabled={gameDisabled} onClick={() => void job('verify')}>Verify installed</button><button disabled={gameDisabled || !clientReady || !map.trim()} onClick={() => void job('quickTest')}>Launch installed</button>{data?.bakerAvailable && <button disabled={disabled} onClick={() => { setTab('bake'); setDetailsOpen(false); }}>Map authoring</button>}</div></>}
         </div>
         <div className="log-heading"><h2>Activity</h2><div><button disabled={disabled} onClick={() => void job('validateBundle')}>Validate bundle</button><button disabled={!logs.length} onClick={() => { void navigator.clipboard.writeText(logs.join('\n')).catch(error => { setStatus('Could not copy log: ' + String(error)); setTone('bad'); }); }}>Copy log</button></div></div><div className="log" role="log" aria-label="Activity log"><pre>{logs.length ? logs.join('\n') : 'Operations and validation results appear here.'}</pre><div ref={logEnd}/></div></details>
     </main>

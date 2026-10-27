@@ -30,6 +30,15 @@ async fn bootstrap() -> Result<service::Bootstrap, String> {
 }
 
 #[tauri::command]
+async fn inspect_game(game_directory: String) -> Result<service::ClientStatus, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        service::inspect_game(&service::bundle_root()?, &game_directory)
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
 async fn pick_path(kind: String) -> Result<Vec<String>, String> {
     tauri::async_runtime::spawn_blocking(move || {
         let dialog = rfd::FileDialog::new();
@@ -112,7 +121,12 @@ fn main() {
             }
         }))
         .manage(Jobs::default())
-        .invoke_handler(tauri::generate_handler![bootstrap, pick_path, run_job])
+        .invoke_handler(tauri::generate_handler![
+            bootstrap,
+            inspect_game,
+            pick_path,
+            run_job
+        ])
         .on_window_event(|window, event| {
             // Do not interrupt a backup/restore or leave a bake worker orphaned.
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {

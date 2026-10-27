@@ -16,6 +16,9 @@ test.beforeEach(async ({ page }) => {
           suggestedOutput:'C:\\Maps\\smoke-output', bakerAvailable:!window.playerOnly,
         };
         if (command === 'pick_path') return args.kind === 'maps' ? ['C:\\Maps\\mp_example.d3dbsp'] : [];
+        if (command === 'inspect_game') return {ready: !window.missingCoD2x, message: window.missingCoD2x ?
+          'CoD2x is not installed in this folder. Install CoD2x first, then click Recheck.' :
+          'CoD2x detected. Your current client will be backed up before smoke is installed.'};
         if (command === 'run_job') {
           window.requests.push(args.request);
           await new Promise(resolve => setTimeout(resolve, 150));
@@ -76,4 +79,22 @@ test('player package keeps Try available and hides authoring', async ({ page }, 
   await expect(page.getByRole('status')).toContainText('Checks passed.');
   await page.getByText('Tools & details',{exact:true}).click();
   await page.screenshot({path:info.outputPath('player.png'),fullPage:true});
+});
+
+test('missing CoD2x blocks installing and launching until rechecked', async ({ page }, info) => {
+  await page.addInitScript(() => { window.missingCoD2x = true; });
+  await page.reload();
+  await expect(page.getByTestId('cod2x-status')).toContainText('Install CoD2x first');
+  await expect(page.getByRole('button', {name:'Try smoke',exact:true})).toBeDisabled();
+  await expect(page.getByRole('button', {name:'Restore original files',exact:true})).toBeEnabled();
+  await page.getByText('Tools & details', {exact:true}).click();
+  await expect(page.getByRole('button', {name:'Launch installed',exact:true})).toBeDisabled();
+  expect(await page.evaluate(() => window.requests.length)).toBe(0);
+  await page.screenshot({path:info.outputPath('missing-cod2x.png'),fullPage:true});
+  await page.evaluate(() => { window.missingCoD2x = false; });
+  await page.getByRole('button', {name:'Recheck',exact:true}).click();
+  await expect(page.getByTestId('cod2x-status')).toContainText('CoD2x detected');
+  await expect(page.getByRole('button', {name:'Try smoke',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button', {name:'Launch installed',exact:true})).toBeEnabled();
+  expect(await page.evaluate(() => window.requests.length)).toBe(0);
 });

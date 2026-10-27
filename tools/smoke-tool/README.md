@@ -14,11 +14,15 @@ The full **cod2x-smoke-test.zip** includes authoring and optional custom bakes.
 ## Try smoke
 
 1. Extract the complete ZIP and open `CoD2SmokeTool.exe`.
-2. Check the detected game folder, or browse to your `CoD2MP_s.exe`.
+2. Select a CoD2 1.3 folder with [CoD2x](https://github.com/callofduty2x/CoD2x) already installed.
 3. Close CoD clients/servers and click **Try smoke**.
 
-Your existing installation is supported, including Steam. No separate copy or map
-bake is required. The tool detects previous selections, common folders, the CoD2
+Your existing installation is supported, including Steam. CoD2x must be installed
+first. The tool checks its loader and supported `mss32_original.dll` before enabling
+Try smoke and Launch installed. Missing/incomplete installations show what needs
+fixing; install/reinstall CoD2x and click **Recheck**. The script checks again before
+installing or launching. Restore remains available if a prerequisite is missing.
+No separate game copy or map bake is required. The tool detects previous selections, common folders, the CoD2
 registry entry and Steam libraries, and selects a detected installation automatically.
 Try smoke checks for launch conflicts before changing files, validates compatibility,
 backs up replaced client files, installs the supplied runtime and stock occupancy,
@@ -29,8 +33,8 @@ in-game check. An unsupported renderer is rejected before replacing client files
 **Restore original files** returns the client files backed up before smoke.
 Repeat installs preserve those backups. If a later CoD2x install/update replaces
 `mss32.dll`, Try smoke backs up that newer client as the restoration baseline,
-retaining earlier backups and their receipt. A separate CoD2x install is unnecessary:
-the smoke package includes its modified loader. Maps, player configs and unrelated
+retaining earlier backups and their receipt. The smoke package replaces the existing
+CoD2x loader with its smoke-enabled version. Maps, player configs and unrelated
 files are not installed over or removed by setup/restoration. Game-created logs and
 configs remain. Running games, edits to other installed files and corrupt backups
 still stop setup/restoration; those changes are not silently discarded.
