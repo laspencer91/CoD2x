@@ -6,6 +6,7 @@
 #include "hook.h"
 #include "system.h"
 #include "mss32_original.h"
+#include "smoke_diagnostics.h"
 
 
 // Define a buffer to save the original bytes of the entry point
@@ -24,6 +25,8 @@ bool DLL_HOTRELOAD = false; // set to true when the DLL was hot-reloaded in debu
  */
 bool main_load() {  
     bool ok = FALSE;
+
+    smoke_diagnostics_startup();
 
     // Show warning message
     /*if (APP_VERSION_IS_TEST) {

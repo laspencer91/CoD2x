@@ -2,6 +2,7 @@
 // CoD2x adapter diagnostics; offsets are pinned in integration-targets.json.
 #include "smoke_diagnostics.h"
 #include "mapkit_reload.h"
+#include "smoke_activation.hpp"
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -92,14 +93,7 @@ template<typename T> T procedure(HMODULE module, const char* name) {
 }
 
 bool enabled() {
-#ifndef COD2X_SMOKE_TEST_BUILD
-    return false;
-#endif
-    static const bool value = [] {
-        char setting[8] = {};
-        return GetEnvironmentVariableA("COD2_SMOKE_DIAGNOSTICS", setting, sizeof(setting)) == 1
-            && setting[0] == '1';
-    }();
+    static const bool value = cod2_smoke::activation_flag("COD2_SMOKE_DIAGNOSTICS", cod2_smoke::installed_preview());
     return value;
 }
 
@@ -167,7 +161,8 @@ void start_log() {
     }
     log_file = CreateFileW(path, FILE_APPEND_DATA | FILE_READ_ATTRIBUTES,
         FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-    log("begin adapter=diagnostics-only stock_fx=preserved depth_freshness=unverified");
+    log("begin adapter=smoke installed_preview=%d process=%lu stock_fx=preserved_until_ready",
+        int(cod2_smoke::installed_preview()), static_cast<unsigned long>(GetCurrentProcessId()));
 }
 
 bool verify_renderer(HMODULE module) {
@@ -290,6 +285,13 @@ bool exchange_scene(RenderScene expected, RenderScene replacement) {
 }
 } // namespace
 
+void smoke_diagnostics_startup() {
+    if (!enabled()) return;
+    start_log();
+    log("startup render_enabled=%d awaiting_renderer=1", int(cod2_smoke::activation_flag(
+        "COD2_SMOKE_RENDER", cod2_smoke::installed_preview())));
+}
+
 void smoke_diagnostics_renderer_loaded() {
     if (!enabled()) return;
     start_log();
@@ -300,8 +302,7 @@ void smoke_diagnostics_renderer_loaded() {
     renderer = reinterpret_cast<uintptr_t>(module);
     if (!module || !verify_renderer(module)) { log("renderer=rejected no_hook_installed"); return; }
     renderer_verified = true;
-    char render_setting[8] = {};
-    if (GetEnvironmentVariableA("COD2_SMOKE_RENDER", render_setting, sizeof(render_setting)) == 1 && render_setting[0] == '1') {
+    if (cod2_smoke::activation_flag("COD2_SMOKE_RENDER", cod2_smoke::installed_preview())) {
         char path[MAX_PATH] = {};
         const DWORD length = GetModuleFileNameA(nullptr, path, sizeof(path));
         char* slash = std::strrchr(path, '\\');
@@ -318,7 +319,7 @@ void smoke_diagnostics_renderer_loaded() {
             }
             log("smoke_renderer=%p camera_callback=%p error=%lu", smoke_module, reinterpret_cast<void*>(set_smoke_view), GetLastError());
         }
-    }
+    } else log("smoke_renderer=disabled_by_activation");
     scene_count = 0;
     last_sample = 0;
     // Record loaded instruction bytes only; never detour the packed executable's FX paths.

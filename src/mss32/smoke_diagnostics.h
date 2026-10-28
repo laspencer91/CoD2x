@@ -1,6 +1,7 @@
 #pragma once
 
 // Opt-in, stock-preserving diagnostics for the CoD2 smoke renderer adapter.
+void smoke_diagnostics_startup();
 void smoke_diagnostics_renderer_loaded();
 void smoke_diagnostics_register_settings();
 void smoke_diagnostics_frame();

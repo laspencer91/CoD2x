@@ -56,8 +56,11 @@ checks file hashes and the supported stock DX9 renderer. Missing/invalid occupan
 policy or GPU depth capability preserves stock smoke. The experimental particle
 mode and latest reliability changes still require live acceptance.
 
-`COD2_SMOKE_DIAGNOSTICS=1` and `COD2_SMOKE_RENDER=1` are explicit test opt-ins supplied
-by Start. `COD2_SMOKE_DEV` is cleared; normal tests use packaged, BSP-bound grids.
+The setup receipt beside the game executable enables the installed preview, including
+when Steam relaunches the game without the tool's environment. Restoring the original
+files removes that receipt and loader. `COD2_SMOKE_DIAGNOSTICS` and `COD2_SMOKE_RENDER`
+remain explicit overrides (`1` enables, `0` disables) for diagnostics.
+`COD2_SMOKE_DEV` is cleared; normal tests use packaged, BSP-bound grids.
 The existing `sv_mapkit_smoke_policy` remains server-controlled; resolution is local.
 
 The Windows branch build defaults `COD2X_SMOKE_TEST_BUILD=ON`. This disables stable

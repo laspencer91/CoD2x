@@ -102,6 +102,17 @@ function Start-Process($FilePath, $WorkingDirectory, $ArgumentList, $WindowStyle
         self.assert_original()
         self.assertFalse((self.game / 'cod2-smoke-test-backups').exists())
 
+    def test_verify_reports_runtime_fallback_without_claiming_render_success(self):
+        self.run_action('Install')
+        self.assertIn('Runtime log not created yet:', self.run_action('Verify'))
+        log = self.game / 'mapkit-smoke/client.log'
+        log.write_text('server smoke policy missing/invalid; stock retained\n')
+        output = self.run_action('Verify')
+        self.assertIn('Installed files verified.', output)
+        self.assertIn('server smoke policy missing/invalid; stock retained', output)
+        self.run_action('Uninstall')
+        self.assert_original()
+
     def test_cod2x_install_after_smoke_becomes_new_restoration_baseline(self):
         original_client = self.original
         self.run_action('Install')

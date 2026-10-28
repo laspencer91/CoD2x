@@ -34,8 +34,8 @@
       "sha256": "c84d9011c2665e06689c76f3da25f435b4a5ae068289a78b1bcd938b97a44fb8"
     },
     "Smoke-Test.ps1": {
-      "bytes": 20741,
-      "sha256": "10f3f31b55685338dde843b632580daec5ac896773c85cd1cee7653a94e9819c"
+      "bytes": 21794,
+      "sha256": "987d30613d66b37b549c6f1f27afadb6004d68b6d1f8260a80fc482760e344bc"
     },
     "Start-Smoke-Test.cmd": {
       "bytes": 192,
@@ -154,8 +154,8 @@
       "sha256": "75407d962c75abf79cca421fff0211c65dba8bedcd2d1ae48884f8086db93a02"
     },
     "provenance/bridge-build.json": {
-      "bytes": 2041,
-      "sha256": "bac74d8a50f29be08303e50d3e620005d5bebc1192256e01d994f38f9ababe38"
+      "bytes": 2374,
+      "sha256": "c67d509c893dc5d800df0ae04f3c28bfc4366631d4699869c40709b86647cdbd"
     },
     "provenance/smoke-component.json": {
       "bytes": 356,
@@ -214,8 +214,8 @@
       "sha256": "ba19e59612f86ef833f6fe334e5da957f060e56e6a7e0d505f7a9a92f94a4eed"
     },
     "runtime/mss32.dll": {
-      "bytes": 15971334,
-      "sha256": "79c211722f3b613e090ece46edc8c73bfc2bdb48862bf79dcaa021169ef21e3b"
+      "bytes": 15980314,
+      "sha256": "104b3b68b17800786ed2039bcbaa42c3f44eda8d85cdf010d8b9d821bf954637"
     },
     "tools/smoke-bake/python/LICENSE.txt": {
       "bytes": 35407,

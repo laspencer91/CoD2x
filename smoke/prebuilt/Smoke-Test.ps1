@@ -44,6 +44,25 @@ function File-Hash([string]$Path) {
     return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
+function Write-SmokeDiagnostics([string]$Game) {
+    # Hash verification cannot prove that the game activated the replacement.
+    # Keep the useful runtime evidence visible in the tool's existing activity log.
+    $logs = @((Safe-Path $Game 'mapkit-smoke/client.log'))
+    $localData = [Environment]::GetFolderPath('LocalApplicationData')
+    if ($localData) { $logs += Join-Path $localData 'promodx\cod2-smoke\bridge.log' }
+    foreach ($path in $logs) {
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+            Write-Output "Runtime log not created yet: $path"
+            continue
+        }
+        try {
+            $modified = (Get-Item -LiteralPath $path).LastWriteTime.ToString('yyyy-MM-dd HH:mm:ss')
+            Write-Output "Runtime log ($modified): $path"
+            Get-Content -LiteralPath $path -Tail 16 -ErrorAction Stop | Write-Output
+        } catch { Write-Output "Could not read runtime log: $path" }
+    }
+}
+
 function Get-SteamDirectories([string]$Game) {
     # A Steam library may be on a different drive from the Steam client.
     for ($folder = Get-Item -LiteralPath $Game; $null -ne $folder; $folder = $folder.Parent) {
@@ -283,7 +302,11 @@ try {
             '+set', 'fs_game', 'mapkit_smoke_test', '+set', 'sv_punkbuster', '0', '+set', 'cl_punkbuster', '0',
             '+set', 'sv_pure', '0', '+set', 'net_ip', '127.0.0.1', '+set', 'r_rendererPreference', 'dx9',
             '+set', 'r_fullscreen', '0', '+set', 'g_gametype', 'tdm', '+exec', "smoke_look_$Look.cfg", '+devmap', $Map)
-        if ($CheckOnly -or $Action -eq 'Verify') { Write-Output ('Installed files verified. Launch arguments: ' + ($arguments -join ' ')); exit 0 }
+        if ($CheckOnly -or $Action -eq 'Verify') {
+            Write-Output ('Installed files verified. Launch arguments: ' + ($arguments -join ' '))
+            if ($Action -eq 'Verify') { Write-SmokeDiagnostics $game }
+            exit 0
+        }
         Assert-Stopped -Launching
         $steamDirectory = Find-SteamDirectory $game
         $saved = @{}

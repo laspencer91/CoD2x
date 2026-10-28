@@ -10,6 +10,8 @@ If it is missing or incomplete, Try smoke and Launch installed stay disabled.
 Install/reinstall CoD2x in the selected game folder, then click Recheck.
 For the Steam edition, keep Steam open and signed in. The launcher discovers its
 client folder and adds it to the game's DLL search path for that launch only.
+The installed preview stays enabled if Steam relaunches the game. Smoke still
+requires a valid map bake, server policy and supported DX9 depth capability.
 
 Existing CoD2 1.3 installations with CoD2x are supported, including Steam. The tool checks
 compatibility, backs up replaced client files, installs smoke, and opens Toujane
@@ -23,6 +25,8 @@ until you have restored.
 Setup/restoration retain maps, player configs and unrelated files.
 
 Tools & details contains validation and the activity log. It opens on errors.
+If you see stock smoke, run Verify there after the test; it includes the runtime
+logs and their timestamps, which can explain why replacement was declined.
 Copy log copies the visible log; nothing is uploaded. This is a player preview;
 multiplayer, demos, particle ordering and GPU compatibility still need acceptance
 testing. It has not been approved for competition.
