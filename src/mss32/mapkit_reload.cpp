@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2026 Logan Spencer. Private preview.
 // Local build/install handshake. Never executes caller-supplied console text.
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

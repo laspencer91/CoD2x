@@ -1,0 +1,37 @@
+{
+    "schema":  1,
+    "feature":  "opt-in CoD2 volumetric smoke bridge with local bullet-impact forwarding; server policy read from systeminfo, then serverinfo",
+    "cod2xCommit":  "edee5a080c93a7a6a9c752bf0a1da0eab648c671",
+    "configuration":  "RelWithDebInfo; no CoD2x debug hot reload",
+    "sha256":  "de78e2a3024d595b7ddfbe4ab4b2c80bd30ddda0438a4cef6862701f4d56de20",
+    "rendererSha256":  "243505f56ec0f86122fc09b3a6c18f0daf49a00abb2d969147f595991584a6b2",
+    "originalMss32Sha256":  "7855b8fbae917cb8449f2d4361ab61b5ecec4df0a11130d797cb0aa99b4260ea",
+    "adapterSha256":  "19353b709ad1d06b696f47822015675673e8eb288b78f8fc0282efda8fa69645",
+    "enableEnvironment":  "COD2_SMOKE_DIAGNOSTICS=1",
+    "renderEnvironment":  "COD2_SMOKE_RENDER=1",
+    "logEnvironment":  "COD2_SMOKE_LOG=\u003cabsolute log path\u003e",
+    "pending":  [
+                    "Complete impact/sky/penetration coverage",
+                    "Carving visual and GPU acceptance",
+                    "Multiplayer, demo and renderer-reset acceptance"
+                ],
+    "branch":  "feature/volumetric-smoke",
+    "stableUpdatesDisabled":  true,
+    "sourceHashNormalization":  "Text CRLF normalized to LF",
+    "sourceHashes":  {
+                         "CMakeLists.txt":  "a242aaab2907df6faf1c54dd496930ec3b3eb38b9c653df7ad593e3d4338f8d9",
+                         "src/mss32/hook.cpp":  "b989b6f046e908ff13f76ab4d06965c6e3470536636c9dc503d045a0ef622eb5",
+                         "src/mss32/drawing.cpp":  "742bfb90f06c956c46dd4e89568c1fc96916997e180cf0157c70d82baee34d50",
+                         "src/mss32/updater.cpp":  "f95915d8bb36907a0e53a17b347dcd540171830e307eb1cd0f0274994e1c80d8",
+                         "src/mss32/smoke_diagnostics.cpp":  "19353b709ad1d06b696f47822015675673e8eb288b78f8fc0282efda8fa69645",
+                         "src/mss32/smoke_diagnostics.h":  "19bfaa9f950283acbc22b094a4199b54deb22fdcd38d37335b97c2b9a2f46de3",
+                         "src/mss32/policy.hpp":  "6caa00dba772a56111c69be2340c5c6cfb4e59739fa3434df673c25c5cbaeddc",
+                         "src/mss32/mapkit_reload.cpp":  "3ca43051d3a6ca0c51d8279687078cd8c8e0bf37eff839aab22ab1f4c93a20a7",
+                         "src/mss32/mapkit_reload.h":  "3c224982d648cccf63b60c0dfb2c2f92942a52a1337175ac4bc4bf45cc16634c",
+                         "src/shared/weapons.cpp":  "b1982f8fdeedd1bd3760a4a5955c5d47686963a0940c5d81718e0e6809444f04",
+                         "src/mss32/main.cpp":  "834d0cb3240ec9154c70c9aeb62e7865546fe48736c44229885e8356c899ac9d",
+                         "src/mss32/smoke_activation.hpp":  "d98ac4a4ee989364edddc6fd0e0f363700f0062609fceb8dd88c9e711a0c5603"
+                     },
+    "activation":  "Installed preview receipt beside CoD2MP_s.exe; environment overrides optional",
+    "localSourceCommit":  "cb16503b3d9e9736008c5e3fcb1110dff457da6f"
+}

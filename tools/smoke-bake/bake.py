@@ -74,7 +74,7 @@ def main():
             report = smoke_bake.bake(workspace, source, destination, run,
                                      install_loose=False, bounds=args.bounds, props='ignore')
             report['boundsReviewRequired'] = args.bounds == 'hints'
-            package = destination / ('mapkit_smoke_' + source.stem + '.iwd')
+            package = destination / ('prosmoke_' + source.stem + '.iwd')
             pending = package.with_suffix('.iwd.pending')
             try:
                 with zipfile.ZipFile(pending, 'w', zipfile.ZIP_DEFLATED) as archive:

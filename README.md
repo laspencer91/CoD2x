@@ -1,10 +1,10 @@
 # CoD2x
 
-This local `feature/volumetric-smoke` branch includes an opt-in smoke bridge,
-prebuilt runtime/data, setup scripts and an optional occupancy baker.
-See [smoke branch instructions](smoke/README.md) and [validation](smoke/VALIDATION.md).
-The smoke implementation and HLSL source remain in a separate workspace; this
-branch is a private review snapshot, with no public release or push performed.
+This `feature/volumetric-smoke` branch adds **ProSmoke**, volumetric smoke for
+CoD2x: the client bridge in `src/mss32`, the prebuilt runtime, the drop-in
+client/server package and an optional occupancy baker. See
+[smoke/README.md](smoke/README.md) and [validation](smoke/VALIDATION.md).
+The renderer implementation and HLSL source live in a separate workspace.
 
 ![alt text](images/cod2-window.png)
 

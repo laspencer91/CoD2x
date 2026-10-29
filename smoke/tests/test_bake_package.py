@@ -20,7 +20,7 @@ sys.path.pop(0)
 
 class PackageValidation(unittest.TestCase):
     def test_accepts_valid_package_rejects_stale_binding_and_extra_entries(self):
-        with zipfile.ZipFile(ROOT / 'smoke/prebuilt/runtime/mapkit_smoke_test/mapkit_smoke_stock.iwd') as stock:
+        with zipfile.ZipFile(ROOT / 'smoke/package/client/prosmoke/prosmoke_stock.iwd') as stock:
             grid = stock.read('maps/mp/mp_toujane.smokegrid')
         with tempfile.TemporaryDirectory() as temporary:
             source = Path(temporary) / 'mp_fixture.d3dbsp'

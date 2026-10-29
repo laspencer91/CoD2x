@@ -1,94 +1,125 @@
-# Volumetric smoke test branch
+# ProSmoke
 
-This local branch adds the CoD2x integration and prebuilt smoke runtime. It has not
-been pushed or approved for competitive/general-player distribution.
+Volumetric smoke for Call of Duty 2 on CoD2x. Smoke grenades become real volumes
+that fill rooms and flow around walls, bullets carve holes through them, and the
+server controls the look, size, timing and carve sizes so every player sees the
+same cloud.
 
-## Contents
+## What is in this branch
 
-- `src/mss32/smoke_diagnostics.*`, `policy.hpp`: the small client bridge and settings.
-- `src/mss32/mapkit_reload.*`: optional local Map Kit archive-release/reload bridge.
-- `smoke/prebuilt`: ready-to-test binaries, compiled shaders, noise, all 15 stock-map
-  occupancy grids, 21 separate optional custom/test occupancy packages and setup scripts.
-- `tools/smoke-bake`: optional compiled-map occupancy baker (prebuilt voxelizer plus
-  standard-library Python BSP exporter/package wrapper). See its
-  [bake and installation instructions](../tools/smoke-bake/README.md#bake-and-install)
-  for output paths and where to copy the occupancy IWD.
-- `smoke/Build-Test.ps1`: rebuild the CoD2x bridge and assemble a fresh test ZIP using
-  the pinned prebuilt smoke component.
+- `src/mss32/smoke_diagnostics.*`, `smoke_activation.hpp`, `policy.hpp`: the client
+  bridge compiled into the CoD2x loader. It loads the renderer, hooks the scene
+  render call, forwards bullet traces and passes the server policy through.
+- `smoke/package`: the shipped ZIP, exactly as players and admins receive it.
+- `smoke/custom-occupancy`: optional occupancy packages for 21 custom/test maps.
+- `smoke/provenance`: hashes tying the shipped binaries to this source and the
+  renderer build.
+- `tools/smoke-bake`: optional occupancy baker for custom maps (prebuilt voxelizer
+  plus standard-library Python). See its [README](../tools/smoke-bake/README.md).
 
-The smoke simulation/rendering implementation and shader source stay in the existing
-separate workspace. This branch carries the native interface and prebuilt component;
-it does not copy the map editor, geometry compiler, lightmapper or source archive.
-Existing license and attribution notices are retained. Public distribution/source
-availability terms still need to be settled before publishing this binary-component layout.
+The renderer (`prosmoke.dll`) and its HLSL are built from a separate workspace with
+MSVC x86 and shipped prebuilt here. No license or notice files ship; this is a
+preview handed to people the author knows.
 
-## Review and test
+## Package layout
 
-Send testers `smoke/out/cod2x-smoke-player.zip` (build with
-`./smoke/Package-Test.ps1 -PlayerOnly`). It contains only the desktop tool,
-setup/restore script, runtime, default smoke look, all 15 stock-map bakes,
-compatibility/integrity metadata, short instructions and license notices.
-Tests, sources, Python, developer notes and custom-map bakes are excluded.
-The full `cod2x-smoke-test.zip` retains authoring tools and optional custom bakes.
+```
+prosmoke.zip
+├── README.txt
+├── Setup-Client.cmd       finds the game, backs up mss32.dll, copies the client files
+├── Undo-Client.cmd        restores the original loader, removes prosmoke\
+├── Play-Local.cmd         local Toujane with smoke on
+├── scripts/setup.ps1      what the three .cmd files run
+├── client/                drop the contents into the CoD2 folder
+│   ├── mss32.dll          CoD2x loader with the ProSmoke bridge
+│   └── prosmoke/
+│       ├── prosmoke.dll   renderer
+│       ├── smoke.shaders  compiled DX9 shaders
+│       ├── noise128.rgba
+│       ├── prosmoke_stock.iwd   occupancy grids for all 15 stock maps
+│       └── prosmoke.cfg   default policy for the local launch
+└── server/
+    ├── README-SERVER.txt
+    ├── prosmoke_server.cfg  sample policy line, every field explained
+    └── prosmoke_stock.iwd   for sv_pure servers
+```
 
-Open `CoD2SmokeTool.exe` in the extracted ZIP, check the detected game folder,
-and click **Try smoke**. CoD2x must already be installed in the selected CoD2 1.3
-folder. The tool checks the CoD2x loader and original sound library before enabling
-Try smoke or Launch installed; install/reinstall CoD2x and click Recheck if missing.
-Existing installations, including Steam, are supported.
-It validates compatibility, backs up replaced client files, installs and launches
-Toujane. **Restore original files** returns the previous client. A separate game
-copy is optional. The game picker and two main actions are shown first; additional
-controls and logs are under **Tools & details**. The full ZIP offers **Map authoring**
-there and includes private Python for baking. WebView2 is required. See the
-[desktop tool guide](../tools/smoke-tool/README.md). No app installer is used.
-The prebuilt EXE in the branch is staged with `tools/smoke-tool/Build-Desktop.ps1`;
-it can run player actions directly from `smoke/prebuilt`. Assemble the full ZIP
-with `smoke/Package-Test.ps1` to use the baker.
+## Client
 
-The command-line setup remains available. Read `prebuilt/READ-ME-FIRST.txt` and `prebuilt/TESTING-NOTES.txt`.
-Run `prebuilt/Setup-Smoke-Test.cmd`, select your installation's `CoD2MP_s.exe`,
-then run `prebuilt/Start-Smoke-Test.cmd`. `Uninstall-Smoke-Test.cmd` restores backed-up
-files. No Steam installation is modified by this branch's assembly tools.
+Setup detects the game through the CoD2 registry key, Steam library folders and
+the usual install paths. One match asks for confirmation; none or several opens a
+folder picker. It refuses folders without CoD2x, refuses while the game runs,
+backs up `mss32.dll` into `prosmoke-backup\`, copies the client files and remembers
+the folder under `%LOCALAPPDATA%\prosmoke`. A later CoD2x update that replaces
+the loader is backed up as the new restore baseline on the next install, keeping
+the earlier copy. Undo reverses all of it.
 
-The current runtime uses compiled `smoke.shaders`, with no HLSL dependency. Setup
-checks file hashes and the supported stock DX9 renderer. Missing/invalid occupancy,
-policy or GPU depth capability preserves stock smoke. The experimental particle
-mode and latest reliability changes still require live acceptance.
+Smoke activates when `prosmoke\prosmoke.dll` exists beside `CoD2MP_s.exe`, so a
+manual copy works and deleting the folder turns it off. `COD2_SMOKE_RENDER=0` and
+`COD2_SMOKE_DIAGNOSTICS` remain explicit overrides. `prosmoke_resolution`
+(full, half, quarter) is the only client-side setting.
 
-The setup receipt beside the game executable enables the installed preview, including
-when Steam relaunches the game without the tool's environment. Restoring the original
-files removes that receipt and loader. `COD2_SMOKE_DIAGNOSTICS` and `COD2_SMOKE_RENDER`
-remain explicit overrides (`1` enables, `0` disables) for diagnostics.
-`COD2_SMOKE_DEV` is cleared; normal tests use packaged, BSP-bound grids.
-The existing `sv_mapkit_smoke_policy` remains server-controlled; resolution is local.
+The loader is built with `COD2X_SMOKE_TEST_BUILD=ON`, which disables CoD2x's own
+update check so a stable update cannot replace it. Undo returns the regular loader.
 
-The Windows branch build defaults `COD2X_SMOKE_TEST_BUILD=ON`. This disables stable
-update checks/download replacement in the test binary, preventing a stable update
-from replacing this branch's bridge. No public update endpoint/channel is changed.
-Set the option OFF for a build with smoke opt-in disabled and upstream update behavior.
+## Server
+
+The server renders nothing. One line in its config publishes the policy to every
+client; a stock CoD2x server uses `sets` (serverinfo), a server built from this
+branch may use `set` (systeminfo). The client checks systeminfo, then serverinfo.
+
+```text
+sets sv_prosmoke_policy "v1 width=1.3 height=1.1 bloom_time=3 carve_scale=0.8"
+```
+
+| Field | Default | Range | Effect |
+|---|---|---|---|
+| `width` | 1.2 | 0.5 to 1.5 | mature cloud radius multiplier |
+| `height` | 1.0 | 0.5 to 2.0 | vertical radius and dome, on top of width |
+| `bloom_rate` | 512 | 64 to 32768 | new cells per second while growing |
+| `bloom_time` | 0 | 0 to 30 | seconds to full size; overrides `bloom_rate` when above 0 |
+| `thicken` | 0.5 | 0.05 to 3 | seconds for a reached cell to fill |
+| `duration` | 48 | 10 to 90 | cloud lifetime from detonation |
+| `fade_time` | 12 | 1 to 30 | final fade; must be below `duration` |
+| `carve_scale` | 1.0 | 0.5 to 2.0 | multiplies every carve radius |
+| `carve_pistol` | 3 | 1 to 20 | Colt, Luger, Webley, TT-30 |
+| `carve_smg` | 3.5 | 1 to 20 | Thompson, Grease Gun, MP40, PPSh, Sten |
+| `carve_rifle` | 4.5 | 1 to 20 | MP44, BAR, unmatched weapons |
+| `carve_semi` | 4.75 | 1 to 20 | Garand, M1 Carbine, G43, SVT-40 |
+| `carve_sniper` | 11 | 1 to 20 | Kar98k, Mosin, Enfield, Springfield, scoped |
+| `carve_shotgun` | 6 | 1 to 20 | Trench Gun pellet cone at the muzzle |
+
+The look fields (`density`, `brightness`, `variation`, `shadow_strength`,
+`lightgrid_strength`, `edge_softness`, `height_gradient`, `billow_*`, `wisp_*`,
+`rise_speed`, `tint_*`, `fx_after_smoke`) are unchanged. `src/mss32/policy.hpp` is
+the single list of fields, defaults and limits, and is identical in the renderer.
+An invalid or missing line means stock smoke on that server; the client log says why.
+Carve values apply to the next shot; width, height, bloom and timing changes wait
+for active clouds to drain.
+
+Under `sv_pure 1` the renderer can only read grids from IWDs the server also has,
+so `prosmoke_stock.iwd` goes into the server's mod folder and the same file into
+the clients' copy of that folder (downloads handle it). Without a mod folder it
+goes into `main` renamed with an `iw_` prefix on both sides.
 
 ## Build
 
-The bridge uses the upstream 32-bit MinGW/NASM/OpenSSL toolchain. The smoke component
-was built separately with MSVC x86 and is supplied prebuilt. Only the bridge is rebuilt
-here; no MSVC renderer build or private source checkout is required.
-
 ```powershell
-.\smoke\Build-Test.ps1 -ToolchainDirectory C:\Toolchains\cod2-mingw -CMake cmake -Ninja ninja
+.\smoke\Build-Package.ps1 -ToolchainDirectory <mingw root> -CMake <cmake.exe> -Ninja <ninja.exe> -RendererDirectory <renderer stage>
+python -B -m unittest discover -s smoke/tests -v
 ```
 
-The toolchain root must contain `mingw32/bin/gcc.exe`, `mingw32/bin/g++.exe` and
-`usr/bin/nasm.exe`. Override `-MsysDirectory` if the required MSYS utilities are elsewhere.
-Output is `smoke/out/cod2x-smoke-test.zip` and its SHA256 sidecar. Temporary packaging
-files are removed after success. Pass `-KeepExpanded` to retain `smoke/out/package/`;
-that explicit mode preserves any previous expanded output for recovery.
-The normal upstream CMake target `mss32` also builds the bridge; the helper additionally
-stages the DLL, updates package hashes and creates the ZIP. It never installs or launches.
+The bridge uses the upstream 32-bit MinGW/NASM/OpenSSL toolchain; the renderer
+stage comes from the owner workspace's `build-renderer.ps1`. Both arguments are
+optional: without them the script repackages the checked-in binaries. Output is
+`smoke/out/prosmoke.zip` with a SHA256 sidecar. The normal CMake target `mss32`
+also builds the bridge.
 
 ## Remaining work
 
-See the testing notes for details: additional GPU support, complete particle ordering,
-large-volume splitting, same-name map rebinding, round/killcam acceptance, authoritative
-remote sky-shot transport, competitive admission/integrity and six cropped stock-map
-bounds reviews remain open. The occupancy baker is not a lighting or full map compiler.
+Live acceptance on a dedicated server publishing the policy with `sets`, more
+GPUs (NVIDIA, AMD, Intel through D3D9On12, DXVK), particle ordering mode 2,
+large-volume splitting, same-name map rebinding, round/killcam/demo behaviour,
+authoritative remote sky-shot transport, and six cropped stock-map bounds
+reviews (Brecourt, Carentan, Decoy, Harbor, Matmata, Rhine). See
+[VALIDATION.md](VALIDATION.md) for what has been checked offline.

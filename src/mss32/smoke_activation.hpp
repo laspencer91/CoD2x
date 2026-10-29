@@ -5,8 +5,9 @@
 #include <string>
 
 namespace cod2_smoke {
-// Setup commits this receipt only after installing all runtime files. Unlike
-// launcher environment variables, it survives a Steam handoff/relaunch.
+// ProSmoke is active when its runtime folder sits beside the game executable. A plain
+// file copy installs it and deleting the folder removes it; no receipt or registry.
+// Unlike launcher environment variables, this survives a Steam handoff/relaunch.
 inline bool installed_preview() {
 #ifndef COD2X_SMOKE_TEST_BUILD
     return false;
@@ -17,8 +18,8 @@ inline bool installed_preview() {
     const std::wstring path(executable, length);
     const auto slash = path.find_last_of(L"\\/");
     if (slash == std::wstring::npos) return false;
-    const auto receipt = path.substr(0, slash + 1) + L"cod2-smoke-test-install.json";
-    const DWORD attributes = GetFileAttributesW(receipt.c_str());
+    const auto runtime = path.substr(0, slash + 1) + L"prosmoke\\prosmoke.dll";
+    const DWORD attributes = GetFileAttributesW(runtime.c_str());
     return attributes != INVALID_FILE_ATTRIBUTES
         && !(attributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT));
 #endif

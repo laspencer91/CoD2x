@@ -1,5 +1,5 @@
 // Volumetric Smoke System by Logan - contact at logan@loganspencer.dev
-// Copyright (c) 2026 Logan Spencer. GPL-3.0 + ../NOTICE.md.
+// Copyright (c) 2026 Logan Spencer. Private preview.
 #pragma once
 #include <cmath>
 #include <cstdlib>
@@ -8,14 +8,16 @@
 #include <string_view>
 
 namespace cod2_smoke {
-inline constexpr char policy_dvar[] = "sv_mapkit_smoke_policy";
-inline constexpr char resolution_dvar[] = "promod_smoke_resolution";
+inline constexpr char policy_dvar[] = "sv_prosmoke_policy";
+inline constexpr char resolution_dvar[] = "prosmoke_resolution";
 inline constexpr char default_policy[] = "v1";
 
 #define COD2_SMOKE_POLICY_FIELDS(X) \
     X(density, .07f, .001f, 1.f) \
     X(width, 1.2f, .5f, 1.5f) \
+    X(height, 1.f, .5f, 2.f) \
     X(bloom_rate, 512.f, 64.f, 32768.f) \
+    X(bloom_time, 0.f, 0.f, 30.f) \
     X(thicken, .5f, .05f, 3.f) \
     X(duration, 48.f, 10.f, 90.f) \
     X(fade_time, 12.f, 1.f, 30.f) \
@@ -36,8 +38,20 @@ inline constexpr char default_policy[] = "v1";
     X(tint_r, 1.05f, 0.f, 2.f) \
     X(tint_g, 1.01f, 0.f, 2.f) \
     X(tint_b, .94f, 0.f, 2.f) \
-    X(tint_amount, .35f, 0.f, 1.f)
+    X(tint_amount, .35f, 0.f, 1.f) \
+    X(carve_scale, 1.f, .5f, 2.f) \
+    X(carve_pistol, 3.f, 1.f, 20.f) \
+    X(carve_smg, 3.5f, 1.f, 20.f) \
+    X(carve_rifle, 4.5f, 1.f, 20.f) \
+    X(carve_semi, 4.75f, 1.f, 20.f) \
+    X(carve_sniper, 11.f, 1.f, 20.f) \
+    X(carve_shotgun, 6.f, 1.f, 20.f)
 
+// width scales the mature cloud; height scales its vertical radius relative to width.
+// bloom_time is approximate seconds for a cloud to reach full size; 0 keeps bloom_rate
+// (new cells per second). thicken is seconds for a reached cell to fill.
+// carve_* values are visual hole radii in game units per weapon class, multiplied by
+// carve_scale. Holes already carved keep their size; new shots use the current values.
 struct Policy {
 #define DECLARE_POLICY(name, value, lo, hi) float name = value;
     COD2_SMOKE_POLICY_FIELDS(DECLARE_POLICY)
@@ -79,6 +93,8 @@ inline bool parse_policy(std::string_view text, Policy& output) {
 }
 
 // Read the replicated configstring itself, rather than a client-writable dvar copy.
+// The same parser serves systeminfo (branch servers register the dvar) and serverinfo
+// (stock CoD2x servers publish it with `sets`), which the client checks in that order.
 inline std::string policy_from_info(std::string_view info) {
     std::string result;
     bool found = false;

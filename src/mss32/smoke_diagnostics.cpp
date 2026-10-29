@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2026 Logan Spencer. Private preview.
 // CoD2x adapter diagnostics; offsets are pinned in integration-targets.json.
 #include "smoke_diagnostics.h"
 #include "mapkit_reload.h"
@@ -150,7 +150,7 @@ void start_log() {
         length = GetEnvironmentVariableW(L"LOCALAPPDATA", path, MAX_PATH);
         if (!length || length >= MAX_PATH) return;
         std::wstring directory(path, length);
-        for (const auto* component : {L"\\promodx", L"\\cod2-smoke"}) {
+        for (const auto* component : {L"\\prosmoke"}) {
             directory += component;
             if (!CreateDirectoryW(directory.c_str(), nullptr) && GetLastError() != ERROR_ALREADY_EXISTS) return;
         }
@@ -254,11 +254,17 @@ void __cdecl scene(const Refdef* view) {
     if (original_scene) {
         sample(view);
         if (smoke_settings) {
-            const char* info = nullptr; const int system_info = 1;
-            ASM_CALL(RETURN(info), 0x4020d0, 0, EAX(system_info));
             // CL_GetConfigString owns a bounded, NUL-terminated engine string.
             // Do not VirtualQuery once per character on this per-view path.
-            const auto policy = info ? cod2_smoke::policy_from_info(std::string_view(info, strnlen(info, 16384))) : std::string{};
+            const auto replicated = [](int index) {
+                const char* info = nullptr;
+                ASM_CALL(RETURN(info), 0x4020d0, 0, EAX(index));
+                return info ? cod2_smoke::policy_from_info(std::string_view(info, strnlen(info, 16384))) : std::string{};
+            };
+            // Systeminfo (1) comes from servers that register the dvar. Stock CoD2x servers
+            // cannot, so a policy published into serverinfo (0) with `sets` is accepted next.
+            auto policy = replicated(1);
+            if (policy.empty()) policy = replicated(0);
             static const bool developer_opt_in = [] {
                 char dev[8]{};
                 return GetEnvironmentVariableA("COD2_SMOKE_DEV", dev, sizeof(dev)) == 1 && dev[0] == '1';
@@ -307,7 +313,7 @@ void smoke_diagnostics_renderer_loaded() {
         const DWORD length = GetModuleFileNameA(nullptr, path, sizeof(path));
         char* slash = std::strrchr(path, '\\');
         if (length && length < sizeof(path) && slash && static_cast<size_t>(slash - path) + 40 < sizeof(path)) {
-            std::strcpy(slash + 1, "mapkit-smoke\\mapkit_smoke.dll");
+            std::strcpy(slash + 1, "prosmoke\\prosmoke.dll");
             if (!smoke_module) smoke_module = LoadLibraryExA(path, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
             using Initialize = bool (__cdecl*)(uintptr_t);
             auto init = procedure<Initialize>(smoke_module, "Smoke_Init");

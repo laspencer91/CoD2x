@@ -84,3 +84,40 @@ multi-client authoritative carving, large-volume limits and cropped map bounds
 remain acceptance work. These offline checks do not establish player FPS or
 competitive readiness. Existing license/attribution terms remain in place; this
 local binary-component layout has not been approved for public distribution.
+
+## October 28, 2026 update
+
+Server-tunable shape, bloom and carving; no game was launched.
+
+- `policy.hpp` (identical in the bridge and renderer) gained `height`, `bloom_time`
+  and seven `carve_*` fields. Defaults equal the previous fixed values, so `v1`
+  behaves as before. The bridge now reads the policy from systeminfo, then serverinfo.
+- Renderer rebuilt with MSVC x86. Policy probe passes against all nine look presets,
+  including serverinfo-shaped info strings and out-of-range rejection. Carve probe
+  passes: class radii follow the policy, `carve_scale=0.5` halves packed bullet holes
+  and shrinks the shotgun cone. Growth probe passes: `bloom_time=3` reaches full size
+  at 3.000 s on the Toujane grid, height 1.5 and 0.6 change the mature target (5172
+  and 827 cells against 2299), and the nominal target matches the core's pressure
+  target.
+- Bridge rebuilt with MinGW; all 364 proxy exports keep their ordinals and names.
+- Not covered offline: a live dedicated server publishing the policy with `sets`,
+  mixed systeminfo/serverinfo servers, and the visual result of height and bloom
+  changes in game.
+
+## October 28, 2026: ProSmoke rename and drop-in package
+
+No game was launched. The Map Kit names, the desktop tool, the hash manifests and
+all license/notice files were removed; the package is now `client/` and `server/`
+folders plus three double-click commands.
+
+- Server cvar `sv_prosmoke_policy`, client dvar `prosmoke_resolution`, runtime
+  folder `prosmoke\`, renderer `prosmoke.dll`, grids `prosmoke_stock.iwd` and
+  `prosmoke_<map>.iwd`, log `%LOCALAPPDATA%\prosmoke\bridge.log`.
+- Activation is now the presence of `prosmoke\prosmoke.dll` beside the game
+  executable; the receipt file is gone. The activation probe test covers it.
+- Renderer and bridge rebuilt after the rename; policy, carve and growth probes
+  pass; all 364 proxy exports keep their ordinals and names.
+- `smoke/tests` (package layout and names, setup script install/reinstall/update/
+  undo/refusals/dry-run launch, activation, baker package validation) pass.
+- Still not covered offline: real detection dialogs, a live game launch, and a
+  dedicated server publishing the policy with `sets`.

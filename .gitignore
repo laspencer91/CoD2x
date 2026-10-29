@@ -45,4 +45,3 @@ src/other/*.bndb_disassembly.txt
 smoke/build/
 smoke/out/
 **/__pycache__/
-smoke/prebuilt/test-installation.json

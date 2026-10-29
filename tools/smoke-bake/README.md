@@ -1,7 +1,7 @@
 # Smoke occupancy baker
 
 This is an optional authoring tool. Players do not run it, and all 15 stock MP maps
-already have grids in `smoke/prebuilt/runtime/mapkit_smoke_test/mapkit_smoke_stock.iwd`.
+already have grids in `smoke/package/client/prosmoke/prosmoke_stock.iwd`.
 
 The baker takes an existing compiled `.d3dbsp`, extracts solid world brushes and
 terrain collision, voxelizes them at 50 cm, and packages the grid with the BSP/grid
@@ -30,15 +30,15 @@ python tools/smoke-bake/bake.py C:\Maps\mp_example.d3dbsp --output C:\Maps\smoke
 The example writes the installable package to:
 
 ```text
-C:\Maps\smoke-output\mp_example\mapkit_smoke_mp_example.iwd
+C:\Maps\smoke-output\mp_example\prosmoke_mp_example.iwd
 ```
 
 Copy that `.iwd` into the active CoD2 mod directory (the directory selected by
-`fs_game`). Our supplied test launcher uses `mapkit_smoke_test`, so a test copy
+`fs_game`). Our supplied test launcher uses `prosmoke`, so a test copy
 installed at `C:\Games\CoD2-Smoke-Test` needs:
 
 ```text
-C:\Games\CoD2-Smoke-Test\mapkit_smoke_test\mapkit_smoke_mp_example.iwd
+C:\Games\CoD2-Smoke-Test\prosmoke\prosmoke_mp_example.iwd
 ```
 
 For another server mod, put the occupancy IWD alongside that mod's other IWDs and
@@ -69,5 +69,5 @@ The temporary `.smoke-work-*` directory is confined to the output folder and rem
 after each bake. Final outputs/cache remain there. The tool never installs or launches
 CoD2. `bin/cod2smoke-bake.json` records the supplied voxelizer's hash.
 
-The prebuilt voxelizer and smoke runtime retain the supplied license/attribution notices.
+The prebuilt voxelizer and smoke runtime retain the supplied attribution notice.
 Implementation source remains in the owner's separate workspace for this local review.

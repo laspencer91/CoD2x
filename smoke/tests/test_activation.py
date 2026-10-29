@@ -33,10 +33,11 @@ int main() {
                 check=True, capture_output=True, text=True, timeout=30)
 
     def probe(self, installed=False, overrides=None, executable='preview'):
-        receipt = self.folder / 'cod2-smoke-test-install.json'
-        receipt.unlink(missing_ok=True)
+        runtime = self.folder / 'prosmoke' / 'prosmoke.dll'
+        runtime.unlink(missing_ok=True)
         if installed:
-            receipt.write_text('{"schema": 1}')
+            runtime.parent.mkdir(exist_ok=True)
+            runtime.write_bytes(b'MZ renderer fixture; never loaded')
         env = dict(os.environ)
         for key in ('COD2_SMOKE_DIAGNOSTICS', 'COD2_SMOKE_RENDER'):
             env.pop(key, None)
