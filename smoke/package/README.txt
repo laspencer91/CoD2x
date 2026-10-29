@@ -1,7 +1,10 @@
 ProSmoke - volumetric smoke for Call of Duty 2 (CoD2x)
 
-Smoke grenades become real volumes that fill rooms, flow around walls, and get
-carved by bullets. Everyone on a server sees the same cloud, tuned by the server.
+Volumetric smoke provides competitive integrity by rendering smoke as a true 3D
+volume that exists in the world. It does not suffer from the problems of 2D
+billboard smokes that face each player's camera, giving a different view on each
+client's screen, nor does smoke density rely on per-billboard opacity.
+Bullets carve holes through it. Server enforced smoke configuration.
 
 REQUIREMENTS
   Call of Duty 2 version 1.3 with CoD2x installed (https://github.com/callofduty2x/CoD2x).
