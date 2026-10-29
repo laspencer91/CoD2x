@@ -22,8 +22,9 @@ class SetupScript(unittest.TestCase):
         self.game = root / 'Call of Duty 2'
         self.game.mkdir()
         (self.game / 'CoD2MP_s.exe').write_bytes(b'Fixture only; never execute')
-        # A real CoD2x loader body with an overlay so it differs from the package loader.
-        self.original = LOADER.read_bytes() + b'Previous CoD2x fixture'
+        # A CoD2x-looking loader body without the ProSmoke marker, so it reads as the stock loader.
+        self.original = LOADER.read_bytes().replace(b'sv_prosmoke_policy', b'sv_stockcod2x_fixt') + b'Previous CoD2x fixture'
+        assert b'sv_prosmoke_policy' not in self.original
         (self.game / 'mss32.dll').write_bytes(self.original)
         (self.game / 'mss32_original.dll').write_bytes(b'Miles fixture; never load')
         self.env = dict(os.environ, LOCALAPPDATA=str(root / 'local'))
@@ -81,9 +82,23 @@ class SetupScript(unittest.TestCase):
         self.assertEqual(result.returncode, 0, out)
         self.assertIn(f'Game folder: {self.game}', out)
 
+    def test_upgrading_prosmoke_keeps_the_original_backup(self):
+        # An earlier ProSmoke build in place must not be mistaken for a newer CoD2x loader.
+        self.run_script('Install')
+        backup = self.game / 'prosmoke-backup/mss32.dll'
+        self.assertEqual(backup.read_bytes(), self.original)
+        (self.game / 'mss32.dll').write_bytes(LOADER.read_bytes() + b'older ProSmoke build')
+        out = self.run_script('Install')
+        self.assertIn('Replacing an earlier ProSmoke loader', out)
+        self.assertEqual(backup.read_bytes(), self.original)
+        self.assertEqual(sorted(p.name for p in backup.parent.iterdir()), ['install.json', 'mss32.dll'])
+        self.assert_installed()
+        self.run_script('Undo')
+        self.assertEqual((self.game / 'mss32.dll').read_bytes(), self.original)
+
     def test_newer_cod2x_loader_becomes_the_restore_baseline(self):
         self.run_script('Install')
-        newer = LOADER.read_bytes() + b'Newer CoD2x fixture'
+        newer = LOADER.read_bytes().replace(b'sv_prosmoke_policy', b'sv_stockcod2x_fixt') + b'Newer CoD2x fixture'
         (self.game / 'mss32.dll').write_bytes(newer)
         self.run_script('Install')
         self.assert_installed()

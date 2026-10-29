@@ -62,6 +62,10 @@ class PackageLayout(unittest.TestCase):
         self.assertNotIn(b'mapkit-smoke', renderer)
         self.assertNotIn(b'sv_mapkit_smoke_policy', loader)
         self.assertIn(b'Smoke_Settings', renderer)
+        self.assertIn(b'Smoke_PopConsole', renderer)   # console status lines drained by the loader
+        self.assertIn(b'Smoke_Status', renderer)
+        self.assertIn(b'prosmoke_status', loader)     # console command
+        self.assertNotIn(b'mapkit_smoke.dll', loader)
 
     def test_compiled_shader_variants_without_hlsl(self):
         data = (RUNTIME / 'smoke.shaders').read_bytes()

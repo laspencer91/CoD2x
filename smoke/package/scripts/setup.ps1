@@ -32,6 +32,11 @@ function Test-CoD2xLoader([string]$Path) {
     $text = [Text.Encoding]::ASCII.GetString($data)
     return $text.Contains('mss32_original.dll') -and $text.Contains('CoD2x is not installed correctly.')
 }
+function Test-ProSmokeLoader([string]$Path) {
+    # Any ProSmoke build of the loader carries the policy cvar name; stock CoD2x loaders do not.
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    return [Text.Encoding]::ASCII.GetString([IO.File]::ReadAllBytes($Path)).Contains('sv_prosmoke_policy')
+}
 function Test-GameFolder([string]$Path) {
     return $Path -and (Test-Path -LiteralPath (Join-Path $Path 'CoD2MP_s.exe') -PathType Leaf)
 }
@@ -137,11 +142,11 @@ function Write-Atomic([string]$Path, [byte[]]$Data) {
 }
 function Get-Status([string]$Game) {
     $loader = Join-Path $Game 'mss32.dll'
-    $ours = (File-Hash $loader) -eq (File-Hash $packageLoader)
     [pscustomobject]@{
         game = $Game
         cod2x = (Test-CoD2xLoader $loader) -and (Test-Path -LiteralPath (Join-Path $Game 'mss32_original.dll') -PathType Leaf)
-        loaderIsProSmoke = $ours
+        loaderIsProSmoke = Test-ProSmokeLoader $loader                       # any ProSmoke version
+        loaderIsCurrent = (File-Hash $loader) -eq (File-Hash $packageLoader)  # this package's build
         runtime = Test-Path -LiteralPath (Join-Path $Game 'prosmoke\prosmoke.dll') -PathType Leaf
         backup = Test-Path -LiteralPath (Join-Path $Game "$backupName\mss32.dll") -PathType Leaf
     }
@@ -193,12 +198,14 @@ try {
                 Write-Atomic $backupLoader ([IO.File]::ReadAllBytes($loader))
                 Say "Backed up your CoD2x loader to $backupName\mss32.dll"
             }
-        } else { Say 'ProSmoke loader already installed; refreshing files.' }
+        } elseif ($status.loaderIsCurrent) { Say 'ProSmoke loader already installed; refreshing files.' }
+        else { Say 'Replacing an earlier ProSmoke loader; your original CoD2x backup is kept.' }
         Write-Atomic $loader ([IO.File]::ReadAllBytes($packageLoader))
         $target = Join-Path $game 'prosmoke'
         foreach ($file in Get-ChildItem -LiteralPath $payload -File) {
             Write-Atomic (Join-Path $target $file.Name) ([IO.File]::ReadAllBytes($file.FullName))
         }
+        [IO.Directory]::CreateDirectory($backupDirectory) | Out-Null
         $record = [ordered]@{ installed = [DateTime]::Now.ToString('s'); loader = File-Hash $packageLoader; runtime = File-Hash (Join-Path $payload 'prosmoke.dll') }
         [IO.File]::WriteAllText((Join-Path $backupDirectory 'install.json'), ($record | ConvertTo-Json))
         Remember $game
@@ -217,6 +224,7 @@ try {
         $backupLoader = Join-Path $backupDirectory 'mss32.dll'
         if (Test-Path -LiteralPath $backupLoader) {
             if (-not (Test-CoD2xLoader $backupLoader)) { throw "The backup at $backupLoader is not a CoD2x loader. Reinstall CoD2x instead." }
+            if (Test-ProSmokeLoader $backupLoader) { throw "The backup at $backupLoader is itself a ProSmoke loader. Reinstall CoD2x to get the stock loader back." }
             Write-Atomic $loader ([IO.File]::ReadAllBytes($backupLoader))
             Say 'Restored your original CoD2x loader.'
         } elseif ($status.loaderIsProSmoke) {

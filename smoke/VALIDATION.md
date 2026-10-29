@@ -121,3 +121,30 @@ folders plus three double-click commands.
   undo/refusals/dry-run launch, activation, baker package validation) pass.
 - Still not covered offline: real detection dialogs, a live game launch, and a
   dedicated server publishing the policy with `sets`.
+
+## 2026-10-29 console status and live runs
+
+- Live run on the owner PC (Steam CoD2x install, AMD RX 9060 XT): package installed
+  by setup.ps1, game launched with `+set fs_game prosmoke +devmap mp_toujane` and no
+  config executed. The listen server published `sv_prosmoke_policy v1` by itself,
+  the Toujane grid bound (BSP edba82b2), the depth path verified and the renderer
+  reported "replacement ready". Local play needs no policy line.
+- A runtime `set fs_game` from a config is rejected by the engine ("fs_game is write
+  protected"); the Mods menu uses the engine's internal set. That path could not be
+  scripted.
+- Setup-Client failed with "The property 'Count' cannot be found" whenever exactly one
+  game folder was detected: PowerShell unrolls a one-element array returned from a
+  function. Fixed by wrapping the call site; regression test added (skips on machines
+  with a real install, verify with `setup.ps1 -Action Check -NoPrompt`).
+- Reinstalling a newer ProSmoke build over an older one treated the old ProSmoke
+  loader as a "newer CoD2x loader" and made it the Undo baseline. The script now
+  recognises any ProSmoke loader by its policy cvar string and keeps the original
+  backup; Undo refuses a backup that is itself a ProSmoke loader.
+- New: the renderer queues status lines that the bridge prints in the game console
+  (`ProSmoke: volumetric smoke active`, or the reason smoke stays normal), plus the
+  `prosmoke_status` command. Built and unit-tested; the in-game console output has
+  not been observed yet because the owner PC entered a Remote Desktop session, in
+  which CoD2 cannot create a Direct3D 9 device ("GetDeviceCaps failed: Invalid call").
+- Side effect of the windowed test runs: a `vid_restart` saved the player config with
+  `r_fullscreen 0` and `r_displayRefresh "32 Hz"`; restored to fullscreen and the
+  monitor's 165 Hz, with the modified file kept as `config_mp.cfg.prosmoke-test-backup`.

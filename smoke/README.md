@@ -60,6 +60,10 @@ manual copy works and deleting the folder turns it off. `COD2_SMOKE_RENDER=0` an
 The loader is built with `COD2X_SMOKE_TEST_BUILD=ON`, which disables CoD2x's own
 update check so a stable update cannot replace it. Undo returns the regular loader.
 
+## Console status
+
+The renderer queues short status lines and the loader prints them in the game console on the engine thread: `ProSmoke: volumetric smoke active` once the depth path is verified for a map, or a `... normal smoke` line naming the reason (missing or invalid `sv_prosmoke_policy`, no occupancy grid for the map, no INTZ/RESZ depth texture, shader or noise load failure). `/prosmoke_status` prints whether the renderer DLL loaded, the policy the client sees, the renderer summary (`map= policy= ready= last=`) and the quality setting. The same lines go to `<game>\prosmoke\client.log`.
+
 ## Server
 
 The server renders nothing. One line in its config publishes the policy to every

@@ -24,6 +24,12 @@ CLIENT - two ways
 
   Play-Local.cmd starts Toujane locally with smoke on. Throw a smoke, shoot it.
 
+CHECKING IT WORKS
+  When a map loads, the console (~ key) prints "ProSmoke: volumetric smoke
+  active". If smoke stays normal, a "ProSmoke: ... normal smoke" line says why
+  (no policy from the server, no occupancy grid for the map, GPU limitation).
+  Type /prosmoke_status at any time for the current state.
+
 SERVER
   1. Add this line to your server config:
        sets sv_prosmoke_policy "v1"
@@ -47,7 +53,8 @@ LOCAL TESTING
   Quality:      /prosmoke_resolution full, half or quarter (default half)
 
 PROBLEMS
-  Still see normal smoke? The server must publish the policy line, your GPU
+  Still see normal smoke? Open the console and look for the ProSmoke line, or
+  type /prosmoke_status. The server must publish the policy line, your GPU
   must support DX9 depth textures (anything from the last 15 years), and the
   map needs an occupancy grid (all 15 stock maps are included). Logs:
     <game>\prosmoke\client.log

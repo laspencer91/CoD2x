@@ -21,6 +21,8 @@
 #include "../shared/assembly.h"
 #include "../shared/cod2_entity.h"
 #include "../shared/cod2_dvars.h"
+#include "../shared/cod2_common.h"
+#include "../shared/cod2_cmd.h"
 #include "policy.hpp"
 
 namespace {
@@ -81,6 +83,10 @@ Bullet smoke_bullet = nullptr;
 HMODULE smoke_module = nullptr;
 using SmokeSettings = void (__cdecl*)(const char*, unsigned, bool);
 SmokeSettings smoke_settings = nullptr;
+using PopConsole = int (__cdecl*)(char*, unsigned);
+PopConsole pop_console = nullptr;     // renderer status lines for the game console
+using SmokeStatus = int (__cdecl*)(char*, unsigned);
+SmokeStatus smoke_status = nullptr;   // one-line summary for prosmoke_status
 const char* resolution_names[]{"full", "half", "quarter", nullptr};
 dvar_t* smoke_resolution = nullptr;
 
@@ -249,6 +255,19 @@ void sample(const Refdef* view) {
     }
 }
 
+// The policy this client currently sees. Systeminfo (1) comes from servers that register
+// the dvar; stock CoD2x servers cannot, so serverinfo (0), published with `sets`, is next.
+std::string replicated_policy() {
+    const auto replicated = [](int index) {
+        const char* info = nullptr;
+        ASM_CALL(RETURN(info), 0x4020d0, 0, EAX(index));
+        return info ? cod2_smoke::policy_from_info(std::string_view(info, strnlen(info, 16384))) : std::string{};
+    };
+    auto policy = replicated(1);
+    if (policy.empty()) policy = replicated(0);
+    return policy;
+}
+
 void __cdecl scene(const Refdef* view) {
     // R_RenderScene submits work; this sample does NOT prove a current-frame depth pass.
     if (original_scene) {
@@ -256,15 +275,7 @@ void __cdecl scene(const Refdef* view) {
         if (smoke_settings) {
             // CL_GetConfigString owns a bounded, NUL-terminated engine string.
             // Do not VirtualQuery once per character on this per-view path.
-            const auto replicated = [](int index) {
-                const char* info = nullptr;
-                ASM_CALL(RETURN(info), 0x4020d0, 0, EAX(index));
-                return info ? cod2_smoke::policy_from_info(std::string_view(info, strnlen(info, 16384))) : std::string{};
-            };
-            // Systeminfo (1) comes from servers that register the dvar. Stock CoD2x servers
-            // cannot, so a policy published into serverinfo (0) with `sets` is accepted next.
-            auto policy = replicated(1);
-            if (policy.empty()) policy = replicated(0);
+            const auto policy = replicated_policy();
             static const bool developer_opt_in = [] {
                 char dev[8]{};
                 return GetEnvironmentVariableA("COD2_SMOKE_DEV", dev, sizeof(dev)) == 1 && dev[0] == '1';
@@ -273,6 +284,11 @@ void __cdecl scene(const Refdef* view) {
                 && sv_running && sv_running->value.boolean && Dvar_GetBool("sv_cheats");
             const int selection = smoke_resolution ? smoke_resolution->value.integer : 1;
             smoke_settings(policy.c_str(), selection == 0 ? 1 : selection == 2 ? 4 : 2, developer);
+            if (pop_console) {
+                // Renderer status lines, printed on the engine thread that owns the console.
+                char line[512];
+                for (int i = 0; i < 8 && pop_console(line, sizeof(line)) > 0; ++i) Com_Printf("^3ProSmoke:^7 %s\n", line);
+            }
         }
         if (set_smoke_view) set_smoke_view(view);
         original_scene(view);
@@ -322,6 +338,8 @@ void smoke_diagnostics_renderer_loaded() {
                 wants_bullets = procedure<WantsBullets>(smoke_module, "Smoke_WantsBullets");
                 smoke_bullet = procedure<Bullet>(smoke_module, "Smoke_Bullet");
                 smoke_settings = procedure<SmokeSettings>(smoke_module, "Smoke_Settings");
+                pop_console = procedure<PopConsole>(smoke_module, "Smoke_PopConsole");
+                smoke_status = procedure<SmokeStatus>(smoke_module, "Smoke_Status");
             }
             log("smoke_renderer=%p camera_callback=%p error=%lu", smoke_module, reinterpret_cast<void*>(set_smoke_view), GetLastError());
         }
@@ -339,8 +357,24 @@ void smoke_diagnostics_renderer_loaded() {
     log("renderer=verified base=%p awaiting_export_table", module);
 }
 
+// /prosmoke_status: what the loader, the server policy and the renderer currently report.
+void prosmoke_status_command() {
+    if (!smoke_module) {
+        Com_Printf("ProSmoke: renderer not loaded. prosmoke\\prosmoke.dll must sit beside CoD2MP_s.exe; see %%LOCALAPPDATA%%\\prosmoke\\bridge.log\n");
+        return;
+    }
+    const auto policy = replicated_policy();
+    Com_Printf("ProSmoke: renderer loaded; server policy %s\n", policy.empty() ? "not set (normal smoke)" : policy.c_str());
+    char text[1024] = {};
+    if (smoke_status && smoke_status(text, sizeof(text)) > 0) Com_Printf("ProSmoke: %s\n", text);
+    else Com_Printf("ProSmoke: renderer has not drawn a frame yet\n");
+    const int selection = smoke_resolution ? smoke_resolution->value.integer : 1;
+    Com_Printf("ProSmoke: quality %s (prosmoke_resolution full|half|quarter)\n", resolution_names[selection >= 0 && selection < 3 ? selection : 1]);
+}
+
 void smoke_diagnostics_register_settings() {
     smoke_resolution = Dvar_RegisterEnum(cod2_smoke::resolution_dvar, resolution_names, 1, DVAR_ARCHIVE);
+    Cmd_AddCommand("prosmoke_status", prosmoke_status_command);
 }
 
 void smoke_diagnostics_frame() {
@@ -359,6 +393,7 @@ void smoke_diagnostics_frame() {
 bool smoke_diagnostics_shutdown() {
     if (!restore_trace()) { log("shutdown=deferred could_not_restore_bullet_call"); return false; }
     wants_bullets = nullptr; smoke_bullet = nullptr; smoke_settings = nullptr; set_smoke_view = nullptr;
+    pop_console = nullptr; smoke_status = nullptr;
     RenderScene current = nullptr;
     if (original_scene && read(kRenderSceneSlot, current) && current == scene
         && !exchange_scene(scene, original_scene)) {

@@ -71,7 +71,7 @@ void remount(bool load) {
     if (load) {
         // Request a render-thread grid refresh even when reloading the same map name.
         using Refresh = void(__cdecl*)();
-        const auto renderer = GetModuleHandleA("mapkit_smoke.dll");
+        const auto renderer = GetModuleHandleA("prosmoke.dll");
         const auto refresh = renderer ? reinterpret_cast<Refresh>(GetProcAddress(renderer, "Smoke_MapReload")) : nullptr;
         if (refresh) refresh();
         char command[128]{};
