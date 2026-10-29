@@ -66,6 +66,21 @@ class SetupScript(unittest.TestCase):
         self.assertFalse((self.game / 'prosmoke-backup').exists())
         self.assertTrue((self.game / 'mss32_original.dll').is_file())
 
+    def test_detects_a_single_remembered_game_folder(self):
+        # Regression: a lone detected folder came back as a string and '.Count' failed under strict mode.
+        state = Path(self.env['LOCALAPPDATA']) / 'prosmoke'
+        state.mkdir()
+        (state / 'game-directory.txt').write_text(str(self.game))
+        result = subprocess.run(
+            ['powershell.exe', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', str(SCRIPT),
+             '-Action', 'Check', '-NoPrompt'], capture_output=True, text=True, timeout=90, env=self.env)
+        out = result.stdout + result.stderr
+        self.assertNotIn("property 'Count'", out)
+        if result.returncode and 'Detected: ' in out and str(self.game) in out:
+            self.skipTest('this machine has a real Call of Duty 2 install, so more than one folder was detected')
+        self.assertEqual(result.returncode, 0, out)
+        self.assertIn(f'Game folder: {self.game}', out)
+
     def test_newer_cod2x_loader_becomes_the_restore_baseline(self):
         self.run_script('Install')
         newer = LOADER.read_bytes() + b'Newer CoD2x fixture'

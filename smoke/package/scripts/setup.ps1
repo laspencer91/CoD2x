@@ -5,7 +5,7 @@
 param(
     [ValidateSet('Install', 'Undo', 'Play', 'Check')] [string]$Action = 'Install',
     [string]$GameDirectory,
-    [switch]$NoPrompt,   # automation: never open a dialog; requires -GameDirectory
+    [switch]$NoPrompt,   # automation: never open a dialog; uses -GameDirectory or the one detected game folder
     [switch]$DryRun,     # Play: print the launch command instead of starting the game
     [ValidatePattern('^mp_[a-z0-9_]{1,28}$')] [string]$Map = 'mp_toujane'
 )
@@ -99,8 +99,11 @@ function Resolve-Game {
         if (-not (Test-GameFolder $full)) { throw "No CoD2MP_s.exe in $full" }
         return $full
     }
-    if ($NoPrompt) { throw 'Pass -GameDirectory when using -NoPrompt.' }
-    $candidates = Find-GameFolders
+    $candidates = @(Find-GameFolders)   # @() keeps a single hit an array; PowerShell unrolls one-element returns
+    if ($NoPrompt) {
+        if ($candidates.Count -eq 1) { return $candidates[0] }
+        throw ('Pass -GameDirectory when using -NoPrompt. Detected: ' + $(if ($candidates.Count) { $candidates -join '; ' } else { 'nothing' }))
+    }
     if ($candidates.Count -eq 1) {
         Say "Found Call of Duty 2 at: $($candidates[0])"
         if (Ask-YesNo "Found Call of Duty 2 at:`n$($candidates[0])`n`nUse this folder?") { return $candidates[0] }
