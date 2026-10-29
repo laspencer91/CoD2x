@@ -55,7 +55,8 @@ LOCAL TESTING
 PROBLEMS
   Still see normal smoke? Open the console and look for the ProSmoke line, or
   type /prosmoke_status. The server must publish the policy line, your GPU
-  must support DX9 depth textures (anything from the last 15 years), and the
+  must support DX9 depth textures (NVIDIA, AMD and Intel from the last 15
+  years; anti-aliasing must be off on NVIDIA, r_aaSamples 1), and the
   map needs an occupancy grid (all 15 stock maps are included). Logs:
     <game>\prosmoke\client.log
     %LOCALAPPDATA%\prosmoke\bridge.log

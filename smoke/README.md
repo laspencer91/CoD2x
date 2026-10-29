@@ -62,7 +62,7 @@ update check so a stable update cannot replace it. Undo returns the regular load
 
 ## Console status
 
-The renderer queues short status lines and the loader prints them in the game console on the engine thread: `ProSmoke: volumetric smoke active` once the depth path is verified for a map, or a `... normal smoke` line naming the reason (missing or invalid `sv_prosmoke_policy`, no occupancy grid for the map, no INTZ/RESZ depth texture, shader or noise load failure). `/prosmoke_status` prints whether the renderer DLL loaded, the policy the client sees, the renderer summary (`map= policy= ready= last=`) and the quality setting. The same lines go to `<game>\prosmoke\client.log`.
+The renderer queues short status lines and the loader prints them in the game console on the engine thread: `ProSmoke: volumetric smoke active` once the depth path is verified for a map, or a `... normal smoke` line naming the reason (missing or invalid `sv_prosmoke_policy`, no occupancy grid for the map, no readable depth buffer, shader or noise load failure). `/prosmoke_status` prints whether the renderer DLL loaded, the policy the client sees, the renderer summary (`gpu= depth= map= policy= ready= last=`) and the quality setting. The same lines go to `<game>\prosmoke\client.log`.
 
 ## Server
 

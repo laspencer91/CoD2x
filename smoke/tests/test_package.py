@@ -64,6 +64,7 @@ class PackageLayout(unittest.TestCase):
         self.assertIn(b'Smoke_Settings', renderer)
         self.assertIn(b'Smoke_PopConsole', renderer)   # console status lines drained by the loader
         self.assertIn(b'Smoke_Status', renderer)
+        self.assertIn(b'intz-bound', renderer)        # NVIDIA depth path (INTZ without RESZ)
         self.assertIn(b'prosmoke_status', loader)     # console command
         self.assertNotIn(b'mapkit_smoke.dll', loader)
 

@@ -148,3 +148,25 @@ folders plus three double-click commands.
 - Side effect of the windowed test runs: a `vid_restart` saved the player config with
   `r_fullscreen 0` and `r_displayRefresh "32 Hz"`; restored to fullscreen and the
   monitor's 165 Hz, with the modified file kept as `config_mp.cfg.prosmoke-test-backup`.
+
+## 2026-10-29 NVIDIA depth path
+
+- First report from a GeForce RTX 5080: `/prosmoke_status` showed the loader with the
+  server policy but the renderer at `ready=0`, last status "native scene depth
+  unavailable (no INTZ/RESZ depth texture)". The renderer required both INTZ and
+  RESZ; RESZ is an AMD extension (Intel adopted it) that NVIDIA drivers never
+  exposed, so every NVIDIA user saw normal smoke. The owner PC passed only because
+  it is an AMD card.
+- Fix: `DepthResolve` now has two modes chosen per device. `resz` is the existing
+  copy (AMD, Intel, DXVK). `intz-bound` replaces the game's depth-stencil with an
+  INTZ texture's surface, hooks `SetDepthStencilSurface` so the engine cannot swap
+  it back, unbinds it while the smoke pass samples it and rebinds it afterwards
+  (state blocks do not cover depth-stencil bindings). A multisampled depth buffer
+  cannot be INTZ; that case prints a console line asking for `r_aaSamples 1`.
+  `PROSMOKE_DEPTH=bound` in the environment forces the NVIDIA mode on a GPU that
+  has RESZ, for testing on AMD.
+- The status line was misleading on this failure: the GPU gate runs before the policy
+  is parsed or the map loaded, so it read `map=(none) policy=missing/invalid`. It now
+  reads `gpu="<adapter>" depth=<mode> map= policy=<valid|missing/invalid|not checked yet>`.
+- Verification: compiled; package tests pass. Not yet run on NVIDIA hardware or with
+  the forced mode on the owner PC (still in a Remote Desktop session).
