@@ -1,6 +1,4 @@
-ProSmoke - server side
-
-The server never renders smoke, so there is no DLL to install. Two things:
+ProSmoke - server setup
 
 1. THE POLICY LINE (required)
    Add to your server config, or copy prosmoke_server.cfg into your mod folder

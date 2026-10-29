@@ -25,17 +25,26 @@ CLIENT - two ways
   Play-Local.cmd starts Toujane locally with smoke on. Throw a smoke, shoot it.
 
 SERVER
-  Nothing to install on the server for it to work. One line in the server config
-  enables smoke for every ProSmoke client, and the same line tunes it:
-    sets sv_prosmoke_policy "v1"
-  The server folder has a sample config with every field explained and the
-  occupancy file that sv_pure servers need. See server\README-SERVER.txt.
+  1. Add this line to your server config:
+       sets sv_prosmoke_policy "v1"
+     Fields after v1 tune width, height, bloom time, duration and per-weapon
+     carve sizes. server\prosmoke_server.cfg lists them all with their ranges.
+  2. If you run sv_pure 1, copy server\prosmoke_stock.iwd into your mod folder.
+  Details in server\README-SERVER.txt.
 
-  No policy line on the server = normal smoke, so ProSmoke clients can play
-  anywhere.
+  Without the policy line, ProSmoke clients see normal smoke on that server.
 
-QUALITY
-  In the console: /prosmoke_resolution full, half or quarter (default half).
+LOCAL TESTING
+  Play-Local.cmd runs a local server on Toujane and applies the policy line in
+  <game>\prosmoke\prosmoke.cfg. To try other settings, either edit that file
+  (Setup-Client.cmd overwrites it when you reinstall), or type in the console
+  while playing:
+    /set sv_prosmoke_policy "v1 width=1.4 height=1.3 bloom_time=3 carve_scale=0.8"
+  Carve changes apply to the next shot. Width, height, bloom and duration
+  changes apply once the current clouds have faded. All fields and their
+  ranges are listed in server\prosmoke_server.cfg.
+  Another map:  Play-Local.cmd -Map mp_burgundy
+  Quality:      /prosmoke_resolution full, half or quarter (default half)
 
 PROBLEMS
   Still see normal smoke? The server must publish the policy line, your GPU
