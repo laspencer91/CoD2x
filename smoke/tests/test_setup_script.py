@@ -82,6 +82,19 @@ class SetupScript(unittest.TestCase):
         self.assertEqual(result.returncode, 0, out)
         self.assertIn(f'Game folder: {self.game}', out)
 
+    def test_candidate_on_a_missing_drive_does_not_stop_detection(self):
+        # Regression: Test-Path raised "Cannot find drive" for the built-in D:\ candidate on C:-only PCs.
+        missing = next(d for d in 'ZYXWVUTSRQPONMLKJIHGFE' if not os.path.exists(d + ':\\'))
+        state = Path(self.env['LOCALAPPDATA']) / 'prosmoke'
+        state.mkdir()
+        (state / 'game-directory.txt').write_text(missing + ':\\Games\\Call of Duty 2')
+        result = subprocess.run(
+            ['powershell.exe', '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', str(SCRIPT),
+             '-Action', 'Check', '-NoPrompt'], capture_output=True, text=True, timeout=90, env=self.env)
+        output = result.stdout + result.stderr
+        self.assertNotIn('Cannot find drive', output)
+        self.assertNotIn('does not exist', output)
+
     def test_upgrading_prosmoke_keeps_the_original_backup(self):
         # An earlier ProSmoke build in place must not be mistaken for a newer CoD2x loader.
         self.run_script('Install')

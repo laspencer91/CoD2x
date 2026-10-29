@@ -12,6 +12,9 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $package = Split-Path -Parent $PSScriptRoot                  # the extracted ZIP root
+# PowerShell's Join-Path validates the drive letter and throws for one that does not exist (the
+# built-in D:\ candidate on a C:-only PC). This shadowing function only joins the strings.
+function Join-Path([string]$Path, [string]$ChildPath) { return [IO.Path]::Combine($Path, $ChildPath) }
 $payload = Join-Path $package 'client\prosmoke'              # files that land in <game>\prosmoke
 $packageLoader = Join-Path $package 'client\mss32.dll'        # the ProSmoke CoD2x loader
 $backupName = 'prosmoke-backup'
@@ -21,11 +24,11 @@ $rememberedPath = Join-Path $stateDirectory 'game-directory.txt'
 
 function Say([string]$Text) { Write-Host $Text }
 function File-Hash([string]$Path) {
-    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
+    if (-not ([IO.File]::Exists($Path))) { return $null }
     return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 function Test-CoD2xLoader([string]$Path) {
-    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    if (-not ([IO.File]::Exists($Path))) { return $false }
     if ([Diagnostics.FileVersionInfo]::GetVersionInfo($Path).ProductName -eq 'CoD2x') { return $true }
     $data = [IO.File]::ReadAllBytes($Path)
     if ($data.Length -lt 64 -or $data[0] -ne 0x4d -or $data[1] -ne 0x5a) { return $false }
@@ -34,11 +37,13 @@ function Test-CoD2xLoader([string]$Path) {
 }
 function Test-ProSmokeLoader([string]$Path) {
     # Any ProSmoke build of the loader carries the policy cvar name; stock CoD2x loaders do not.
-    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    if (-not ([IO.File]::Exists($Path))) { return $false }
     return [Text.Encoding]::ASCII.GetString([IO.File]::ReadAllBytes($Path)).Contains('sv_prosmoke_policy')
 }
+# Test-Path throws for a drive letter that does not exist; these never do.
+function Path-Exists([string]$Path) { return [IO.File]::Exists($Path) -or [IO.Directory]::Exists($Path) }
 function Test-GameFolder([string]$Path) {
-    return $Path -and (Test-Path -LiteralPath (Join-Path $Path 'CoD2MP_s.exe') -PathType Leaf)
+    return $Path -and ([IO.File]::Exists((Join-Path $Path 'CoD2MP_s.exe')))
 }
 function Registry-Value([string]$Key, [string]$Name) {
     try { return Get-ItemPropertyValue -LiteralPath $Key -Name $Name -ErrorAction Stop } catch { return $null }
@@ -54,7 +59,7 @@ function Find-GameFolders {
     $add = { param($candidate) if ($candidate -and (Test-GameFolder $candidate)) {
         $full = [IO.Path]::GetFullPath($candidate).TrimEnd('\')
         if (-not ($found | Where-Object { $_ -ieq $full })) { $found.Add($full) } } }
-    if (Test-Path -LiteralPath $rememberedPath) { & $add ((Get-Content -LiteralPath $rememberedPath -Raw).Trim()) }
+    if ((Path-Exists $rememberedPath)) { & $add ((Get-Content -LiteralPath $rememberedPath -Raw).Trim()) }
     foreach ($key in @('HKLM:\SOFTWARE\Activision\Call of Duty 2', 'HKLM:\SOFTWARE\WOW6432Node\Activision\Call of Duty 2')) {
         & $add (Registry-Value $key 'InstallPath')
     }
@@ -62,11 +67,11 @@ function Find-GameFolders {
     foreach ($steam in @((Registry-Value 'HKCU:\Software\Valve\Steam' 'SteamPath'),
         (Registry-Value 'HKLM:\SOFTWARE\WOW6432Node\Valve\Steam' 'InstallPath'),
         (Join-Path ([Environment]::GetFolderPath('ProgramFilesX86')) 'Steam'), 'C:\Games\Steam')) {
-        if ($steam -and (Test-Path -LiteralPath $steam)) { $libraries.Add($steam) }
+        if ($steam -and ((Path-Exists $steam))) { $libraries.Add($steam) }
     }
     foreach ($steam in @($libraries)) {
         $vdf = Join-Path $steam 'steamapps\libraryfolders.vdf'
-        if (Test-Path -LiteralPath $vdf) {
+        if ((Path-Exists $vdf)) {
             foreach ($match in [regex]::Matches((Get-Content -LiteralPath $vdf -Raw), '"path"\s+"([^"]+)"')) {
                 $libraries.Add($match.Groups[1].Value.Replace('\\', '\'))
             }
@@ -74,7 +79,7 @@ function Find-GameFolders {
     }
     foreach ($library in $libraries) {
         $manifest = Join-Path $library 'steamapps\appmanifest_2630.acf'
-        if (Test-Path -LiteralPath $manifest) {
+        if ((Path-Exists $manifest)) {
             $install = (Quoted-Pairs (Get-Content -LiteralPath $manifest -Raw))['installdir']
             if ($install -and $install -notmatch '[\\/:]') { & $add (Join-Path $library ('steamapps\common\' + $install)) }
         }
@@ -138,17 +143,17 @@ function Write-Atomic([string]$Path, [byte[]]$Data) {
     [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($Path)) | Out-Null
     $pending = $Path + '.next'
     [IO.File]::WriteAllBytes($pending, $Data)
-    if (Test-Path -LiteralPath $Path) { [IO.File]::Replace($pending, $Path, [NullString]::Value) } else { [IO.File]::Move($pending, $Path) }
+    if ((Path-Exists $Path)) { [IO.File]::Replace($pending, $Path, [NullString]::Value) } else { [IO.File]::Move($pending, $Path) }
 }
 function Get-Status([string]$Game) {
     $loader = Join-Path $Game 'mss32.dll'
     [pscustomobject]@{
         game = $Game
-        cod2x = (Test-CoD2xLoader $loader) -and (Test-Path -LiteralPath (Join-Path $Game 'mss32_original.dll') -PathType Leaf)
+        cod2x = (Test-CoD2xLoader $loader) -and ([IO.File]::Exists((Join-Path $Game 'mss32_original.dll')))
         loaderIsProSmoke = Test-ProSmokeLoader $loader                       # any ProSmoke version
         loaderIsCurrent = (File-Hash $loader) -eq (File-Hash $packageLoader)  # this package's build
-        runtime = Test-Path -LiteralPath (Join-Path $Game 'prosmoke\prosmoke.dll') -PathType Leaf
-        backup = Test-Path -LiteralPath (Join-Path $Game "$backupName\mss32.dll") -PathType Leaf
+        runtime = [IO.File]::Exists((Join-Path $Game 'prosmoke\prosmoke.dll'))
+        backup = [IO.File]::Exists((Join-Path $Game "$backupName\mss32.dll"))
     }
 }
 function Find-SteamDirectory([string]$Game) {
@@ -160,7 +165,7 @@ function Find-SteamDirectory([string]$Game) {
         (Join-Path ([Environment]::GetFolderPath('ProgramFilesX86')) 'Steam'))
     foreach ($candidate in $candidates) {
         if (-not $candidate -or -not [IO.Path]::IsPathRooted($candidate)) { continue }
-        if ((Test-Path -LiteralPath (Join-Path $candidate 'steam.exe')) -and (Test-Path -LiteralPath (Join-Path $candidate 'Steam.dll'))) { return $candidate }
+        if (((Path-Exists (Join-Path $candidate 'steam.exe'))) -and ((Path-Exists (Join-Path $candidate 'Steam.dll')))) { return $candidate }
     }
     return $null
 }
@@ -168,7 +173,7 @@ function Find-SteamDirectory([string]$Game) {
 try {
     foreach ($required in @($packageLoader, (Join-Path $payload 'prosmoke.dll'), (Join-Path $payload 'smoke.shaders'),
         (Join-Path $payload 'noise128.rgba'), (Join-Path $payload 'prosmoke_stock.iwd'), (Join-Path $payload 'prosmoke.cfg'))) {
-        if (-not (Test-Path -LiteralPath $required -PathType Leaf)) { throw "The package is incomplete: missing $required. Extract the whole ZIP and keep its folders together." }
+        if (-not ([IO.File]::Exists($required))) { throw "The package is incomplete: missing $required. Extract the whole ZIP and keep its folders together." }
     }
     $game = Resolve-Game
     $status = Get-Status $game
@@ -190,11 +195,11 @@ try {
         $backupDirectory = Join-Path $game $backupName
         $backupLoader = Join-Path $backupDirectory 'mss32.dll'
         if (-not $status.loaderIsProSmoke) {
-            if ((Test-Path -LiteralPath $backupLoader) -and ((File-Hash $backupLoader) -ne (File-Hash $loader))) {
+            if (((Path-Exists $backupLoader)) -and ((File-Hash $backupLoader) -ne (File-Hash $loader))) {
                 # CoD2x was updated since the last install; keep the older backup too.
                 Move-Item -LiteralPath $backupLoader -Destination (Join-Path $backupDirectory ('mss32.' + [DateTime]::Now.ToString('yyyyMMdd-HHmmss') + '.dll'))
             }
-            if (-not (Test-Path -LiteralPath $backupLoader)) {
+            if (-not ((Path-Exists $backupLoader))) {
                 Write-Atomic $backupLoader ([IO.File]::ReadAllBytes($loader))
                 Say "Backed up your CoD2x loader to $backupName\mss32.dll"
             }
@@ -222,7 +227,7 @@ try {
         $loader = Join-Path $game 'mss32.dll'
         $backupDirectory = Join-Path $game $backupName
         $backupLoader = Join-Path $backupDirectory 'mss32.dll'
-        if (Test-Path -LiteralPath $backupLoader) {
+        if ((Path-Exists $backupLoader)) {
             if (-not (Test-CoD2xLoader $backupLoader)) { throw "The backup at $backupLoader is not a CoD2x loader. Reinstall CoD2x instead." }
             if (Test-ProSmokeLoader $backupLoader) { throw "The backup at $backupLoader is itself a ProSmoke loader. Reinstall CoD2x to get the stock loader back." }
             Write-Atomic $loader ([IO.File]::ReadAllBytes($backupLoader))
@@ -231,8 +236,8 @@ try {
             throw "No backup found in $backupName. Reinstall CoD2x to replace mss32.dll, then delete the prosmoke folder."
         } else { Say 'The game loader is not the ProSmoke one; leaving mss32.dll alone.' }
         $target = Join-Path $game 'prosmoke'
-        if (Test-Path -LiteralPath $target) { Remove-Item -LiteralPath $target -Recurse -Force; Say 'Removed the prosmoke folder.' }
-        if (Test-Path -LiteralPath $backupDirectory) { Remove-Item -LiteralPath $backupDirectory -Recurse -Force }
+        if ((Path-Exists $target)) { Remove-Item -LiteralPath $target -Recurse -Force; Say 'Removed the prosmoke folder.' }
+        if ((Path-Exists $backupDirectory)) { Remove-Item -LiteralPath $backupDirectory -Recurse -Force }
         Say 'ProSmoke removed. Game logs and your configs were not touched.'
         exit 0
     }

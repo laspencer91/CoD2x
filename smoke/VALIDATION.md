@@ -170,3 +170,13 @@ folders plus three double-click commands.
   reads `gpu="<adapter>" depth=<mode> map= policy=<valid|missing/invalid|not checked yet>`.
 - Verification: compiled; package tests pass. Not yet run on NVIDIA hardware or with
   the forced mode on the owner PC (still in a Remote Desktop session).
+
+## 2026-10-29 setup on PCs without a D: drive
+
+- Report: `Setup-Client.cmd` stopped with "Cannot find drive. A drive with the name 'D'
+  does not exist." Both `Test-Path` and `Join-Path` validate the drive letter in
+  PowerShell 5.1, and the script probes a built-in `D:\Games\Call of Duty 2`
+  candidate with errors set to stop. Fixed by using .NET existence checks and a
+  script-local `Join-Path` that only joins strings. Regression test seeds the
+  remembered folder with a path on a drive letter that does not exist; it reproduced
+  the failure before the fix.
