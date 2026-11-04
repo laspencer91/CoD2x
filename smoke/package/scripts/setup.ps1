@@ -205,9 +205,25 @@ try {
             }
         } elseif ($status.loaderIsCurrent) { Say 'ProSmoke loader already installed; refreshing files.' }
         else { Say 'Replacing an earlier ProSmoke loader; your original CoD2x backup is kept.' }
-        Write-Atomic $loader ([IO.File]::ReadAllBytes($packageLoader))
         $target = Join-Path $game 'prosmoke'
+        $changed = $status.loaderIsProSmoke -and -not $status.loaderIsCurrent
+        if ($status.loaderIsProSmoke -and -not $changed) {
+            foreach ($file in Get-ChildItem -LiteralPath $payload -File) {
+                if ($file.Name -ne 'prosmoke.cfg' -and (File-Hash (Join-Path $target $file.Name)) -ne (File-Hash $file.FullName)) { $changed = $true; break }
+            }
+        }
+        if ($changed) {
+            $snapshot = Join-Path (Join-Path $backupDirectory 'previews') ([DateTime]::Now.ToString('yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N').Substring(0,8))
+            Write-Atomic (Join-Path $snapshot 'mss32.dll') ([IO.File]::ReadAllBytes($loader))
+            foreach ($file in Get-ChildItem -LiteralPath $payload -File) {
+                $previous = Join-Path $target $file.Name
+                if ([IO.File]::Exists($previous)) { Write-Atomic (Join-Path (Join-Path $snapshot 'prosmoke') $file.Name) ([IO.File]::ReadAllBytes($previous)) }
+            }
+            Say "Saved the previous ProSmoke files to $snapshot"
+        }
+        Write-Atomic $loader ([IO.File]::ReadAllBytes($packageLoader))
         foreach ($file in Get-ChildItem -LiteralPath $payload -File) {
+            if ($file.Name -eq 'prosmoke.cfg' -and [IO.File]::Exists((Join-Path $target $file.Name))) { Say 'Kept your existing prosmoke.cfg.'; continue }
             Write-Atomic (Join-Path $target $file.Name) ([IO.File]::ReadAllBytes($file.FullName))
         }
         [IO.Directory]::CreateDirectory($backupDirectory) | Out-Null
@@ -236,8 +252,16 @@ try {
             throw "No backup found in $backupName. Reinstall CoD2x to replace mss32.dll, then delete the prosmoke folder."
         } else { Say 'The game loader is not the ProSmoke one; leaving mss32.dll alone.' }
         $target = Join-Path $game 'prosmoke'
-        if ((Path-Exists $target)) { Remove-Item -LiteralPath $target -Recurse -Force; Say 'Removed the prosmoke folder.' }
-        if ((Path-Exists $backupDirectory)) { Remove-Item -LiteralPath $backupDirectory -Recurse -Force }
+        foreach ($owned in @($target, $backupDirectory)) {
+            $absolute = [IO.Path]::GetFullPath($owned)
+            if ([IO.Path]::GetDirectoryName($absolute).TrimEnd('\') -ne [IO.Path]::GetFullPath($game).TrimEnd('\') -or
+                [IO.Path]::GetFileName($absolute) -notin @('prosmoke', 'prosmoke-backup')) { throw 'Refusing an undo path outside the selected game folder.' }
+            if ((Path-Exists $absolute)) {
+                if ((Get-Item -LiteralPath $absolute -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Refusing to remove a linked ProSmoke folder.' }
+                Remove-Item -LiteralPath $absolute -Recurse -Force
+            }
+        }
+        Say 'Removed the prosmoke folder and its installer backups.'
         Say 'ProSmoke removed. Game logs and your configs were not touched.'
         exit 0
     }

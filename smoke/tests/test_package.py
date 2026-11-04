@@ -71,7 +71,7 @@ class PackageLayout(unittest.TestCase):
     def test_compiled_shader_variants_without_hlsl(self):
         data = (RUNTIME / 'smoke.shaders').read_bytes()
         magic, version, _, count = struct.unpack_from('<IIQI', data)
-        self.assertEqual((magic, version, count), (0x42535350, 1, 16))
+        self.assertEqual((magic, version, count), (0x42535350, 1, 18))
         self.assertFalse((RUNTIME / 'smoke.hlsl').exists())
         cursor = 20
         seen = set()
@@ -86,6 +86,17 @@ class PackageLayout(unittest.TestCase):
             self.assertEqual(struct.unpack_from('<I', data, cursor + size - 4)[0], 0xffff)
             cursor += size
         self.assertEqual(cursor, len(data))
+        self.assertEqual(seen,{(entry,shadow) for entry in ('main','composite','main_cached','composite_cached','weapon_mask','weapon_probe','weapon_integrate','merge_depth','composite_cached_fast') for shadow in (0,1)})
+
+    def test_version_and_optimized_loader_identity(self):
+        identity=json.loads((RUNTIME/'version.json').read_text())
+        self.assertEqual(identity['version'],'0.1.4-preview')
+        self.assertEqual(identity['shortWaitRequestedUs'],250)
+        for name,key in [('mss32.dll','loaderSha256')]:
+            self.assertEqual(hashlib.sha256((CLIENT/name).read_bytes()).hexdigest(),identity[key])
+        for name,key in [('prosmoke.dll','runtimeSha256'),('smoke.shaders','shadersSha256')]:
+            self.assertEqual(hashlib.sha256((RUNTIME/name).read_bytes()).hexdigest(),identity[key])
+        self.assertIn(b'prosmoke_shortWait',(CLIENT/'mss32.dll').read_bytes())
 
     def test_occupancy_is_data_only_and_matches_inventory(self):
         self.assertEqual((RUNTIME / 'prosmoke_stock.iwd').read_bytes(), (SERVER / 'prosmoke_stock.iwd').read_bytes())

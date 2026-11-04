@@ -55,7 +55,19 @@ the earlier copy. Undo reverses all of it.
 Smoke activates when `prosmoke\prosmoke.dll` exists beside `CoD2MP_s.exe`, so a
 manual copy works and deleting the folder turns it off. `COD2_SMOKE_RENDER=0` and
 `COD2_SMOKE_DIAGNOSTICS` remain explicit overrides. `prosmoke_resolution`
-(full, half, quarter) is the only client-side setting.
+(full, half, quarter) controls smoke resolution. `prosmoke_shortWait` (default1)
+enables the guarded250us game/render fence waits only with a ready smoke renderer,
+valid server policy, DX7 and native adaptive GPU sync. Set it to0 for original
+wait delays. Unsupported code/timers fall back to native waits. Fence polls,
+prediction limits, unrelated sleeps and system timer resolution are unchanged.
+The optimization does not install in debug hot-reload builds.
+
+Preview0.1.4 updates the loader and selected v8 renderer together. Run the new
+`Setup-Client.cmd` over an older preview: it preserves `prosmoke.cfg` and the
+original CoD2x restore baseline, and saves replaced preview files under
+`prosmoke-backup/previews/`. `client/prosmoke/version.json` identifies the matched
+loader/renderer/shader hashes. The renderer comes from `c26ceb0`; experimental
+capture/replay shaders and DX11 are excluded. Constant250FPS remains unproven.
 
 The loader is built with `COD2X_SMOKE_TEST_BUILD=ON`, which disables CoD2x's own
 update check so a stable update cannot replace it. Undo returns the regular loader.

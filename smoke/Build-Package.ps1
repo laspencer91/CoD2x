@@ -69,6 +69,7 @@ Copy-Item -LiteralPath (Join-Path $runtime 'prosmoke_stock.iwd') -Destination (J
 
 $bridge = Get-Content -LiteralPath (Join-Path $provenance 'bridge-build.json') -Raw | ConvertFrom-Json
 $bridge.sha256 = Hash (Join-Path $client 'mss32.dll')
+$bridge.sourceHashes | Add-Member -NotePropertyName 'src/mss32/smoke_waits.hpp' -NotePropertyValue '' -Force
 foreach ($entry in $bridge.sourceHashes.PSObject.Properties) { $entry.Value = Hash-Source (Join-Path $source $entry.Name) }
 $bridge.adapterSha256 = $bridge.sourceHashes.'src/mss32/smoke_diagnostics.cpp'
 $bridge | Add-Member -NotePropertyName localSourceCommit -NotePropertyValue ((& git -C $source rev-parse HEAD).Trim()) -Force
@@ -76,7 +77,29 @@ Save-Json (Join-Path $provenance 'bridge-build.json') $bridge
 $component = Get-Content -LiteralPath (Join-Path $provenance 'smoke-component.json') -Raw | ConvertFrom-Json
 $component.runtimeSha256 = Hash (Join-Path $runtime 'prosmoke.dll')
 $component.shadersSha256 = Hash (Join-Path $runtime 'smoke.shaders')
+$shaderBytes = [IO.File]::ReadAllBytes((Join-Path $runtime 'smoke.shaders'))
+if ($shaderBytes.Length -lt 20 -or [BitConverter]::ToUInt32($shaderBytes, 0) -ne 0x42535350) { throw 'Invalid compiled shader bundle.' }
+$component.shaderVariants = [BitConverter]::ToUInt32($shaderBytes, 16)
+if ($RendererDirectory -and (Test-Path -LiteralPath (Join-Path $renderer 'manifest.json'))) {
+    $rendererBuild = Get-Content -LiteralPath (Join-Path $renderer 'manifest.json') -Raw | ConvertFrom-Json
+    foreach ($name in @('prosmoke.dll', 'smoke.shaders', 'noise128.rgba')) {
+        if ((Hash (Join-Path $runtime $name)) -ne $rendererBuild.files.$name) { throw "Renderer manifest mismatch: $name" }
+    }
+    $component | Add-Member -NotePropertyName sourceCommit -NotePropertyValue $rendererBuild.sourceCommit -Force
+    $component | Add-Member -NotePropertyName selectedTag -NotePropertyValue $rendererBuild.selectedTag -Force
+}
 Save-Json (Join-Path $provenance 'smoke-component.json') $component
+$adapterText = [IO.File]::ReadAllText((Join-Path $source 'src\mss32\smoke_diagnostics.cpp'))
+$versionMatch = [regex]::Match($adapterText, 'kPreviewVersion\[\]\s*=\s*"([^"]+)"')
+if (-not $versionMatch.Success) { throw 'Missing preview version in bridge source.' }
+Save-Json (Join-Path $runtime 'version.json') ([ordered]@{
+    version = $versionMatch.Groups[1].Value
+    loaderSha256 = $bridge.sha256
+    runtimeSha256 = $component.runtimeSha256
+    shadersSha256 = $component.shadersSha256
+    shaderVariants = $component.shaderVariants
+    shortWaitRequestedUs = 250
+})
 
 foreach ($required in @('README.txt', 'Setup-Client.cmd', 'Undo-Client.cmd', 'Play-Local.cmd', 'scripts\setup.ps1',
     'client\mss32.dll', 'client\prosmoke\prosmoke.dll', 'client\prosmoke\smoke.shaders', 'client\prosmoke\noise128.rgba',

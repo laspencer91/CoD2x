@@ -180,3 +180,37 @@ folders plus three double-click commands.
   script-local `Join-Path` that only joins strings. Regression test seeds the
   remembered folder with a path on a drive letter that does not exist; it reproduced
   the failure before the fix.
+
+## 2026-11-04 preview0.1.4 integration
+
+The normal CoD2x loader now contains the250us blocked-wait optimization for the
+two exact retail game/render fence Sleep(1) callers. Loaded code fingerprints,
+image bounds and native import ownership are verified before installing hooks.
+Only a ready smoke renderer with valid replicated policy, DX7 and adaptive GPU
+sync enables them. `prosmoke_shortWait 0` restores native delays. Unsupported
+images/timers and runtime timer/contention failures fall back to native waits;
+original fence polls, RDTSC prediction bounds, other Sleep callers and global
+timer resolution are unchanged. Debug hot reload keeps native imports.
+
+The bridge compiler's real Windows x86 fixture verifies original forwarding,
+64 blocked timer requests through both actual return-address hooks, image/bounds
+rejection, import protection/idempotence, contention/timer failure, foreign-hook
+ownership and exact import restoration. All22 package/setup/activation/baker/
+wait tests pass with one expected skip for ambiguous game-folder detection on
+this PC. Upgrade tests preserve custom policy and the original CoD2x baseline,
+and verify snapshots of replaced previews.
+
+An isolated real installation upgraded the0.1.3 client through the new installer.
+The actual packaged CoD2x loader and selected renderer draw four overlapping
+volumetric clouds at3440x1440, quarter resolution, with zero split failures.
+DX7 on/off/on checks exercise both shorter waits, with zero timer fallbacks;
+DX9 draws the same smoke and keeps both wait counters zero. These are background
+compatibility tests without FPS sampling. Fresh native-client performance,
+busy servers, additional GPUs and moving/networked carving remain separate
+validation; steady250FPS is not certified.
+
+The renderer is the selectedc26ceb0 build, matched18-entry shader bundle and
+unchanged noise/stock-grid data. Experimental capture/replay shaders and DX11
+are excluded. Public packaging contains compiled renderer files and the normal
+loader, with a version/hash identity JSON. Renderer implementation and private
+benchmark captures are not part of the source release or ZIP.

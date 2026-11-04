@@ -1,4 +1,4 @@
-ProSmoke - volumetric smoke for Call of Duty 2 (CoD2x)
+ProSmoke 0.1.4 preview - volumetric smoke for Call of Duty 2 (CoD2x)
 
 Volumetric smoke provides competitive integrity by rendering smoke as a true 3D
 volume that exists in the world. It does not suffer from the problems of 2D
@@ -8,7 +8,28 @@ Bullets carve holes through it. Server enforced smoke configuration.
 
 REQUIREMENTS
   Call of Duty 2 version 1.3 with CoD2x installed (https://github.com/callofduty2x/CoD2x).
-  DirectX 9 renderer (the default). Steam and disc versions both work.
+  DX7 and DX9 game renderers are supported on a Shader Model 3-capable GPU.
+  Steam and disc versions both work.
+
+UPDATING AN OLDER PREVIEW
+  Close CoD2, extract this ZIP into a new folder, and run Setup-Client.cmd.
+  It updates the loader and matching renderer/shaders together, keeps your
+  original CoD2x restore backup, and preserves your existing prosmoke.cfg.
+  Replaced ProSmoke files are saved under prosmoke-backup\previews\ for rollback.
+  Do not mix a renderer DLL and shader bundle from different previews.
+
+PERFORMANCE IN THIS PREVIEW
+  Includes the selected CPU preparation, depth-aware reconstruction, projected
+  scissor and split repair optimizations. The DX7 adaptive GPU-sync path also
+  uses shorter blocked waits at two verified native fence-sleep callers.
+  Unsupported code or timers retain native waits. Fence checks are preserved.
+  /prosmoke_shortWait 0 restores native wait delays; 1 enables the optimization
+  when smoke is ready and DX7 adaptive GPU sync is active. Shorter waits can use
+  more CPU. /prosmoke_status reports the version, active state and call counts.
+  /prosmoke_resolution quarter reduces smoke render resolution; the default
+  remains half and existing player preferences are retained.
+  Constant 250 FPS at 3440x1440 is not guaranteed. Experimental probe shaders
+  and the paused DX11 renderer are not included.
 
 CLIENT - two ways
   1. Double-click Setup-Client.cmd. It finds your game folder (or asks you to
@@ -43,7 +64,7 @@ SERVER
 LOCAL TESTING
   Play-Local.cmd runs a local server on Toujane and applies the policy line in
   <game>\prosmoke\prosmoke.cfg. To try other settings, either edit that file
-  (Setup-Client.cmd overwrites it when you reinstall), or type in the console
+  (Setup-Client.cmd preserves an existing copy), or type in the console
   while playing:
     /set sv_prosmoke_policy "v1 width=1.4 height=1.3 bloom_time=3 carve_scale=0.8"
   Carve changes apply to the next shot. Width, height, bloom and duration

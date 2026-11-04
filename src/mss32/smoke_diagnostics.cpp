@@ -24,9 +24,11 @@
 #include "../shared/cod2_common.h"
 #include "../shared/cod2_cmd.h"
 #include "policy.hpp"
+#include "smoke_waits.hpp"
 
 namespace {
 constexpr char kRendererName[] = "gfx_d3d_mp_x86_s.dll";
+constexpr char kPreviewVersion[] = "0.1.4-preview";
 constexpr char kRendererHash[] = "243505f56ec0f86122fc09b3a6c18f0daf49a00abb2d969147f595991584a6b2";
 constexpr uintptr_t kRenderSceneRva = 0x25b90;
 constexpr uintptr_t kRenderSceneSlot = 0x68a27c;
@@ -89,6 +91,24 @@ using SmokeStatus = int (__cdecl*)(char*, unsigned);
 SmokeStatus smoke_status = nullptr;   // one-line summary for prosmoke_status
 const char* resolution_names[]{"full", "half", "quarter", nullptr};
 dvar_t* smoke_resolution = nullptr;
+dvar_t* smoke_short_wait = nullptr;
+DWORD last_smoke_view = 0, last_wait_status = 0;
+bool wait_smoke_ready = false;
+std::string wait_policy;
+bool wait_policy_valid = false;
+
+void update_short_waits(const std::string& policy) {
+    const DWORD now=GetTickCount();last_smoke_view=now;
+    const bool changed=wait_policy!=policy;
+    if(changed){cod2_smoke::Policy parsed;wait_policy=policy;wait_policy_valid=cod2_smoke::parse_policy(policy,parsed);}
+    if(changed || now-last_wait_status>=250){
+        char state[1024]{};wait_smoke_ready=smoke_status && smoke_status(state,sizeof(state))>0 && std::strstr(state," ready=1 ");
+        last_wait_status=now;
+    }
+    const bool enabled=smoke_short_wait && smoke_short_wait->value.boolean && wait_policy_valid && wait_smoke_ready &&
+        Dvar_GetInt("r_rendererInUse")==2 && *reinterpret_cast<const int*>(renderer+0x1d4810)==3;
+    cod2_smoke::short_waits::set_active(enabled);
+}
 
 template<typename T> T procedure(HMODULE module, const char* name) {
     const auto address = module ? GetProcAddress(module, name) : nullptr;
@@ -167,8 +187,8 @@ void start_log() {
     }
     log_file = CreateFileW(path, FILE_APPEND_DATA | FILE_READ_ATTRIBUTES,
         FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-    log("begin adapter=smoke installed_preview=%d process=%lu stock_fx=preserved_until_ready",
-        int(cod2_smoke::installed_preview()), static_cast<unsigned long>(GetCurrentProcessId()));
+    log("begin adapter=smoke version=%s installed_preview=%d process=%lu stock_fx=preserved_until_ready",
+        kPreviewVersion,int(cod2_smoke::installed_preview()), static_cast<unsigned long>(GetCurrentProcessId()));
 }
 
 bool verify_renderer(HMODULE module) {
@@ -284,6 +304,7 @@ void __cdecl scene(const Refdef* view) {
                 && sv_running && sv_running->value.boolean && Dvar_GetBool("sv_cheats");
             const int selection = smoke_resolution ? smoke_resolution->value.integer : 1;
             smoke_settings(policy.c_str(), selection == 0 ? 1 : selection == 2 ? 4 : 2, developer);
+            update_short_waits(policy);
             if (pop_console) {
                 // Renderer status lines, printed on the engine thread that owns the console.
                 char line[512];
@@ -324,6 +345,7 @@ void smoke_diagnostics_renderer_loaded() {
     renderer = reinterpret_cast<uintptr_t>(module);
     if (!module || !verify_renderer(module)) { log("renderer=rejected no_hook_installed"); return; }
     renderer_verified = true;
+    cod2_smoke::short_waits::set_active(false);wait_smoke_ready=false;last_wait_status=0;
     if (cod2_smoke::activation_flag("COD2_SMOKE_RENDER", cod2_smoke::installed_preview())) {
         char path[MAX_PATH] = {};
         const DWORD length = GetModuleFileNameA(nullptr, path, sizeof(path));
@@ -340,6 +362,8 @@ void smoke_diagnostics_renderer_loaded() {
                 smoke_settings = procedure<SmokeSettings>(smoke_module, "Smoke_Settings");
                 pop_console = procedure<PopConsole>(smoke_module, "Smoke_PopConsole");
                 smoke_status = procedure<SmokeStatus>(smoke_module, "Smoke_Status");
+                const bool waits=cod2_smoke::short_waits::install(GetModuleHandleW(nullptr),module);
+                log("short_waits installed=%d requested_us=%u reason=%s",int(waits),cod2_smoke::short_waits::delay_us,cod2_smoke::short_waits::reason);
             }
             log("smoke_renderer=%p camera_callback=%p error=%lu", smoke_module, reinterpret_cast<void*>(set_smoke_view), GetLastError());
         }
@@ -359,6 +383,7 @@ void smoke_diagnostics_renderer_loaded() {
 
 // /prosmoke_status: what the loader, the server policy and the renderer currently report.
 void prosmoke_status_command() {
+    Com_Printf("ProSmoke: version %s\n",kPreviewVersion);
     if (!smoke_module) {
         Com_Printf("ProSmoke: renderer not loaded. prosmoke\\prosmoke.dll must sit beside CoD2MP_s.exe; see %%LOCALAPPDATA%%\\prosmoke\\bridge.log\n");
         return;
@@ -370,16 +395,23 @@ void prosmoke_status_command() {
     else Com_Printf("ProSmoke: renderer has not drawn a frame yet\n");
     const int selection = smoke_resolution ? smoke_resolution->value.integer : 1;
     Com_Printf("ProSmoke: quality %s (prosmoke_resolution full|half|quarter)\n", resolution_names[selection >= 0 && selection < 3 ? selection : 1]);
+    using namespace cod2_smoke::short_waits;
+    Com_Printf("ProSmoke: short waits available=%d active=%d requested=%uus game=%u renderer=%u fallbacks=%u (prosmoke_shortWait 0|1)\n",
+        int(configured.load()),int(active.load()),delay_us,static_cast<unsigned>(game.calls.load()),
+        static_cast<unsigned>(render.calls.load()),static_cast<unsigned>(game.fallbacks.load()+render.fallbacks.load()));
 }
 
 void smoke_diagnostics_register_settings() {
     smoke_resolution = Dvar_RegisterEnum(cod2_smoke::resolution_dvar, resolution_names, 1, DVAR_ARCHIVE);
+    smoke_short_wait = Dvar_RegisterBool("prosmoke_shortWait",true,DVAR_ARCHIVE);
     Cmd_AddCommand("prosmoke_status", prosmoke_status_command);
 }
 
 void smoke_diagnostics_frame() {
     mapkit_reload_frame();
     if (!enabled() || !renderer_verified) return;
+    if(!smoke_short_wait || !smoke_short_wait->value.boolean || GetTickCount()-last_smoke_view>1000)
+        cod2_smoke::short_waits::set_active(false);
     if (smoke_bullet && !trace_installed) install_trace();
     if (original_scene) return;
     RenderScene current = nullptr;
@@ -391,6 +423,7 @@ void smoke_diagnostics_frame() {
 }
 
 bool smoke_diagnostics_shutdown() {
+    if(!cod2_smoke::short_waits::restore()){log("shutdown=deferred could_not_restore_short_wait_imports");return false;}
     if (!restore_trace()) { log("shutdown=deferred could_not_restore_bullet_call"); return false; }
     wants_bullets = nullptr; smoke_bullet = nullptr; smoke_settings = nullptr; set_smoke_view = nullptr;
     pop_console = nullptr; smoke_status = nullptr;

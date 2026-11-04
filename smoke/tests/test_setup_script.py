@@ -104,10 +104,27 @@ class SetupScript(unittest.TestCase):
         out = self.run_script('Install')
         self.assertIn('Replacing an earlier ProSmoke loader', out)
         self.assertEqual(backup.read_bytes(), self.original)
-        self.assertEqual(sorted(p.name for p in backup.parent.iterdir()), ['install.json', 'mss32.dll'])
+        self.assertEqual(sorted(p.name for p in backup.parent.iterdir()), ['install.json', 'mss32.dll', 'previews'])
+        snapshots=list((backup.parent/'previews').iterdir())
+        self.assertEqual(len(snapshots),1)
+        self.assertEqual((snapshots[0]/'mss32.dll').read_bytes(),LOADER.read_bytes()+b'older ProSmoke build')
         self.assert_installed()
         self.run_script('Undo')
         self.assertEqual((self.game / 'mss32.dll').read_bytes(), self.original)
+
+    def test_upgrade_preserves_custom_policy_and_snapshots_previous_renderer(self):
+        self.run_script('Install')
+        custom=b'set sv_prosmoke_policy "v1 width=1.4"\r\n'
+        (self.game/'prosmoke/prosmoke.cfg').write_bytes(custom)
+        previous=(self.game/'prosmoke/prosmoke.dll').read_bytes()+b'previous renderer fixture'
+        (self.game/'prosmoke/prosmoke.dll').write_bytes(previous)
+        self.run_script('Install')
+        self.assertEqual((self.game/'prosmoke/prosmoke.cfg').read_bytes(),custom)
+        self.assertEqual((self.game/'prosmoke/prosmoke.dll').read_bytes(),(PAYLOAD/'prosmoke.dll').read_bytes())
+        snapshots=list((self.game/'prosmoke-backup/previews').iterdir())
+        self.assertEqual(len(snapshots),1)
+        self.assertEqual((snapshots[0]/'prosmoke/prosmoke.dll').read_bytes(),previous)
+        self.assertEqual((snapshots[0]/'prosmoke/prosmoke.cfg').read_bytes(),custom)
 
     def test_newer_cod2x_loader_becomes_the_restore_baseline(self):
         self.run_script('Install')
