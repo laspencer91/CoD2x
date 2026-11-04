@@ -71,6 +71,7 @@ $main = Join-Path $client 'main'
 [IO.Directory]::CreateDirectory($main) | Out-Null
 Copy-Item -LiteralPath (Join-Path $runtime 'prosmoke_stock.iwd') -Destination (Join-Path $main 'iw_prosmoke_stock.iwd') -Force
 Copy-Item -LiteralPath (Join-Path $runtime 'prosmoke_stock.iwd') -Destination (Join-Path $server 'prosmoke_stock.iwd') -Force
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'competitive-occupancy\prosmoke_competitive_full.iwd') -Destination (Join-Path $server 'prosmoke_competitive_full.iwd') -Force
 
 $bridge = Get-Content -LiteralPath (Join-Path $provenance 'bridge-build.json') -Raw | ConvertFrom-Json
 $bridge.sha256 = Hash (Join-Path $client 'mss32.dll')
@@ -111,7 +112,7 @@ $requiredFiles = @('README.txt',
     'client\main\iw_prosmoke_stock.iwd',
     'client\mss32.dll', 'client\prosmoke\prosmoke.dll', 'client\prosmoke\smoke.shaders', 'client\prosmoke\noise128.rgba',
     'client\prosmoke\prosmoke_stock.iwd', 'client\prosmoke\prosmoke.cfg', 'client\prosmoke\version.json',
-    'server\README-SERVER.txt', 'server\prosmoke_server.cfg', 'server\prosmoke_stock.iwd')
+    'server\README-SERVER.txt', 'server\prosmoke_server.cfg', 'server\prosmoke_stock.iwd', 'server\prosmoke_competitive_full.iwd')
 foreach ($required in $requiredFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $package $required) -PathType Leaf)) { throw "Package is missing $required" }
 }

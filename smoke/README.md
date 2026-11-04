@@ -39,7 +39,8 @@ prosmoke.zip
 └── server/
     ├── README-SERVER.txt
     ├── prosmoke_server.cfg  sample policy line, every field explained
-    └── prosmoke_stock.iwd   for sv_pure servers
+    ├── prosmoke_stock.iwd   stock-map grids for sv_pure servers
+    └── prosmoke_competitive_full.iwd   12 additional full-collision map grids
 ```
 
 ## Client

@@ -23,5 +23,18 @@ ProSmoke - server setup
    With sv_pure 0 no matching server archive is needed, but the client archive
    must still be in a mounted folder. Fully restart after adding an IWD.
 
+3. THE COMPETITIVE MAP GRIDS
+   prosmoke_competitive_full.iwd contains 12 additional full-collision map grids,
+   including mp_toujane_fix. Install this same file into the active server mod
+   directory and make it available to clients through your file distribution.
+   For a FastDL mirror, keep the same relative directory and filename as the
+   game server expects. Clients need the byte-identical IWD mounted in the
+   corresponding active mod directory; normal mod downloads can provide it.
+   Keep prosmoke_stock.iwd too: the two archives cover different map names.
+   This competitive IWD is about 354 KB and contains data only. The separate
+   eight-map cropped candidate bundle is not included in these server files.
+   A live server needs a filesystem reload before it can mount a newly added
+   archive. Adding it to the download mirror alone does not activate smoke.
+
 Changing the line while the server runs is fine. Carve changes apply to the next
 shot; width, height, bloom and duration changes apply after current clouds fade.

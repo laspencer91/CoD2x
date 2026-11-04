@@ -38,7 +38,8 @@ class PackageLayout(unittest.TestCase):
                      'client/mss32.dll', 'client/prosmoke/prosmoke.dll', 'client/prosmoke/smoke.shaders',
                      'client/prosmoke/noise128.rgba', 'client/prosmoke/prosmoke_stock.iwd', 'client/prosmoke/prosmoke.cfg',
                      'client/prosmoke/version.json',
-                     'server/README-SERVER.txt', 'server/prosmoke_server.cfg', 'server/prosmoke_stock.iwd'}
+                     'server/README-SERVER.txt', 'server/prosmoke_server.cfg', 'server/prosmoke_stock.iwd',
+                     'server/prosmoke_competitive_full.iwd'}
         for name in expected_files:
             self.assertTrue((PACKAGE / name).is_file(), name)
         self.assertEqual({p.relative_to(PACKAGE).as_posix() for p in PACKAGE.rglob('*') if p.is_file()}, expected_files)
@@ -101,6 +102,13 @@ class PackageLayout(unittest.TestCase):
         self.assertIn(b'prosmoke_shortWait',(CLIENT/'mss32.dll').read_bytes())
 
     def test_occupancy_is_data_only_and_matches_inventory(self):
+        self.assertEqual((SERVER / 'prosmoke_competitive_full.iwd').read_bytes(),
+                         (SMOKE / 'competitive-occupancy/prosmoke_competitive_full.iwd').read_bytes())
+        with zipfile.ZipFile(SERVER / 'prosmoke_competitive_full.iwd') as competitive:
+            metadata = [json.loads(competitive.read(name)) for name in competitive.namelist() if name.endswith('.smoke.json')]
+            self.assertEqual(len(metadata), 12)
+            self.assertTrue(all(record['boundsPolicy'] == 'collision' and not record['boundsReviewRequired'] for record in metadata))
+            self.assertIn('mp_toujane_fix', {record['map'] for record in metadata})
         self.assertEqual((RUNTIME / 'prosmoke_stock.iwd').read_bytes(), (CLIENT / 'main/iw_prosmoke_stock.iwd').read_bytes())
         self.assertEqual((RUNTIME / 'prosmoke_stock.iwd').read_bytes(), (SERVER / 'prosmoke_stock.iwd').read_bytes())
         inventory = json.loads((SMOKE / 'occupancy-inventory.json').read_text())

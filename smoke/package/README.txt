@@ -67,6 +67,9 @@ SERVER
      Fields after v1 tune width, height, bloom time, duration and per-weapon
      carve sizes. server\prosmoke_server.cfg lists them all with their ranges.
   2. If you run sv_pure 1, copy server\prosmoke_stock.iwd into your mod folder.
+  3. For the 12 additional competitive maps, including mp_toujane_fix, also
+     install server\prosmoke_competitive_full.iwd and distribute that same IWD
+     to clients through the server's normal mod downloads or FastDL mirror.
   Details in server\README-SERVER.txt.
 
   Without the policy line, ProSmoke clients see normal smoke on that server.

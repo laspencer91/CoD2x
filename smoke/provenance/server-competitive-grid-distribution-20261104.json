@@ -1,0 +1,30 @@
+{
+  "updatedUtc": "2026-11-04T22:10:14.488827+00:00",
+  "file": "prosmoke_competitive_full.iwd",
+  "sha256": "5d8df24150c8acdc44e5d350146e99d7ff247d7ea2fdf9d9ff979efcec368eb5",
+  "bytes": 353989,
+  "maps": 12,
+  "includesToujaneFix": true,
+  "croppedCandidatesIncluded": false,
+  "serverPackageIncluded": true,
+  "hostedRelativePaths": [
+    "downloads/main/prosmoke_competitive_full.iwd",
+    "server/main/prosmoke_competitive_full.iwd"
+  ],
+  "localHttpDownloadVerified": true,
+  "externalReachabilityClaimed": false,
+  "gameServerRestarted": false,
+  "gameplayPolicyChanged": false,
+  "archiveNeedsServerFilesystemReload": true,
+  "automatedChecksPassed": 16,
+  "serverZip": {
+    "name": "prosmoke-server-files.zip",
+    "sha256": "52229746f569baeabf6968671dea4f4614393b45fe21f6faa4e0971fcec25d1d",
+    "bytes": 785795
+  },
+  "serverZipDefenderScan": {
+    "noThreatsReported": true,
+    "exitCode": 0,
+    "protectionSettingsChanged": false
+  }
+}
