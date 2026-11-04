@@ -33,19 +33,20 @@ def pe_machine(data):
 
 class PackageLayout(unittest.TestCase):
     def test_required_files_and_nothing_else_suspicious(self):
-        for name in ('README.txt', 'Setup-Client.cmd', 'Undo-Client.cmd', 'Play-Local.cmd', 'scripts/setup.ps1',
+        expected_files = {'README.txt',
                      'client/mss32.dll', 'client/prosmoke/prosmoke.dll', 'client/prosmoke/smoke.shaders',
                      'client/prosmoke/noise128.rgba', 'client/prosmoke/prosmoke_stock.iwd', 'client/prosmoke/prosmoke.cfg',
-                     'server/README-SERVER.txt', 'server/prosmoke_server.cfg', 'server/prosmoke_stock.iwd'):
+                     'client/prosmoke/version.json',
+                     'server/README-SERVER.txt', 'server/prosmoke_server.cfg', 'server/prosmoke_stock.iwd'}
+        for name in expected_files:
             self.assertTrue((PACKAGE / name).is_file(), name)
+        self.assertEqual({p.relative_to(PACKAGE).as_posix() for p in PACKAGE.rglob('*') if p.is_file()}, expected_files)
         for path in PACKAGE.rglob('*'):
             if path.is_file():
-                self.assertNotIn(path.suffix.lower(), ('.cpp', '.hpp', '.h', '.hlsl', '.py', '.exe', '.pyc'), str(path))
+                self.assertNotIn(path.suffix.lower(), ('.cpp', '.hpp', '.h', '.hlsl', '.py', '.exe', '.pyc', '.cmd', '.bat', '.ps1', '.vbs', '.js'), str(path))
                 self.assertNotRegex(path.name.lower(), r'licen|notice|mapkit', str(path))
         # The client folder is exactly what lands in the game folder: one loader and one subfolder.
         self.assertEqual(sorted(p.name for p in CLIENT.iterdir()), ['mss32.dll', 'prosmoke'])
-        for cmd in ('Setup-Client.cmd', 'Undo-Client.cmd', 'Play-Local.cmd'):
-            self.assertIn('scripts\\setup.ps1', (PACKAGE / cmd).read_text())
 
     def test_binaries_are_32bit_and_carry_the_prosmoke_names(self):
         loader = (CLIENT / 'mss32.dll').read_bytes()

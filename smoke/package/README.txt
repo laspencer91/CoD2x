@@ -1,4 +1,4 @@
-ProSmoke 0.1.4 preview - volumetric smoke for Call of Duty 2 (CoD2x)
+ProSmoke 0.1.4 preview - manual install edition for Call of Duty 2 (CoD2x)
 
 Volumetric smoke provides competitive integrity by rendering smoke as a true 3D
 volume that exists in the world. It does not suffer from the problems of 2D
@@ -11,12 +11,27 @@ REQUIREMENTS
   DX7 and DX9 game renderers are supported on a Shader Model 3-capable GPU.
   Steam and disc versions both work.
 
-UPDATING AN OLDER PREVIEW
-  Close CoD2, extract this ZIP into a new folder, and run Setup-Client.cmd.
-  It updates the loader and matching renderer/shaders together, keeps your
-  original CoD2x restore backup, and preserves your existing prosmoke.cfg.
-  Replaced ProSmoke files are saved under prosmoke-backup\previews\ for rollback.
-  Do not mix a renderer DLL and shader bundle from different previews.
+INSTALL OR UPDATE BY HAND
+  This edition contains no installer or launch scripts. Backups are manual.
+  1. Close CoD2 and extract the entire ZIP into a new folder.
+  2. Find your game folder: the one containing CoD2MP_s.exe. CoD2x must already
+     be installed, with its mss32.dll and mss32_original.dll present.
+  3. Create a backup folder outside the game folder. Copy the current mss32.dll
+     and the complete existing prosmoke folder, if present, into that backup.
+     Also keep any older prosmoke-backup folder: it may hold your stock loader.
+  4. Copy client\mss32.dll into the game folder, replacing mss32.dll.
+  5. Copy client\prosmoke into the game folder as prosmoke. Replace the matching
+     package files together. If updating, keep your existing prosmoke.cfg.
+  6. Start CoD2 normally and join a server with ProSmoke enabled.
+  Leave mss32_original.dll untouched. Do not mix renderer/shader versions.
+
+ROLLBACK OR REMOVE
+  To undo this update: close CoD2, restore mss32.dll from step 3, and replace the
+  installed prosmoke folder with the complete backed-up folder. If no prosmoke
+  folder existed before, remove only the new prosmoke folder.
+  To remove ProSmoke entirely: restore a verified stock CoD2x mss32.dll from
+  your original backup, or reinstall official CoD2x, then remove prosmoke.
+  A loader backed up from an earlier ProSmoke preview is not a stock loader.
 
 PERFORMANCE IN THIS PREVIEW
   Includes the selected CPU preparation, depth-aware reconstruction, projected
@@ -30,20 +45,6 @@ PERFORMANCE IN THIS PREVIEW
   remains half and existing player preferences are retained.
   Constant 250 FPS at 3440x1440 is not guaranteed. Experimental probe shaders
   and the paused DX11 renderer are not included.
-
-CLIENT - two ways
-  1. Double-click Setup-Client.cmd. It finds your game folder (or asks you to
-     pick it), backs up your CoD2x loader to prosmoke-backup\, and copies the files.
-     Undo-Client.cmd puts everything back.
-  2. By hand: copy the contents of the client folder into your Call of Duty 2
-     folder, next to CoD2MP_s.exe. Say yes to replacing mss32.dll (keep a copy of
-     the old one if you want to go back). To remove: restore your old mss32.dll
-     and delete the prosmoke folder.
-
-  Smoke is on whenever the prosmoke folder is next to CoD2MP_s.exe. Delete the
-  folder to turn it off without touching anything else.
-
-  Play-Local.cmd starts Toujane locally with smoke on. Throw a smoke, shoot it.
 
 CHECKING IT WORKS
   When a map loads, the console (~ key) prints "ProSmoke: volumetric smoke
@@ -62,15 +63,17 @@ SERVER
   Without the policy line, ProSmoke clients see normal smoke on that server.
 
 LOCAL TESTING
-  Play-Local.cmd runs a local server on Toujane and applies the policy line in
-  <game>\prosmoke\prosmoke.cfg. To try other settings, either edit that file
-  (Setup-Client.cmd preserves an existing copy), or type in the console
-  while playing:
+  Create a shortcut to CoD2MP_s.exe. Set its "Start in" to the game folder.
+  Append these arguments after the quoted executable path in "Target":
+    +set fs_game prosmoke +set net_ip 127.0.0.1 +set sv_punkbuster 0 +set cl_punkbuster 0 +set sv_pure 0 +exec prosmoke.cfg +devmap mp_toujane
+  This starts a private local listen server with the policy in prosmoke.cfg.
+  The pure/PunkBuster settings above are for this local test only.
+  To try other settings, edit <game>\prosmoke\prosmoke.cfg, or type in the console:
     /set sv_prosmoke_policy "v1 width=1.4 height=1.3 bloom_time=3 carve_scale=0.8"
   Carve changes apply to the next shot. Width, height, bloom and duration
   changes apply once the current clouds have faded. All fields and their
   ranges are listed in server\prosmoke_server.cfg.
-  Another map:  Play-Local.cmd -Map mp_burgundy
+  Another map:  replace mp_toujane with mp_burgundy in the shortcut arguments.
   Quality:      /prosmoke_resolution full, half or quarter (default half)
 
 PROBLEMS
@@ -83,5 +86,6 @@ PROBLEMS
     %LOCALAPPDATA%\prosmoke\bridge.log
 
 This is a preview build shared for testing. CoD2x auto-updates are disabled in
-this loader so an update cannot silently remove smoke; run Undo-Client.cmd to go
-back to the regular CoD2x loader at any time.
+this loader so an update cannot silently remove smoke. Restore a verified stock
+CoD2x loader, or reinstall official CoD2x, to return to its regular updates.
+The compiled loader, renderer and shaders are unchanged from 0.1.4 preview.

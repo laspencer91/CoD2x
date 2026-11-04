@@ -35,5 +35,5 @@
                      },
     "activation":  "Installed preview receipt beside CoD2MP_s.exe; environment overrides optional",
     "buildPromotion":  "Exact binaries validated with normal packaged CoD2x on local DX7 and DX9. Runtime sources/headers match this public source snapshot after CRLF normalization; compiled in integration workspace.",
-    "localSourceCommit":  "0e70e4982a6abc341097516ca2008b7be528c2a1"
+    "localSourceCommit":  "336f0ce2194794c1aaf5eeb3563049624cfbb5fc"
 }

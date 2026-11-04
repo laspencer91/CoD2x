@@ -24,10 +24,6 @@ preview handed to people the author knows.
 ```
 prosmoke.zip
 ├── README.txt
-├── Setup-Client.cmd       finds the game, backs up mss32.dll, copies the client files
-├── Undo-Client.cmd        restores the original loader, removes prosmoke\
-├── Play-Local.cmd         local Toujane with smoke on
-├── scripts/setup.ps1      what the three .cmd files run
 ├── client/                drop the contents into the CoD2 folder
 │   ├── mss32.dll          CoD2x loader with the ProSmoke bridge
 │   └── prosmoke/
@@ -44,13 +40,18 @@ prosmoke.zip
 
 ## Client
 
-Setup detects the game through the CoD2 registry key, Steam library folders and
-the usual install paths. One match asks for confirmation; none or several opens a
-folder picker. It refuses folders without CoD2x, refuses while the game runs,
-backs up `mss32.dll` into `prosmoke-backup\`, copies the client files and remembers
-the folder under `%LOCALAPPDATA%\prosmoke`. A later CoD2x update that replaces
-the loader is backed up as the new restore baseline on the next install, keeping
-the earlier copy. Undo reverses all of it.
+This edition uses manual installation and contains no installer or launcher
+scripts. Close CoD2 and back up the current `mss32.dll` and complete `prosmoke`
+folder outside the game directory. Keep any original `prosmoke-backup` folder.
+Copy the contents of `client` beside `CoD2MP_s.exe`, replacing the matching files
+together. When updating, preserve your existing `prosmoke.cfg`. CoD2 1.3 and
+CoD2x must already be installed; leave `mss32_original.dll` untouched.
+
+To undo an update, close the game and restore the backed-up loader and complete
+runtime folder. To remove ProSmoke entirely, restore a verified stock CoD2x loader
+or reinstall official CoD2x, then remove `prosmoke`. A previous ProSmoke preview's
+loader is not a stock loader. See `package/README.txt` for complete installation,
+rollback and local-test shortcut instructions.
 
 Smoke activates when `prosmoke\prosmoke.dll` exists beside `CoD2MP_s.exe`, so a
 manual copy works and deleting the folder turns it off. `COD2_SMOKE_RENDER=0` and
@@ -62,15 +63,15 @@ wait delays. Unsupported code/timers fall back to native waits. Fence polls,
 prediction limits, unrelated sleeps and system timer resolution are unchanged.
 The optimization does not install in debug hot-reload builds.
 
-Preview0.1.4 updates the loader and selected v8 renderer together. Run the new
-`Setup-Client.cmd` over an older preview: it preserves `prosmoke.cfg` and the
-original CoD2x restore baseline, and saves replaced preview files under
-`prosmoke-backup/previews/`. `client/prosmoke/version.json` identifies the matched
+Preview 0.1.4 updates the loader and selected v8 renderer together. The manual
+edition uses those same compiled files; backups and config preservation are the
+player's responsibility. `client/prosmoke/version.json` identifies the matched
 loader/renderer/shader hashes. The renderer comes from `c26ceb0`; experimental
 capture/replay shaders and DX11 are excluded. Constant250FPS remains unproven.
 
 The loader is built with `COD2X_SMOKE_TEST_BUILD=ON`, which disables CoD2x's own
-update check so a stable update cannot replace it. Undo returns the regular loader.
+update check so a stable update cannot replace it. Restoring a verified stock
+CoD2x loader returns to its normal update behavior.
 
 ## Console status
 
@@ -127,7 +128,9 @@ The bridge uses the upstream 32-bit MinGW/NASM/OpenSSL toolchain; the renderer
 stage comes from the owner workspace's `build-renderer.ps1`. Both arguments are
 optional: without them the script repackages the checked-in binaries. Output is
 `smoke/out/prosmoke.zip` with a SHA256 sidecar. The normal CMake target `mss32`
-also builds the bridge.
+also builds the bridge. Packaging requires the exact manual-install file list
+and rejects extra files, including installer and launcher scripts. Build scripts
+and developer tools remain in the source repository, outside the player ZIP.
 
 ## Remaining work
 

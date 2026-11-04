@@ -1,0 +1,62 @@
+{
+  "releaseTag": "v0.1.4-manual-preview",
+  "runtimeVersion": "0.1.4-preview",
+  "baseSourceCommit": "336f0ce2194794c1aaf5eeb3563049624cfbb5fc",
+  "packaging": "Manual installation; all three CMD launchers and scripts/setup.ps1 removed. Manual backup, config preservation, install and rollback documented.",
+  "removedScriptTests": "Installer-only tests removed with the installer; historical source remains in v0.1.4-preview.",
+  "originalWithdrawnZipSha256": "6892d023bbd132effe2fbd2ba58fc8d7982e8ae7aae247e8d503b756edd3e1f9",
+  "zipSha256": "4e5602d95919b91f06538e293e78692d22f96ce1a07a9cfd812a5b0a4f198ec0",
+  "bytes": 14181242,
+  "archiveEntries": 11,
+  "archiveEntriesVerifiedAgainstPackage": true,
+  "compiledFilesByteIdenticalToOriginalRelease": {
+    "client/mss32.dll": "1ff45f17af0246c2300cbb63fefc6f94cd1463aa3eb067184074f8ad1ce6f59b",
+    "client/prosmoke/prosmoke.dll": "09a11f5ef7aa8306d62093e40766e12d35c3812d14120ba34d493cb62cd76ec3",
+    "client/prosmoke/smoke.shaders": "ded2fbf537c330665e501665850bad746bb1f1e1b5549a3223075603533eb438",
+    "client/prosmoke/noise128.rgba": "b67672efe1393289a943ed50a6c5c945528140abe8308b0edd70f0f8133a32a7",
+    "client/prosmoke/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "server/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf"
+  },
+  "filesSha256": {
+    "README.txt": "a8d9686af4857cb3b149ac5115bcf755e8f9ad0378468cfae28692b47626fad9",
+    "client/mss32.dll": "1ff45f17af0246c2300cbb63fefc6f94cd1463aa3eb067184074f8ad1ce6f59b",
+    "server/prosmoke_server.cfg": "3be718260d1fcfa7707960c20df9ee7727d7bb6568c824f2f8d218835dfd496e",
+    "server/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "server/README-SERVER.txt": "e2dfe8a77a38658bfddcd9e1918d62de1ad319b1280e47c4de07d1b9844f3da1",
+    "client/prosmoke/noise128.rgba": "b67672efe1393289a943ed50a6c5c945528140abe8308b0edd70f0f8133a32a7",
+    "client/prosmoke/prosmoke.cfg": "59ab63d3f17ef8a1adce564bc48a036dda26d9f7b2dbbb1517278b73c0b33e88",
+    "client/prosmoke/prosmoke.dll": "09a11f5ef7aa8306d62093e40766e12d35c3812d14120ba34d493cb62cd76ec3",
+    "client/prosmoke/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "client/prosmoke/smoke.shaders": "ded2fbf537c330665e501665850bad746bb1f1e1b5549a3223075603533eb438",
+    "client/prosmoke/version.json": "10113bbca0766b0c6cb916122ad486b15032d283025616bb8e85580d5822522d"
+  },
+  "defender": {
+    "signatureBefore": "1.463.122.0",
+    "signatureAfter": "1.463.122.0",
+    "engine": "1.1.26100.4",
+    "realTimeProtectionBefore": true,
+    "realTimeProtectionAfter": true,
+    "protectionsChanged": false,
+    "scans": [
+      {
+        "kind": "folder",
+        "exitCode": 0,
+        "noThreatsReported": true,
+        "log": "D:\\Development\\Projects\\cod2x-smoke-release-0.1.4\\smoke\\out\\manual-release-validation\\folder-scan.txt"
+      },
+      {
+        "kind": "zip",
+        "exitCode": 0,
+        "noThreatsReported": true,
+        "log": "D:\\Development\\Projects\\cod2x-smoke-release-0.1.4\\smoke\\out\\manual-release-validation\\zip-scan.txt"
+      }
+    ]
+  },
+  "falsePositiveConfirmed": false,
+  "notes": "Original full archive detection remains unexplained. No-detection results do not certify safety. No game launch or new FPS benchmark was needed for this packaging-only revision.",
+  "automatedChecks": {
+    "passed": 9,
+    "skipped": 5,
+    "skipReason": "C++ compiler unavailable in default PATH; unchanged native fixture coverage recorded in original release receipt."
+  }
+}

@@ -6,6 +6,11 @@ client/server package and an optional occupancy baker. See
 [smoke/README.md](smoke/README.md) and [validation](smoke/VALIDATION.md).
 The renderer implementation and HLSL source live in a separate workspace.
 
+The current player download is the [ProSmoke 0.1.4 manual-install edition](https://github.com/laspencer91/CoD2x/releases/tag/v0.1.4-manual-preview).
+It contains the client/server files and manual installation/rollback instructions,
+with no installer or launcher scripts. See the included `README.txt` before copying
+files into an existing installation.
+
 ![alt text](images/cod2-window.png)
 
 CoD2x is a modification of Call of Duty 2. It is build on top of 1.3 version.

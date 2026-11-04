@@ -222,3 +222,21 @@ unchanged noise/stock-grid data. Experimental capture/replay shaders and DX11
 are excluded. Public packaging contains compiled renderer files and the normal
 loader, with a version/hash identity JSON. Renderer implementation and private
 benchmark captures are not part of the source release or ZIP.
+
+## 2026-11-04 manual-install packaging revision
+
+The manual edition removes the three CMD launchers and PowerShell installer from
+the player ZIP. Installation, backups, config preservation and rollback are now
+manual and documented in the package README. The packaging command and package
+tests require the exact client/server file list, preventing accidental inclusion
+of scripts or other extra files. Installer-only tests were removed with the
+installer; they are available in the earlier release tag.
+
+This is a packaging revision of 0.1.4, with no rendering code or compiled payload
+changes. The local policy config has only its outdated launcher comment changed.
+The original complete ZIP reproducibly triggered Defender's
+`Trojan:Script/Sabsik.FL.A!ml` detection. Script-free diagnostic packages produced
+no detections with signatures 1.463.122.0; no particular script was established
+as the cause, and no false-positive determination was obtained. The final release
+archive has its own scan and checksum receipt. A no-detection result does not
+certify safety, and protection settings were not changed.

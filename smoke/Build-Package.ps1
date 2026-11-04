@@ -102,14 +102,17 @@ Save-Json (Join-Path $runtime 'version.json') ([ordered]@{
     shortWaitRequestedUs = 250
 })
 
-foreach ($required in @('README.txt', 'Setup-Client.cmd', 'Undo-Client.cmd', 'Play-Local.cmd', 'scripts\setup.ps1',
+$requiredFiles = @('README.txt',
     'client\mss32.dll', 'client\prosmoke\prosmoke.dll', 'client\prosmoke\smoke.shaders', 'client\prosmoke\noise128.rgba',
-    'client\prosmoke\prosmoke_stock.iwd', 'client\prosmoke\prosmoke.cfg',
-    'server\README-SERVER.txt', 'server\prosmoke_server.cfg', 'server\prosmoke_stock.iwd')) {
+    'client\prosmoke\prosmoke_stock.iwd', 'client\prosmoke\prosmoke.cfg', 'client\prosmoke\version.json',
+    'server\README-SERVER.txt', 'server\prosmoke_server.cfg', 'server\prosmoke_stock.iwd')
+foreach ($required in $requiredFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $package $required) -PathType Leaf)) { throw "Package is missing $required" }
 }
-$stray = @(Get-ChildItem -LiteralPath $package -Recurse -File | Where-Object { $_.Extension -in @('.cpp', '.hpp', '.h', '.hlsl', '.py', '.exe') })
-if ($stray.Count) { throw ('Package contains source or executables: ' + (($stray | ForEach-Object { $_.FullName }) -join ', ')) }
+$stray = @(Get-ChildItem -LiteralPath $package -Recurse -File | Where-Object {
+    $_.FullName.Substring($package.Length + 1) -notin $requiredFiles
+})
+if ($stray.Count) { throw ('Unexpected files in manual-install package: ' + (($stray | ForEach-Object { $_.FullName }) -join ', ')) }
 
 if (-not $NoZip) {
     [IO.Directory]::CreateDirectory($out) | Out-Null
