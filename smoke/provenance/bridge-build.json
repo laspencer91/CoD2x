@@ -1,12 +1,12 @@
 {
     "schema":  1,
-    "feature":  "opt-in CoD2 volumetric smoke bridge with local bullet-impact forwarding; server policy read from systeminfo, then serverinfo",
+    "feature":  "ProSmoke0.1.4 preview: selected renderer and guarded250us game/render GPU fence waits",
     "cod2xCommit":  "edee5a080c93a7a6a9c752bf0a1da0eab648c671",
     "configuration":  "RelWithDebInfo; no CoD2x debug hot reload",
-    "sha256":  "d1cdeba6ab81eeee4fe34de1988566cc4b42cd4c4f7da1b7a5eb72ada4b0cdc4",
+    "sha256":  "1ff45f17af0246c2300cbb63fefc6f94cd1463aa3eb067184074f8ad1ce6f59b",
     "rendererSha256":  "243505f56ec0f86122fc09b3a6c18f0daf49a00abb2d969147f595991584a6b2",
     "originalMss32Sha256":  "7855b8fbae917cb8449f2d4361ab61b5ecec4df0a11130d797cb0aa99b4260ea",
-    "adapterSha256":  "2ff2cdf7ab58e81fb08514e71eab859dd034a7bdff9ca35612267a67c8b7adcc",
+    "adapterSha256":  "61f7bbb550605738a06bf87e8c85f7ea23bae635c9a1b1832473f0489fde1f9e",
     "enableEnvironment":  "COD2_SMOKE_DIAGNOSTICS=1",
     "renderEnvironment":  "COD2_SMOKE_RENDER=1",
     "logEnvironment":  "COD2_SMOKE_LOG=\u003cabsolute log path\u003e",
@@ -23,15 +23,17 @@
                          "src/mss32/hook.cpp":  "b989b6f046e908ff13f76ab4d06965c6e3470536636c9dc503d045a0ef622eb5",
                          "src/mss32/drawing.cpp":  "742bfb90f06c956c46dd4e89568c1fc96916997e180cf0157c70d82baee34d50",
                          "src/mss32/updater.cpp":  "f95915d8bb36907a0e53a17b347dcd540171830e307eb1cd0f0274994e1c80d8",
-                         "src/mss32/smoke_diagnostics.cpp":  "2ff2cdf7ab58e81fb08514e71eab859dd034a7bdff9ca35612267a67c8b7adcc",
+                         "src/mss32/smoke_diagnostics.cpp":  "61f7bbb550605738a06bf87e8c85f7ea23bae635c9a1b1832473f0489fde1f9e",
                          "src/mss32/smoke_diagnostics.h":  "19bfaa9f950283acbc22b094a4199b54deb22fdcd38d37335b97c2b9a2f46de3",
                          "src/mss32/policy.hpp":  "6caa00dba772a56111c69be2340c5c6cfb4e59739fa3434df673c25c5cbaeddc",
                          "src/mss32/mapkit_reload.cpp":  "7fda5e22db230bdb9640ce21e887c410325320fd3c3dfcbf73eb497b77e368cf",
                          "src/mss32/mapkit_reload.h":  "3c224982d648cccf63b60c0dfb2c2f92942a52a1337175ac4bc4bf45cc16634c",
                          "src/shared/weapons.cpp":  "b1982f8fdeedd1bd3760a4a5955c5d47686963a0940c5d81718e0e6809444f04",
                          "src/mss32/main.cpp":  "834d0cb3240ec9154c70c9aeb62e7865546fe48736c44229885e8356c899ac9d",
-                         "src/mss32/smoke_activation.hpp":  "d98ac4a4ee989364edddc6fd0e0f363700f0062609fceb8dd88c9e711a0c5603"
+                         "src/mss32/smoke_activation.hpp":  "d98ac4a4ee989364edddc6fd0e0f363700f0062609fceb8dd88c9e711a0c5603",
+                         "src/mss32/smoke_waits.hpp":  "8471f9ffdb0666aec1862243bbcdbad63d0b8f085998c23e33f5d479522adf25"
                      },
     "activation":  "Installed preview receipt beside CoD2MP_s.exe; environment overrides optional",
-    "localSourceCommit":  "2ba5c34c7c4c0ae3d1b11fe94238b8f382c6db44"
+    "buildPromotion":  "Exact binaries validated with normal packaged CoD2x on local DX7 and DX9. Runtime sources/headers match this public source snapshot after CRLF normalization; compiled in integration workspace.",
+    "localSourceCommit":  "0e70e4982a6abc341097516ca2008b7be528c2a1"
 }

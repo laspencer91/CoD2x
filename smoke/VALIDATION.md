@@ -209,6 +209,14 @@ compatibility tests without FPS sampling. Fresh native-client performance,
 busy servers, additional GPUs and moving/networked carving remain separate
 validation; steady250FPS is not certified.
 
+The follow-up restart check could not initialize its next client after the
+desktop changed to Remote Desktop. StockGetDeviceCaps and the independent HAL
+fixture both returned D3DERR_NOTAVAILABLE. No native vid_restart acceptance is
+claimed. The release promotes the exact loader/renderer bytes that passed the
+local DX7 and DX9 cases;129 runtime sources/headers and CMake match the public
+source snapshot after CRLF normalization. The364 proxy export names/ordinals,
+full ZIP contents and version identity also pass verification.
+
 The renderer is the selectedc26ceb0 build, matched18-entry shader bundle and
 unchanged noise/stock-grid data. Experimental capture/replay shaders and DX11
 are excluded. Public packaging contains compiled renderer files and the normal

@@ -1,0 +1,113 @@
+{
+  "version": "0.1.4-preview",
+  "sourceCommit": "0e70e4982a6abc341097516ca2008b7be528c2a1",
+  "rendererSourceCommit": "c26ceb098402d673130d053d5fd148d627043395",
+  "identity": {
+    "version": "0.1.4-preview",
+    "loaderSha256": "1ff45f17af0246c2300cbb63fefc6f94cd1463aa3eb067184074f8ad1ce6f59b",
+    "runtimeSha256": "09a11f5ef7aa8306d62093e40766e12d35c3812d14120ba34d493cb62cd76ec3",
+    "shadersSha256": "ded2fbf537c330665e501665850bad746bb1f1e1b5549a3223075603533eb438",
+    "shaderVariants": 18,
+    "shortWaitRequestedUs": 250
+  },
+  "zipSha256": "6892d023bbd132effe2fbd2ba58fc8d7982e8ae7aae247e8d503b756edd3e1f9",
+  "tests": {
+    "pythonUnittestCases": 22,
+    "skipped": 1,
+    "skipReason": "single-game detection fixture on a PC with multiple real installations",
+    "nativeX86Fixture": "64 blocked timer requests through real caller-address hooks; guards, forwarding, failure fallback, exact restoration",
+    "proxyExportsUnchanged": 364,
+    "archiveIdentityAndDataOnlyChecks": true
+  },
+  "nativeCompatibility": {
+    "device": "AMD Radeon RX9060XT",
+    "resolution": [
+      3440,
+      1440
+    ],
+    "smokeResolution": "quarter",
+    "fourOverlappingSources": true,
+    "dx7": [
+      [
+        1,
+        1,
+        250,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        250,
+        1132,
+        307,
+        0
+      ],
+      [
+        1,
+        0,
+        250,
+        1135,
+        308,
+        0
+      ],
+      [
+        1,
+        1,
+        250,
+        2187,
+        529,
+        0
+      ]
+    ],
+    "dx9": [
+      [
+        1,
+        0,
+        250,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        250,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        250,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        250,
+        0,
+        0,
+        0
+      ]
+    ],
+    "timerFallbacks": 0,
+    "splitFailures": 0,
+    "benchmarkRendererProxy": false,
+    "fpsSampled": false,
+    "scope": "Exact release loader/renderer bytes tested together in normal client; isolated upgrade from previous preview"
+  },
+  "unvalidated": [
+    "steady250FPS",
+    "NVIDIA live acceptance",
+    "busy/multiplayer servers and moving/networked carving",
+    "vid_restart: desktop changed to Remote Desktop before the next client could initialize; stockGetDeviceCaps and independent HAL probe both returned D3DERR_NOTAVAILABLE"
+  ],
+  "promotion": "Exact binaries tested with local DX7 and DX9;129 runtime source/header files and CMake match the public source snapshot after CRLF normalization. No renderer implementation or private benchmark history published.",
+  "install": "Setup-Client.cmd updates matched loader/renderer/shaders; keeps existing policy and original CoD2x backup; snapshots replaced preview files.",
+  "rollback": "Undo-Client.cmd restores regular CoD2x. Existing previews are backed up under prosmoke-backup/previews. Older release tags retained."
+}

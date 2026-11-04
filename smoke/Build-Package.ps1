@@ -27,7 +27,8 @@ function Hash-Source([string]$Path) {
     } finally { $sha.Dispose() }
 }
 function Save-Json([string]$Path, $Value) {
-    [IO.File]::WriteAllText($Path, ($Value | ConvertTo-Json -Depth 12) + "`n", [Text.UTF8Encoding]::new($false))
+    $json = ($Value | ConvertTo-Json -Depth 12).Replace("`r`n", "`n")
+    [IO.File]::WriteAllText($Path, $json + "`n", [Text.UTF8Encoding]::new($false))
 }
 
 if ($ToolchainDirectory) {
