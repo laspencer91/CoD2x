@@ -31,6 +31,24 @@ int main() {
             subprocess.run([CXX, '-std=c++17', '-static', *flags,
                 '-I', str(ROOT / 'src/mss32'), str(source), '-o', str(cls.folder / f'{name}.exe')],
                 check=True, capture_output=True, text=True, timeout=30)
+        source.write_text('''#include "smoke_activation.hpp"
+#include <cstdio>
+int main() {
+    using cod2_smoke::local_grid_archive;
+    std::printf("%d %d %d %d %d %d %d",
+        int(local_grid_archive(true, true, "main", "iw_prosmoke_stock.iwd")),
+        int(local_grid_archive(true, true, "MAIN", "IW_PROSMOKE_STOCK.IWD")),
+        int(local_grid_archive(false, true, "main", "iw_prosmoke_stock.iwd")),
+        int(local_grid_archive(true, false, "main", "iw_prosmoke_stock.iwd")),
+        int(local_grid_archive(true, true, "other", "iw_prosmoke_stock.iwd")),
+        int(local_grid_archive(true, true, "main", "iw_prosmoke_stock.iwd.extra")),
+        int(local_grid_archive(true, true, "main", "unrelated.iwd")));
+}
+''')
+        for name, flags in [('grid-preview', ['-DCOD2X_SMOKE_TEST_BUILD=1']), ('grid-stable', [])]:
+            subprocess.run([CXX, '-std=c++17', '-static', *flags,
+                '-I', str(ROOT / 'src/mss32'), str(source), '-o', str(cls.folder / f'{name}.exe')],
+                check=True, capture_output=True, text=True, timeout=30)
 
     def probe(self, installed=False, overrides=None, executable='preview'):
         runtime = self.folder / 'prosmoke' / 'prosmoke.dll'
@@ -61,6 +79,10 @@ int main() {
     def test_stable_build_cannot_enable_preview(self):
         self.assertEqual(self.probe(True, {'COD2_SMOKE_DIAGNOSTICS': '1',
             'COD2_SMOKE_RENDER': '1'}, executable='stable'), '0 0 0')
+
+    def test_local_grid_archive_preserves_online_and_unrelated_iwd_filtering(self):
+        for name, expected in [('grid-preview', '1 1 0 0 0 0 0'), ('grid-stable', '0 0 0 0 0 0 0')]:
+            self.assertEqual(subprocess.check_output([str(self.folder / f'{name}.exe')], text=True, timeout=5), expected)
 
 
 if __name__ == '__main__':

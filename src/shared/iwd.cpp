@@ -1,5 +1,8 @@
 #include "iwd.h"
 #include "shared.h"
+#if COD2X_WIN32 && defined(COD2X_SMOKE_TEST_BUILD)
+    #include "../mss32/smoke_activation.hpp"
+#endif
 
 #include "http_client.h"
 #if COD2X_WIN32
@@ -570,6 +573,10 @@ char** Sys_ListFiles(char* extension, int32_t* numFiles, int32_t wantsubs) {
     // This is fs_game folder
     bool isFsGameFolder = fs_game && fs_game[0] != '\0' && pathEndsWith(directory, fs_game);
 
+#if COD2X_WIN32 && defined(COD2X_SMOKE_TEST_BUILD)
+    const bool installedSmoke = cod2_smoke::installed_preview();
+#endif
+
 
     {
         // The original function created list of loaded iwd files
@@ -628,6 +635,14 @@ char** Sys_ListFiles(char* extension, int32_t* numFiles, int32_t wantsubs) {
             if (allowFileToBeLoaded) {
                 snprintf(reason, sizeof(reason), "original IW / localized file");
             }
+
+#if COD2X_WIN32 && defined(COD2X_SMOKE_TEST_BUILD)
+            if (!allowFileToBeLoaded && cod2_smoke::local_grid_archive(installedSmoke,
+                    clientState == CLIENT_STATE_DISCONNECTED || isListenServer, folder, result[i])) {
+                allowFileToBeLoaded = true;
+                snprintf(reason, sizeof(reason), "installed ProSmoke local map grids");
+            }
+#endif
 
 
             // When connecting to server or replaying demo

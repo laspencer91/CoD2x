@@ -65,12 +65,17 @@ if ($RendererDirectory) {
     Write-Output 'Renderer files copied into the package.'
 }
 
-# The server copy of the occupancy file is always the client one.
+# CoD2 mounts main for a normal launch, and prosmoke when fs_game selects it.
+# Both paths, and the server copy, must carry the exact same reviewed grids.
+$main = Join-Path $client 'main'
+[IO.Directory]::CreateDirectory($main) | Out-Null
+Copy-Item -LiteralPath (Join-Path $runtime 'prosmoke_stock.iwd') -Destination (Join-Path $main 'iw_prosmoke_stock.iwd') -Force
 Copy-Item -LiteralPath (Join-Path $runtime 'prosmoke_stock.iwd') -Destination (Join-Path $server 'prosmoke_stock.iwd') -Force
 
 $bridge = Get-Content -LiteralPath (Join-Path $provenance 'bridge-build.json') -Raw | ConvertFrom-Json
 $bridge.sha256 = Hash (Join-Path $client 'mss32.dll')
 $bridge.sourceHashes | Add-Member -NotePropertyName 'src/mss32/smoke_waits.hpp' -NotePropertyValue '' -Force
+$bridge.sourceHashes | Add-Member -NotePropertyName 'src/shared/iwd.cpp' -NotePropertyValue '' -Force
 foreach ($entry in $bridge.sourceHashes.PSObject.Properties) { $entry.Value = Hash-Source (Join-Path $source $entry.Name) }
 $bridge.adapterSha256 = $bridge.sourceHashes.'src/mss32/smoke_diagnostics.cpp'
 $bridge | Add-Member -NotePropertyName localSourceCommit -NotePropertyValue ((& git -C $source rev-parse HEAD).Trim()) -Force
@@ -103,6 +108,7 @@ Save-Json (Join-Path $runtime 'version.json') ([ordered]@{
 })
 
 $requiredFiles = @('README.txt',
+    'client\main\iw_prosmoke_stock.iwd',
     'client\mss32.dll', 'client\prosmoke\prosmoke.dll', 'client\prosmoke\smoke.shaders', 'client\prosmoke\noise128.rgba',
     'client\prosmoke\prosmoke_stock.iwd', 'client\prosmoke\prosmoke.cfg', 'client\prosmoke\version.json',
     'server\README-SERVER.txt', 'server\prosmoke_server.cfg', 'server\prosmoke_stock.iwd')

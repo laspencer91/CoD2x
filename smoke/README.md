@@ -25,6 +25,7 @@ preview handed to people the author knows.
 prosmoke.zip
 ├── README.txt
 ├── client/                drop the contents into the CoD2 folder
+│   ├── main/iw_prosmoke_stock.iwd   grids mounted by a normal game launch
 │   ├── mss32.dll          CoD2x loader with the ProSmoke bridge
 │   └── prosmoke/
 │       ├── prosmoke.dll   renderer
@@ -43,15 +44,22 @@ prosmoke.zip
 This edition uses manual installation and contains no installer or launcher
 scripts. Close CoD2 and back up the current `mss32.dll` and complete `prosmoke`
 folder outside the game directory. Keep any original `prosmoke-backup` folder.
+Back up an existing `main/iw_prosmoke_stock.iwd` as well.
 Copy the contents of `client` beside `CoD2MP_s.exe`, replacing the matching files
 together. When updating, preserve your existing `prosmoke.cfg`. CoD2 1.3 and
 CoD2x must already be installed; leave `mss32_original.dll` untouched.
+Include `client/main/iw_prosmoke_stock.iwd` when copying: CoD2 mounts `main` for
+normal launches. The matching IWD under `prosmoke` supports `fs_game prosmoke`.
+Fully restart after adding an IWD. A local server still needs an explicit valid
+`sv_prosmoke_policy`; map-data installation does not change server policy.
 
 To undo an update, close the game and restore the backed-up loader and complete
 runtime folder. To remove ProSmoke entirely, restore a verified stock CoD2x loader
 or reinstall official CoD2x, then remove `prosmoke`. A previous ProSmoke preview's
 loader is not a stock loader. See `package/README.txt` for complete installation,
 rollback and local-test shortcut instructions.
+Also restore the backed-up `main/iw_prosmoke_stock.iwd`, or remove that exact file
+if it did not exist before the update. Leave all other `main` files alone.
 
 Smoke activates when `prosmoke\prosmoke.dll` exists beside `CoD2MP_s.exe`, so a
 manual copy works and deleting the folder turns it off. `COD2_SMOKE_RENDER=0` and
@@ -63,9 +71,10 @@ wait delays. Unsupported code/timers fall back to native waits. Fence polls,
 prediction limits, unrelated sleeps and system timer resolution are unchanged.
 The optimization does not install in debug hot-reload builds.
 
-Preview 0.1.4 updates the loader and selected v8 renderer together. The manual
-edition uses those same compiled files; backups and config preservation are the
-player's responsibility. `client/prosmoke/version.json` identifies the matched
+Preview 0.1.5 adds the `main` grid archive and a narrowly scoped loader admission
+for that exact archive in installed local games. Remote connections retain the
+server-required IWD filtering. The selected v8 renderer is unchanged from 0.1.4;
+backups and config preservation remain manual. `client/prosmoke/version.json` identifies the matched
 loader/renderer/shader hashes. The renderer comes from `c26ceb0`; experimental
 capture/replay shaders and DX11 are excluded. Constant250FPS remains unproven.
 

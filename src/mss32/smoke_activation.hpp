@@ -5,6 +5,17 @@
 #include <string>
 
 namespace cod2_smoke {
+// Only the installed preview's exact data archive is eligible for local mounting.
+// Remote connections keep CoD2x's server-required IWD filtering.
+inline bool local_grid_archive(bool installed, bool local_context, const char* folder, const char* filename) {
+#ifndef COD2X_SMOKE_TEST_BUILD
+    installed = false;
+#endif
+    return installed && local_context && folder && filename
+        && lstrcmpiA(folder, "main") == 0
+        && lstrcmpiA(filename, "iw_prosmoke_stock.iwd") == 0;
+}
+
 // ProSmoke is active when its runtime folder sits beside the game executable. A plain
 // file copy installs it and deleting the folder removes it; no receipt or registry.
 // Unlike launcher environment variables, this survives a Steam handoff/relaunch.

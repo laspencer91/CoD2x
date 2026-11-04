@@ -34,6 +34,7 @@ def pe_machine(data):
 class PackageLayout(unittest.TestCase):
     def test_required_files_and_nothing_else_suspicious(self):
         expected_files = {'README.txt',
+                     'client/main/iw_prosmoke_stock.iwd',
                      'client/mss32.dll', 'client/prosmoke/prosmoke.dll', 'client/prosmoke/smoke.shaders',
                      'client/prosmoke/noise128.rgba', 'client/prosmoke/prosmoke_stock.iwd', 'client/prosmoke/prosmoke.cfg',
                      'client/prosmoke/version.json',
@@ -45,8 +46,8 @@ class PackageLayout(unittest.TestCase):
             if path.is_file():
                 self.assertNotIn(path.suffix.lower(), ('.cpp', '.hpp', '.h', '.hlsl', '.py', '.exe', '.pyc', '.cmd', '.bat', '.ps1', '.vbs', '.js'), str(path))
                 self.assertNotRegex(path.name.lower(), r'licen|notice|mapkit', str(path))
-        # The client folder is exactly what lands in the game folder: one loader and one subfolder.
-        self.assertEqual(sorted(p.name for p in CLIENT.iterdir()), ['mss32.dll', 'prosmoke'])
+        # Normal launches mount main; fs_game=prosmoke launches also mount the runtime folder.
+        self.assertEqual(sorted(p.name for p in CLIENT.iterdir()), ['main', 'mss32.dll', 'prosmoke'])
 
     def test_binaries_are_32bit_and_carry_the_prosmoke_names(self):
         loader = (CLIENT / 'mss32.dll').read_bytes()
@@ -91,7 +92,7 @@ class PackageLayout(unittest.TestCase):
 
     def test_version_and_optimized_loader_identity(self):
         identity=json.loads((RUNTIME/'version.json').read_text())
-        self.assertEqual(identity['version'],'0.1.4-preview')
+        self.assertEqual(identity['version'],'0.1.5-preview')
         self.assertEqual(identity['shortWaitRequestedUs'],250)
         for name,key in [('mss32.dll','loaderSha256')]:
             self.assertEqual(hashlib.sha256((CLIENT/name).read_bytes()).hexdigest(),identity[key])
@@ -100,6 +101,7 @@ class PackageLayout(unittest.TestCase):
         self.assertIn(b'prosmoke_shortWait',(CLIENT/'mss32.dll').read_bytes())
 
     def test_occupancy_is_data_only_and_matches_inventory(self):
+        self.assertEqual((RUNTIME / 'prosmoke_stock.iwd').read_bytes(), (CLIENT / 'main/iw_prosmoke_stock.iwd').read_bytes())
         self.assertEqual((RUNTIME / 'prosmoke_stock.iwd').read_bytes(), (SERVER / 'prosmoke_stock.iwd').read_bytes())
         inventory = json.loads((SMOKE / 'occupancy-inventory.json').read_text())
         stock = [r for r in inventory['maps'] if r['kind'] == 'stock']

@@ -240,3 +240,28 @@ no detections with signatures 1.463.122.0; no particular script was established
 as the cause, and no false-positive determination was obtained. The final release
 archive has its own scan and checksum receipt. A no-detection result does not
 certify safety, and protection settings were not changed.
+
+## 2026-11-04 preview 0.1.5 base-game grid mounting
+
+The earlier copy-only recommendation was insufficient: the packaged CoD2x IWD
+filter ignored `main/iw_prosmoke_stock.iwd` as "not required" in an actual normal
+local launch, despite a valid smoke policy. The corrected client includes that
+archive and admits only its exact name under `main` when ProSmoke is installed
+and the client is disconnected or running a local listen server. Remote
+connections continue through the existing server-required archive filter;
+unrelated IWDs and stable builds receive no new admission.
+
+The production 0.1.5 loader was rebuilt with the x86 bridge toolchain. A task-owned
+normal DX7 client with `fs_game` empty loaded Toujane's packaged grid and verified
+its BSP/grid binding, separately with `sv_pure 0` and `sv_pure 1`. The smoke policy
+was explicitly configured for those tests; no automatic local policy behavior is
+claimed. Only the Popen-owned test clients were stopped. No FPS benchmark or
+remote-server acceptance is claimed for this revision.
+
+All 15 automated package, activation, archive admission, baker and native wait
+checks pass with the bridge compiler configured. Admission fixtures cover local
+acceptance, absent installation, unrelated names/folders, remote context and
+stable-build rejection. The selected 0.1.4 renderer, shaders, noise and reviewed
+stock grids are unchanged. The normal client package and developer packaging
+checks require both grid locations plus the matching 0.1.5 loader. The player ZIP
+contains no installer or launcher scripts.

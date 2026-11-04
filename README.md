@@ -6,10 +6,12 @@ client/server package and an optional occupancy baker. See
 [smoke/README.md](smoke/README.md) and [validation](smoke/VALIDATION.md).
 The renderer implementation and HLSL source live in a separate workspace.
 
-The current player download is the [ProSmoke 0.1.4 manual-install edition](https://github.com/laspencer91/CoD2x/releases/tag/v0.1.4-manual-preview).
+The current player download is [ProSmoke 0.1.5 preview](https://github.com/laspencer91/CoD2x/releases/tag/v0.1.5-preview).
 It contains the client/server files and manual installation/rollback instructions,
 with no installer or launcher scripts. See the included `README.txt` before copying
 files into an existing installation.
+Version 0.1.5 includes the stock map grid archive in `client/main` and updates the
+loader to admit this exact archive locally, without selecting the ProSmoke mod.
 
 ![alt text](images/cod2-window.png)
 

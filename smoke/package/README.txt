@@ -1,4 +1,4 @@
-ProSmoke 0.1.4 preview - manual install edition for Call of Duty 2 (CoD2x)
+ProSmoke 0.1.5 preview - manual install for Call of Duty 2 (CoD2x)
 
 Volumetric smoke provides competitive integrity by rendering smoke as a true 3D
 volume that exists in the world. It does not suffer from the problems of 2D
@@ -19,18 +19,27 @@ INSTALL OR UPDATE BY HAND
   3. Create a backup folder outside the game folder. Copy the current mss32.dll
      and the complete existing prosmoke folder, if present, into that backup.
      Also keep any older prosmoke-backup folder: it may hold your stock loader.
+     Back up main\iw_prosmoke_stock.iwd too if it already exists.
   4. Copy client\mss32.dll into the game folder, replacing mss32.dll.
   5. Copy client\prosmoke into the game folder as prosmoke. Replace the matching
      package files together. If updating, keep your existing prosmoke.cfg.
-  6. Start CoD2 normally and join a server with ProSmoke enabled.
+  6. Copy client\main\iw_prosmoke_stock.iwd into the game's main folder. This
+     makes stock-map grids visible during a normal launch, without selecting
+     fs_game prosmoke. Keep the matching copy in prosmoke as well. The 0.1.5
+     loader admits this exact main archive for installed local games; online
+     connections retain CoD2x's server-required archive filtering.
+  7. Fully restart CoD2 and join a server with ProSmoke enabled.
   Leave mss32_original.dll untouched. Do not mix renderer/shader versions.
 
 ROLLBACK OR REMOVE
   To undo this update: close CoD2, restore mss32.dll from step 3, and replace the
   installed prosmoke folder with the complete backed-up folder. If no prosmoke
   folder existed before, remove only the new prosmoke folder.
+  Restore main\iw_prosmoke_stock.iwd from your backup, or remove that exact
+  file if it did not exist before installation. Leave other main files alone.
   To remove ProSmoke entirely: restore a verified stock CoD2x mss32.dll from
   your original backup, or reinstall official CoD2x, then remove prosmoke.
+  Restore/remove main\iw_prosmoke_stock.iwd as described above.
   A loader backed up from an earlier ProSmoke preview is not a stock loader.
 
 PERFORMANCE IN THIS PREVIEW
@@ -63,6 +72,12 @@ SERVER
   Without the policy line, ProSmoke clients see normal smoke on that server.
 
 LOCAL TESTING
+  A local server must opt in too. After starting a local map normally, enter
+  /sets sv_prosmoke_policy "v1" in the console, then throw a new smoke. Use
+  /prosmoke_status to inspect the active policy, map-grid and renderer state.
+  The grid placement above fixes map-data discovery; it does not enable a
+  server policy automatically or change online servers' policies.
+
   Create a shortcut to CoD2MP_s.exe. Set its "Start in" to the game folder.
   Append these arguments after the quoted executable path in "Target":
     +set fs_game prosmoke +set net_ip 127.0.0.1 +set sv_punkbuster 0 +set cl_punkbuster 0 +set sv_pure 0 +exec prosmoke.cfg +devmap mp_toujane
@@ -88,4 +103,5 @@ PROBLEMS
 This is a preview build shared for testing. CoD2x auto-updates are disabled in
 this loader so an update cannot silently remove smoke. Restore a verified stock
 CoD2x loader, or reinstall official CoD2x, to return to its regular updates.
-The compiled loader, renderer and shaders are unchanged from 0.1.4 preview.
+The renderer and shaders are unchanged from 0.1.4 preview. The 0.1.5 loader
+adds local grid-archive mounting; use the matching mss32.dll from this package.

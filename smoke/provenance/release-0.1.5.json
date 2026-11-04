@@ -1,0 +1,86 @@
+{
+  "releaseTag": "v0.1.5-preview",
+  "runtimeVersion": "0.1.5-preview",
+  "baseReleaseTag": "v0.1.4-manual-preview",
+  "fix": "Package main/iw_prosmoke_stock.iwd and admit this exact archive in installed preview local contexts. Remote connections retain server-required filtering.",
+  "originalCopyOnlyNativeCheckFailed": true,
+  "nativeBaseGameGridChecks": [
+    {
+      "accepted": true,
+      "fsGame": "",
+      "map": "mp_toujane",
+      "runtime": "C:\\Games\\CoD2-ProSmoke-0.1.4-Validation",
+      "svPure": 0,
+      "pid": 19420,
+      "elapsedSeconds": 8.16,
+      "onlyPopenOwnedClientStopped": true,
+      "gridArchiveSha256": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+      "gridLoadLines": [
+        "server smoke policy=v1 valid=1 developer-controls=0",
+        "map-grid binding verified BSP=edba82b2 grid=9507e19e",
+        "map mp_toujane packaged grid 347x374x36 hash=1630d48a324223f4 width=1.200 height=1.000"
+      ]
+    },
+    {
+      "accepted": true,
+      "fsGame": "",
+      "map": "mp_toujane",
+      "runtime": "C:\\Games\\CoD2-ProSmoke-0.1.4-Validation",
+      "svPure": 1,
+      "pid": 45400,
+      "elapsedSeconds": 8.16,
+      "onlyPopenOwnedClientStopped": true,
+      "gridArchiveSha256": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+      "gridLoadLines": [
+        "server smoke policy=v1 valid=1 developer-controls=0",
+        "map-grid binding verified BSP=edba82b2 grid=9507e19e",
+        "map mp_toujane packaged grid 347x374x36 hash=1630d48a324223f4 width=1.200 height=1.000"
+      ]
+    }
+  ],
+  "rendererShadersNoiseAndStockGridsUnchanged": true,
+  "proxyExportNamesAndOrdinalsUnchanged": 364,
+  "automatedChecks": {
+    "passed": 15,
+    "skipped": 0
+  },
+  "defender": {
+    "signatureVersion": "1.463.122.0",
+    "engine": "1.1.26100.4",
+    "realTimeProtection": true,
+    "protectionsChanged": false,
+    "scans": [
+      {
+        "kind": "folder",
+        "exitCode": 0,
+        "noThreatsReported": true
+      },
+      {
+        "kind": "zip",
+        "exitCode": 0,
+        "noThreatsReported": true
+      }
+    ]
+  },
+  "zipSha256": "59b9195cb3775baef1801acf3e39a1dbe011407abf44b19906b460e074ca5d92",
+  "bytes": 14626556,
+  "archiveFilesVerified": 12,
+  "filesSha256": {
+    "README.txt": "086318b68a10355b8a36defdabc433f61797cef2da21073f3dade40cc7dd47fb",
+    "client/mss32.dll": "d5ccff9eb9d8ed6cd3d55f131cbc54531c734a016c0b73b77164ad5f09c45063",
+    "server/prosmoke_server.cfg": "3be718260d1fcfa7707960c20df9ee7727d7bb6568c824f2f8d218835dfd496e",
+    "server/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "server/README-SERVER.txt": "937726d68ab281dc30fcc9de5943d9bc32573d5fcd5e8a8890e118774133448f",
+    "client/main/iw_prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "client/prosmoke/noise128.rgba": "b67672efe1393289a943ed50a6c5c945528140abe8308b0edd70f0f8133a32a7",
+    "client/prosmoke/prosmoke.cfg": "59ab63d3f17ef8a1adce564bc48a036dda26d9f7b2dbbb1517278b73c0b33e88",
+    "client/prosmoke/prosmoke.dll": "09a11f5ef7aa8306d62093e40766e12d35c3812d14120ba34d493cb62cd76ec3",
+    "client/prosmoke/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "client/prosmoke/smoke.shaders": "ded2fbf537c330665e501665850bad746bb1f1e1b5549a3223075603533eb438",
+    "client/prosmoke/version.json": "1febe7e8e238e430e7e835e20d5c11cc6906048567fad5459378cb3c4d7952a9"
+  },
+  "scriptsIncludedInPlayerZip": false,
+  "localPolicyStillRequiresExplicitOptIn": true,
+  "remoteServerAndFpsAcceptanceClaimed": false,
+  "falsePositiveConfirmed": false
+}
