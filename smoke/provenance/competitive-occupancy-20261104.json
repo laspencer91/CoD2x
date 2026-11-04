@@ -1,0 +1,45 @@
+{
+  "createdUtc": "2026-11-04T21:49:53.120664+00:00",
+  "branch": "data/competitive-smoke-grids-20261104",
+  "sourceInstall": "D:/Games/Steam/steamapps/common/Call of Duty 2",
+  "mapsBaked": 20,
+  "fullCollisionBakes": 12,
+  "croppedCandidates": 8,
+  "sourceMapsModified": false,
+  "mapBspAssetsIncluded": false,
+  "allIndividualAndCombinedBindingsVerified": true,
+  "spawnHintsOutsideCroppedGrids": 0,
+  "liveGameplayAcceptance": false,
+  "croppedCandidatesReleaseApproved": false,
+  "automaticInGameBakingImplemented": false,
+  "voxelCellSizeCm": 50,
+  "nativeBakerUnchanged": true,
+  "automatedChecksPassed": 16,
+  "cliReproductionsByteIdentical": [
+    "wawa_3daim",
+    "mp_neuville_a1"
+  ],
+  "exporterFix": "Skip unused entities for full world-only bakes; read only classname/origin for world-only spawn hints, preserving duplicate validation for those fields.",
+  "transferZip": {
+    "name": "prosmoke-competitive-grids-20261104.zip",
+    "sha256": "7dff846048fd9f30465eff26f19e39419f1e15fca97a07adaae3162305fec422",
+    "bytes": 1111457
+  },
+  "defender": {
+    "signatureVersion": "1.463.122.0",
+    "realTimeProtection": true,
+    "protectionsChanged": false,
+    "scans": [
+      {
+        "target": "smoke\\competitive-occupancy",
+        "exitCode": 0,
+        "noThreatsReported": true
+      },
+      {
+        "target": "smoke\\out\\competitive-20261104\\prosmoke-competitive-grids-20261104.zip",
+        "exitCode": 0,
+        "noThreatsReported": true
+      }
+    ]
+  }
+}

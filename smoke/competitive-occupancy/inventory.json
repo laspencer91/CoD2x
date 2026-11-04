@@ -1,0 +1,720 @@
+{
+  "schema": 1,
+  "source": "Installed main/zpam_maps_v7.iwd plus mp_eyza_a1.iwd, mp_neuville_a1.iwd and mp_sfax_v1.iwd",
+  "mapsFound": 20,
+  "fullCollisionBakes": 12,
+  "croppedCandidates": 8,
+  "gridCellSizeCm": 50,
+  "originalMapsModified": false,
+  "originalBspOrGeometryIncluded": false,
+  "runtimeChanged": false,
+  "liveGameplayAcceptance": false,
+  "bundles": [
+    {
+      "file": "prosmoke_competitive_full.iwd",
+      "maps": 12,
+      "boundsReviewRequired": false,
+      "sha256": "5d8df24150c8acdc44e5d350146e99d7ff247d7ea2fdf9d9ff979efcec368eb5",
+      "bytes": 353989
+    },
+    {
+      "file": "prosmoke_competitive_cropped_candidates.iwd",
+      "maps": 8,
+      "boundsReviewRequired": true,
+      "sha256": "69ed208c0b410da664c24d80c43a3fc988faa7ffbcc4455d6e3538b2f99dea46",
+      "bytes": 201415
+    }
+  ],
+  "maps": [
+    {
+      "map": "mp_eyza_a1",
+      "archive": "mp_eyza_a1.iwd",
+      "sourceSha256": "683903c064440961ed29e0217cb9ce4500fe705677ebfd1006946bc71353c3f8",
+      "sourceCrc32": "d38455d2",
+      "title": "Tobruk",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "installed-custom-map",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        373,
+        378,
+        72
+      ],
+      "gridSha256": "bcecc2eb4df97eadd1f1a5c208e364e2395ad66f1b4e0d1c273cd952607acb92",
+      "packageSha256": "bde56d3e4d01b23a05f8cb53f7270a4bcf49c9225ba3845cf6414e0a1e3404a0",
+      "packageBytes": 19896,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_eyza_a1.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_neuville_a1",
+      "archive": "mp_neuville_a1.iwd",
+      "sourceSha256": "373fd36a817b9bcfc90ca7018b0c4e94e2c869e29a5f7d523b96ed37fd523dd6",
+      "sourceCrc32": "bce88656",
+      "title": "Neuville",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "installed-custom-map",
+      "boundsPolicy": "hints",
+      "boundsReviewRequired": true,
+      "dimensions": [
+        242,
+        236,
+        42
+      ],
+      "gridSha256": "09e11901032204756325619b6cca423beee57bc7cce1defec55efba14cec76f9",
+      "packageSha256": "2c1e972389f276982193c9ce45ef24ef32ed7ac1ddd0ef7ea2bb9474c1ae2659",
+      "packageBytes": 26975,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/cropped-candidates/prosmoke_mp_neuville_a1.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false,
+      "fullCollisionDimensions": [
+        848,
+        734,
+        100
+      ],
+      "fullCollisionCellCount": 62243200,
+      "fullBoundsFailure": "Exceeds current 16-million-cell runtime/baker cap at 50 cm",
+      "spawnHintCount": 52,
+      "spawnHintsOutsideGrid": 0,
+      "boundsReview": "Required: routes, roofs and grenade trajectories; spawn containment is not a full coverage review."
+    },
+    {
+      "map": "mp_sfax",
+      "archive": "mp_sfax_v1.iwd",
+      "sourceSha256": "993a7e20f242e2b2eab17bf81211860c215150c6f9c54069d19caf8470f4cc39",
+      "sourceCrc32": "cbd6ae00",
+      "title": "Sfax ^1[TEST VERSION 1.0]",
+      "gameTypes": [
+        "dm",
+        "sd",
+        "strat"
+      ],
+      "category": "installed-custom-map",
+      "boundsPolicy": "hints",
+      "boundsReviewRequired": true,
+      "dimensions": [
+        252,
+        259,
+        38
+      ],
+      "gridSha256": "2a2797b7be3540197e8b4bf17ba1a66ef34e35bc26fd960acbd39f1d4b87b831",
+      "packageSha256": "0c364f31512800844ba6ef81a257030180e12531c45a9f5b17ff87df9b191847",
+      "packageBytes": 23146,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/cropped-candidates/prosmoke_mp_sfax.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false,
+      "fullCollisionDimensions": [
+        836,
+        836,
+        152
+      ],
+      "fullCollisionCellCount": 106232192,
+      "fullBoundsFailure": "Exceeds current 16-million-cell runtime/baker cap at 50 cm",
+      "spawnHintCount": 61,
+      "spawnHintsOutsideGrid": 0,
+      "boundsReview": "Required: routes, roofs and grenade trajectories; spawn containment is not a full coverage review."
+    },
+    {
+      "map": "mp_breakout_tls",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "0fe27c59e8e978f4f446759b80528656a3be5affcc8b3b41af03660af2b55e8a",
+      "sourceCrc32": "bd5cc516",
+      "title": "Breakout TLS",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        516,
+        519,
+        45
+      ],
+      "gridSha256": "43c2d023505834006407e0cd0d89058799afdb5e1220a522104adf318c2f75e9",
+      "packageSha256": "f17dc6f9fee0cee30b55c27893a74ec5a5d99da20565eb8c42f0410e9d9013be",
+      "packageBytes": 52366,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_breakout_tls.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_burgundy_fix",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "ce2fc9434456e81a30cd479beb63bc0f70fb6204258457c55f93f324894c2939",
+      "sourceCrc32": "8a69ee11",
+      "title": "Burgundy FIX",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        277,
+        309,
+        43
+      ],
+      "gridSha256": "9380c61357cf3ea1dd0f216a2dc8837c0c745c031bccfb8483536cc795e79106",
+      "packageSha256": "bcec8927ac3bee356c735bffa2a6d098f0378b1811d99c0c44f2d07ed8d35c0c",
+      "packageBytes": 14616,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_burgundy_fix.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_carentan_bal",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "bade12e5193dcfa9b0ed0523c4be162f251b7443e5b52aa33391017539ac68f9",
+      "sourceCrc32": "adb27292",
+      "title": "Carentan BALANCED",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "hints",
+      "boundsReviewRequired": true,
+      "dimensions": [
+        219,
+        301,
+        51
+      ],
+      "gridSha256": "e2100c842bd624f680ce5a4d12e9a2ccd35b0da29f258237ea24ac608e58b76c",
+      "packageSha256": "bb8a7d242cb685e851810e5abd1b84363ad779b889523e7fc81011993d7bf130",
+      "packageBytes": 21538,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/cropped-candidates/prosmoke_mp_carentan_bal.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false,
+      "fullCollisionDimensions": [
+        979,
+        930,
+        73
+      ],
+      "fullCollisionCellCount": 66464310,
+      "fullBoundsFailure": "Exceeds current 16-million-cell runtime/baker cap at 50 cm",
+      "spawnHintCount": 96,
+      "spawnHintsOutsideGrid": 0,
+      "boundsReview": "Required: routes, roofs and grenade trajectories; spawn containment is not a full coverage review."
+    },
+    {
+      "map": "mp_carentan_fix",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "a9b6bf790e4a74ac4d44720b1ede1a9909aceb79d5bbf82e31c40bcaae12e8e2",
+      "sourceCrc32": "9f2d6e71",
+      "title": "Carentan FIX",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "hints",
+      "boundsReviewRequired": true,
+      "dimensions": [
+        219,
+        301,
+        51
+      ],
+      "gridSha256": "a55da6c0548fe6a7b25bdb0ab49fdde638d5138465493c0a33c311d246832cfe",
+      "packageSha256": "e35cfaea04eb904fa532472a2a5cfa0023c74994de1767c413a73018e4e6edb9",
+      "packageBytes": 21520,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/cropped-candidates/prosmoke_mp_carentan_fix.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false,
+      "fullCollisionDimensions": [
+        979,
+        930,
+        73
+      ],
+      "fullCollisionCellCount": 66464310,
+      "fullBoundsFailure": "Exceeds current 16-million-cell runtime/baker cap at 50 cm",
+      "spawnHintCount": 96,
+      "spawnHintsOutsideGrid": 0,
+      "boundsReview": "Required: routes, roofs and grenade trajectories; spawn containment is not a full coverage review."
+    },
+    {
+      "map": "mp_chelm_fix",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "02c8cb523365beadab103ca355d9f282c89d05e23c446e054f96ea566d409e37",
+      "sourceCrc32": "533a4208",
+      "title": "Chelm FIX",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "ctf",
+        "hq",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "hints",
+      "boundsReviewRequired": true,
+      "dimensions": [
+        265,
+        211,
+        46
+      ],
+      "gridSha256": "4871374b735c7e65d0fa28b8d5630a27c3dee44e5d90091b122e3b03ea35c367",
+      "packageSha256": "1782b2787dcfaa3c10ac5d6f4e19a2438b1c1a6361ae560acda0d2e606367f0f",
+      "packageBytes": 16667,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/cropped-candidates/prosmoke_mp_chelm_fix.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false,
+      "fullCollisionDimensions": [
+        2089,
+        1587,
+        538
+      ],
+      "fullCollisionCellCount": 1783600734,
+      "fullBoundsFailure": "Exceeds current 16-million-cell runtime/baker cap at 50 cm",
+      "spawnHintCount": 84,
+      "spawnHintsOutsideGrid": 0,
+      "boundsReview": "Required: routes, roofs and grenade trajectories; spawn containment is not a full coverage review."
+    },
+    {
+      "map": "mp_crossroads",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "59e1168673c49cfeab32ac191fde432d065c1cf814b09c9b5fdf83ef04999484",
+      "sourceCrc32": "7906c1e1",
+      "title": "Crossroads",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "hints",
+      "boundsReviewRequired": true,
+      "dimensions": [
+        274,
+        332,
+        49
+      ],
+      "gridSha256": "b8b9baf0f0a69985070bb5e464bdb0d278da23dd0b1f92d34fc32a3d09ee0dc2",
+      "packageSha256": "7d30ad6c9d3c970349e9f3a8c09973203fa48998742a9d2d14a1e0eb829ecab6",
+      "packageBytes": 47773,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/cropped-candidates/prosmoke_mp_crossroads.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false,
+      "fullCollisionDimensions": [
+        604,
+        709,
+        79
+      ],
+      "fullCollisionCellCount": 33830644,
+      "fullBoundsFailure": "Exceeds current 16-million-cell runtime/baker cap at 50 cm",
+      "spawnHintCount": 97,
+      "spawnHintsOutsideGrid": 0,
+      "boundsReview": "Required: routes, roofs and grenade trajectories; spawn containment is not a full coverage review."
+    },
+    {
+      "map": "mp_dawnville_fix",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "ab31c421d06a2271d6405089cd03fd057574d3949958b283ed2a9282c281ff6f",
+      "sourceCrc32": "a4eb800f",
+      "title": "Dawnville FIX",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        419,
+        294,
+        70
+      ],
+      "gridSha256": "c9d74e04c99d58140d05f8b0cfca867b65700ba35fa153effe1bbd6420a682ea",
+      "packageSha256": "e1eb5e65498170652c6a961404c6b16c8619798f5a9232be90620ebaf04ed2e5",
+      "packageBytes": 35402,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_dawnville_fix.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_dawnville_sun",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "be7b13b309dc19038bee242027ae90546fb4ff645aaa9b3a71ab7fd62a386c8d",
+      "sourceCrc32": "82b644ba",
+      "title": "Dawnville SUN",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        478,
+        294,
+        70
+      ],
+      "gridSha256": "b3ae7febaf05599a937a00f54a2f312bc091d01347cc06799d7eb90fd5b3502d",
+      "packageSha256": "f3e2ddcd9f288f581dc139d3c40c562a937172faafd49a9c7507cc34ebf256b4",
+      "packageBytes": 37689,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_dawnville_sun.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_leningrad_mjr",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "ecb3d092a9b2fba2929b9fb1444b2e31961d9b9a4ddd7dc622123f964c87d82a",
+      "sourceCrc32": "b8e9436f",
+      "title": "Leningrad MJR",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "strat",
+        "re",
+        "htf"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        386,
+        345,
+        73
+      ],
+      "gridSha256": "2f9dab611c3e5a28fc43ea94047fff70484555022d661195f5eb4e45bc860209",
+      "packageSha256": "b66dd8d904509200a971dedbb91038fa183bf182168b084fc5b8719fc9596e21",
+      "packageBytes": 26707,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_leningrad_mjr.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_leningrad_tls",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "f70b6c780389c917e5d5d666e6f9e3633dafe1ee309aa60da32fb3966b915842",
+      "sourceCrc32": "600a47bc",
+      "title": "Leningrad TLS",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "ctf",
+        "hq",
+        "sd",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        315,
+        309,
+        75
+      ],
+      "gridSha256": "2ef1577ad44b7efb9ca6115c9739362cd614e23e10e221a45f5b8f0bf2421295",
+      "packageSha256": "7975862efacfdca632ed672b6db4c937c42399a22cf3c4a5dc248973a1fcbd46",
+      "packageBytes": 21639,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_leningrad_tls.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_matmata_fix",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "b294284fc5583157ebcb4f48e5cec9d26d303b4e0f59ccb00516f7a1a931af09",
+      "sourceCrc32": "b17498ca",
+      "title": "Matmata FIX",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "hints",
+      "boundsReviewRequired": true,
+      "dimensions": [
+        240,
+        249,
+        48
+      ],
+      "gridSha256": "f643ad0b074ab6be0b5ed105d54e4924ebc679284988e61232d35152f40b6e83",
+      "packageSha256": "645ca716bacba96139257ee6e5da1c829499717e02887d351231256fc42ba48f",
+      "packageBytes": 21977,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/cropped-candidates/prosmoke_mp_matmata_fix.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false,
+      "fullCollisionDimensions": [
+        562,
+        526,
+        57
+      ],
+      "fullCollisionCellCount": 16849884,
+      "fullBoundsFailure": "Exceeds current 16-million-cell runtime/baker cap at 50 cm",
+      "spawnHintCount": 96,
+      "spawnHintsOutsideGrid": 0,
+      "boundsReview": "Required: routes, roofs and grenade trajectories; spawn containment is not a full coverage review."
+    },
+    {
+      "map": "mp_railyard_mjr",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "3aa89de155f6de6aabda45813dab3f24eb77291295b68bbf17484d9aec9219fa",
+      "sourceCrc32": "aaeb6f8a",
+      "title": "Railyard MJR",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "strat",
+        "re",
+        "htf"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        440,
+        449,
+        59
+      ],
+      "gridSha256": "b3a8189d84d92590a0691893208f13b68dd8afefc87036b49f7784ce50a8b24d",
+      "packageSha256": "66561fc9a52790835bd3aed70396de31bce8089b3ad8eb6f371201f637e3b6bf",
+      "packageBytes": 36570,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_railyard_mjr.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_toujane_fix",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "07b324465d19ed9b7159e09c1b08c4b8ed9a8ac688a564fffb994febdc8b6b1a",
+      "sourceCrc32": "c23b98a6",
+      "title": "Toujane FIX",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        347,
+        374,
+        36
+      ],
+      "gridSha256": "4a78983c013460ef1eee8b0dc1b91c2177d46f62f2e8c7f8cd1dd6fdda8d7023",
+      "packageSha256": "b6d0c854764abe33a738cfd0e68cfc2ad2fa08f319446fc632cfa72394d6f72e",
+      "packageBytes": 20044,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_toujane_fix.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_trainstation_bhg",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "980b43de7f775acdfddffb14e3c77e5d647dc6f74f21db60e71ba00e3a163038",
+      "sourceCrc32": "392b5e18",
+      "title": "Trainstation BHG",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        396,
+        370,
+        51
+      ],
+      "gridSha256": "358a442f12b2e8a3d8285b357a79a95ac30fb52e33a0d7368d75221f73ab6761",
+      "packageSha256": "2eea9f88f4963b2c64fe67bce7aa3da88a9d4e14159b75877fc3f89d240e28e9",
+      "packageBytes": 43962,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_trainstation_bhg.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_trainstation_fix",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "c2a684910ff195885e43d363faf50915fe0473ecfe11963bf16043aefee7abf0",
+      "sourceCrc32": "2ebf5260",
+      "title": "Trainstation FIX",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        396,
+        370,
+        51
+      ],
+      "gridSha256": "f38a3d00d1b32823c291ab9413abae12335f5e2a6bfefd7eb3e904a8dd4489c4",
+      "packageSha256": "73df12b0dbfe12fa025fccc8992d93c57c566f2447cc980e75d8c4466dc0b4f6",
+      "packageBytes": 43962,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_mp_trainstation_fix.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    },
+    {
+      "map": "mp_vallente_fix",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "3b8ec9506ffbc57ab6b80dd97a5f0e11e6f0548d6fab2cc7eabf2dbdfb2c4a71",
+      "sourceCrc32": "66b40e83",
+      "title": "Vallente FIX",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd",
+        "hq",
+        "ctf",
+        "htf",
+        "strat"
+      ],
+      "category": "competitive-map-variant",
+      "boundsPolicy": "hints",
+      "boundsReviewRequired": true,
+      "dimensions": [
+        256,
+        284,
+        42
+      ],
+      "gridSha256": "73e0786138bc4f2efc42c8d2371f6e2f9c035d08102d1495ab0574d4a9110f5a",
+      "packageSha256": "6218e4800d3483ebff1c4277ba58364596899f9b145b7b04cccfd1421ecae0b1",
+      "packageBytes": 21973,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/cropped-candidates/prosmoke_mp_vallente_fix.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false,
+      "fullCollisionDimensions": [
+        836,
+        836,
+        69
+      ],
+      "fullCollisionCellCount": 48223824,
+      "fullBoundsFailure": "Exceeds current 16-million-cell runtime/baker cap at 50 cm",
+      "spawnHintCount": 84,
+      "spawnHintsOutsideGrid": 0,
+      "boundsReview": "Required: routes, roofs and grenade trajectories; spawn containment is not a full coverage review."
+    },
+    {
+      "map": "wawa_3daim",
+      "archive": "zpam_maps_v7.iwd",
+      "sourceSha256": "dd18218e54add6ed58f3e4ea3a9f51440741430fdbb20abacb2b010a955dff38",
+      "sourceCrc32": "b80133a5",
+      "title": "wawa 3d Aim",
+      "gameTypes": [
+        "dm",
+        "tdm",
+        "sd"
+      ],
+      "category": "training",
+      "boundsPolicy": "collision",
+      "boundsReviewRequired": false,
+      "dimensions": [
+        79,
+        80,
+        39
+      ],
+      "gridSha256": "fbf0bd0d40ae6e374b998d6db54f9e3fad76ead81633e1abf29f690f18fe3e89",
+      "packageSha256": "f3d24c27675c05b0070519f05b4a787c4945ead5673c5b8474b87c3382ce8ace",
+      "packageBytes": 1378,
+      "bakerSha256": "b3d46a21a858949101089663a43a36495b6afb942fe47e2e5f0ff979fdab84e7",
+      "package": "smoke/competitive-occupancy/full/prosmoke_wawa_3daim.iwd",
+      "bindingValidatedAgainstInstalledBsp": true,
+      "liveGameplayAcceptance": false
+    }
+  ]
+}

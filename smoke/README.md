@@ -10,6 +10,9 @@ server, so every player sees the same cloud.
   render call, forwards bullet traces and passes the server policy through.
 - `smoke/package`: the shipped ZIP, exactly as players and admins receive it.
 - `smoke/custom-occupancy`: optional occupancy packages for 21 custom/test maps.
+- `smoke/competitive-occupancy`: 20 installed competitive/training map bakes,
+  including `mp_toujane_fix`; 12 full-collision grids and 8 separate cropped
+  candidates requiring bounds review. See its README and inventory before use.
 - `smoke/provenance`: hashes tying the shipped binaries to this source and the
   renderer build.
 - `tools/smoke-bake`: optional occupancy baker for custom maps (prebuilt voxelizer
