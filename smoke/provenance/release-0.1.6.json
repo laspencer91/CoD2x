@@ -1,0 +1,144 @@
+{
+  "releaseTag": "v0.1.6-preview",
+  "runtimeVersion": "0.1.6-preview",
+  "baseReleaseTag": "v0.1.5-preview",
+  "rendererSourceCommit": "0d4fd94f9b740c404af89c62523e6887959772b5",
+  "fix": "NVIDIA MSAA depth via NVAPI StretchRectEx, corrected AMD RESZ shader/state restoration, stock and zPAM smoke variants",
+  "localGpu": "AMD Radeon RX 9060 XT",
+  "localDepthProbe": {
+    "passed": 8,
+    "vertexProcessing": [
+      "software",
+      "hardware"
+    ],
+    "samples": [
+      1,
+      2,
+      4
+    ],
+    "sourceDepthStencilAndFollowingIndexedDrawPreserved": true
+  },
+  "localCarvingAndZpamMappingProbePassed": true,
+  "dx7NativeChecks": [
+    {
+      "accepted": true,
+      "requestedRenderer": "dx7",
+      "requestedAA": 2,
+      "fourActualSmokeSources": true,
+      "elapsedSeconds": 20.23,
+      "pid": 61592,
+      "onlyPopenOwnedClientStopped": true,
+      "rendererSha256": "118d562c2121cf7099dbaf16711bcb997293bdba646bad6dafd73eccedaad1b6",
+      "depthLines": [
+        "native scene depth resolve mode=resz INTZ=1 RESZ=1 forced=0",
+        "scene depth path verified; replacement ready mode=resz msaa=2 quality=0 nvapi=-1",
+        "smoke groups=1 visible=1 sources=4 CPU draw-p95=0.382ms sim-p95=0.188ms service-p95=0.102ms worker-p95=4.098ms GPU-pass-p95=2.653ms"
+      ],
+      "engineSettingLines": [
+        "      dvar set r_aaSamples 2",
+        "\"r_rendererInUse\" is: \"dx7^7\" default: \"none^7\"",
+        "\"r_aaSamples\" is: \"2^7\" default: \"1^7\"",
+        "      dvar set r_aaSamples 2"
+      ]
+    },
+    {
+      "accepted": true,
+      "requestedRenderer": "dx7",
+      "requestedAA": 4,
+      "fourActualSmokeSources": true,
+      "elapsedSeconds": 19.73,
+      "pid": 25200,
+      "onlyPopenOwnedClientStopped": true,
+      "rendererSha256": "118d562c2121cf7099dbaf16711bcb997293bdba646bad6dafd73eccedaad1b6",
+      "depthLines": [
+        "native scene depth resolve mode=resz INTZ=1 RESZ=1 forced=0",
+        "scene depth path verified; replacement ready mode=resz msaa=4 quality=0 nvapi=-1",
+        "smoke groups=1 visible=1 sources=4 CPU draw-p95=0.380ms sim-p95=0.184ms service-p95=0.092ms worker-p95=3.957ms GPU-pass-p95=2.796ms"
+      ],
+      "engineSettingLines": [
+        "      dvar set r_aaSamples 4",
+        "\"r_rendererInUse\" is: \"dx7^7\" default: \"none^7\"",
+        "\"r_aaSamples\" is: \"4^7\" default: \"1^7\"",
+        "      dvar set r_aaSamples 4"
+      ]
+    }
+  ],
+  "nativeChecksUsePackagedLoaderAndRenderer": true,
+  "nvidiaHardwareEvidenceFromHandoff": {
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "driver": "32.0.16.2101",
+    "candidate80bdcb2": "FAILED: alias flag 0 sampled zeros at 2x/4x MSAA (depth-probe), candidate caused in-game geometry corruption; DX7 2x without ProSmoke was clean",
+    "stretchRectExCopy": {
+      "depthProbe": "8/8 PASS: software and hardware VP; intz-bound 1x; nvapi-copy 1x/2x/4x; source MSAA/depth/stencil and fixed-function indexed draw preserved",
+      "depthProbeSha256": "5b2bc95fff81b836293ea5889ded4aa5cb77ce1c7a4760c899d5f378329a8a7e",
+      "inGame": {
+        "renderer": "dx7",
+        "map": "mp_toujane",
+        "smoke": "zPAM scr_smoke_type 2 (props/c_american_smoke_grenade)",
+        "loggedAA": 2,
+        "smokesDetected": 6,
+        "drawPassesAllSucceeded": 273,
+        "splitFallbacks": 0,
+        "splitFailures": 0,
+        "gpuPassP95Ms": "0.33-0.54 at 720x480",
+        "depthLines": [
+          "native scene depth resolve mode=nvapi-copy INTZ=1 RESZ=0 forced=0",
+          "scene depth path verified; replacement ready mode=nvapi-copy msaa=2 quality=0 nvapi=0"
+        ],
+        "userVisualAcceptance": "2x and 4x: volumetric smoke occluded correctly, no geometry corruption",
+        "fourXLogRetained": false,
+        "testedRendererSha256": "2e756f34ca6050e6bf9f27a333e57bb402f3552d188eb6a0cff75ea8b389fb07",
+        "testedRendererNote": "includes a temporary FX-name log line removed before commit"
+      },
+      "committedSourceRendererSha256": "d4f9526ceb9ff16b5d8e59dc63c1d44dfbce9180492876840fad5326de97c3bf"
+    }
+  },
+  "shadersNoiseAndStockGridsUnchanged": true,
+  "competitiveFullGridsInServerPackage": 12,
+  "croppedCandidatesIncluded": false,
+  "automatedChecks": {
+    "passed": 16,
+    "skipped": 0
+  },
+  "defender": {
+    "signatureVersion": "1.463.122.0",
+    "engine": "1.1.26100.4",
+    "realTimeProtection": true,
+    "protectionsChanged": false,
+    "scans": [
+      {
+        "kind": "folder",
+        "exitCode": 0,
+        "noThreatsReported": true
+      },
+      {
+        "kind": "zip",
+        "exitCode": 0,
+        "noThreatsReported": true
+      }
+    ]
+  },
+  "scriptsIncludedInPlayerZip": false,
+  "localPolicyStillRequiresExplicitOptIn": true,
+  "fpsCertificationClaimed": false,
+  "falsePositiveConfirmed": false,
+  "zipSha256": "6853353ab52bef98f58c8c4d7f077fd160ab40b8be7ee9f6b2beea3e35a6139a",
+  "bytes": 14980273,
+  "archiveFilesVerified": 13,
+  "filesSha256": {
+    "README.txt": "3d2912ced33813cb23dc9217d7d1597bccf5296e67d8cec6dd0ae12361a44c46",
+    "client/mss32.dll": "bd8c14feafdb3852e2853fb4b91f3882a7421cced692db0c453ce89cbbdabc77",
+    "client/main/iw_prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "client/prosmoke/noise128.rgba": "b67672efe1393289a943ed50a6c5c945528140abe8308b0edd70f0f8133a32a7",
+    "client/prosmoke/prosmoke.cfg": "59ab63d3f17ef8a1adce564bc48a036dda26d9f7b2dbbb1517278b73c0b33e88",
+    "client/prosmoke/prosmoke.dll": "118d562c2121cf7099dbaf16711bcb997293bdba646bad6dafd73eccedaad1b6",
+    "client/prosmoke/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "client/prosmoke/smoke.shaders": "ded2fbf537c330665e501665850bad746bb1f1e1b5549a3223075603533eb438",
+    "client/prosmoke/version.json": "fe40bc7629fe8ee58a926328e5cbb3d6a010d0701612db832bec8ae7d980d62b",
+    "server/prosmoke_competitive_full.iwd": "5d8df24150c8acdc44e5d350146e99d7ff247d7ea2fdf9d9ff979efcec368eb5",
+    "server/prosmoke_server.cfg": "3be718260d1fcfa7707960c20df9ee7727d7bb6568c824f2f8d218835dfd496e",
+    "server/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "server/README-SERVER.txt": "c1e7a40f81ae9ff2b170e51b306911e2c5a982be862c5004f7462003552861cf"
+  },
+  "proxyExportNamesAndOrdinalsUnchanged": 364
+}

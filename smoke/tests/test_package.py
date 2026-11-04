@@ -93,7 +93,7 @@ class PackageLayout(unittest.TestCase):
 
     def test_version_and_optimized_loader_identity(self):
         identity=json.loads((RUNTIME/'version.json').read_text())
-        self.assertEqual(identity['version'],'0.1.5-preview')
+        self.assertEqual(identity['version'],'0.1.6-preview')
         self.assertEqual(identity['shortWaitRequestedUs'],250)
         for name,key in [('mss32.dll','loaderSha256')]:
             self.assertEqual(hashlib.sha256((CLIENT/name).read_bytes()).hexdigest(),identity[key])

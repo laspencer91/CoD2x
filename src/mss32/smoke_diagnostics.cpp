@@ -28,7 +28,7 @@
 
 namespace {
 constexpr char kRendererName[] = "gfx_d3d_mp_x86_s.dll";
-constexpr char kPreviewVersion[] = "0.1.5-preview";
+constexpr char kPreviewVersion[] = "0.1.6-preview";
 constexpr char kRendererHash[] = "243505f56ec0f86122fc09b3a6c18f0daf49a00abb2d969147f595991584a6b2";
 constexpr uintptr_t kRenderSceneRva = 0x25b90;
 constexpr uintptr_t kRenderSceneSlot = 0x68a27c;

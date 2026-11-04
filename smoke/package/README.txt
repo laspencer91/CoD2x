@@ -1,4 +1,4 @@
-ProSmoke 0.1.5 preview - manual install for Call of Duty 2 (CoD2x)
+ProSmoke 0.1.6 preview - manual install for Call of Duty 2 (CoD2x)
 
 Volumetric smoke provides competitive integrity by rendering smoke as a true 3D
 volume that exists in the world. It does not suffer from the problems of 2D
@@ -9,6 +9,9 @@ Bullets carve holes through it. Server enforced smoke configuration.
 REQUIREMENTS
   Call of Duty 2 version 1.3 with CoD2x installed (https://github.com/callofduty2x/CoD2x).
   DX7 and DX9 game renderers are supported on a Shader Model 3-capable GPU.
+  DX7 with 2x/4x antialiasing has been checked on AMD RX 9060 XT and NVIDIA
+  RTX 5080. NVIDIA uses an NVAPI depth copy; AMD uses RESZ. Unsupported depth
+  paths retain normal smoke. This does not certify every GPU or driver.
   Steam and disc versions both work.
 
 INSTALL OR UPDATE BY HAND
@@ -97,8 +100,7 @@ LOCAL TESTING
 PROBLEMS
   Still see normal smoke? Open the console and look for the ProSmoke line, or
   type /prosmoke_status. The server must publish the policy line, your GPU
-  must support DX9 depth textures (NVIDIA, AMD and Intel from the last 15
-  years; anti-aliasing must be off on NVIDIA, r_aaSamples 1), and the
+  must support a working DX9 depth-texture path (even in DX7 mode), and the
   map needs an occupancy grid (all 15 stock maps are included). Logs:
     <game>\prosmoke\client.log
     %LOCALAPPDATA%\prosmoke\bridge.log
@@ -106,5 +108,6 @@ PROBLEMS
 This is a preview build shared for testing. CoD2x auto-updates are disabled in
 this loader so an update cannot silently remove smoke. Restore a verified stock
 CoD2x loader, or reinstall official CoD2x, to return to its regular updates.
-The renderer and shaders are unchanged from 0.1.4 preview. The 0.1.5 loader
-adds local grid-archive mounting; use the matching mss32.dll from this package.
+The 0.1.6 renderer supports NVIDIA MSAA depth copies and recognizes the stock
+and zPAM smoke types 2/3. Shaders and noise are unchanged. The loader retains
+local grid-archive mounting; use the matching mss32.dll from this package.

@@ -5,6 +5,12 @@ server, so every player sees the same cloud.
 
 ## What is in this branch
 
+Preview 0.1.6 adds DX7 antialiasing support through NVIDIA NVAPI depth copies,
+corrects AMD RESZ state restoration, and recognizes zPAM smoke types 2/3.
+AMD RX 9060 XT and NVIDIA RTX 5080 checks cover 2x/4x AA; this is not a
+250 FPS certification or a guarantee for every GPU/driver. The server package
+also includes the 12 full-bound competitive grids, including `mp_toujane_fix`.
+
 - `src/mss32/smoke_diagnostics.*`, `smoke_activation.hpp`, `policy.hpp`: the client
   bridge compiled into the CoD2x loader. It loads the renderer, hooks the scene
   render call, forwards bullet traces and passes the server policy through.

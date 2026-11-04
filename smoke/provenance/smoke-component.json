@@ -2,9 +2,9 @@
     "schema":  1,
     "shaderBundleFormat":  1,
     "shaderVariants":  18,
-    "runtimeSha256":  "09a11f5ef7aa8306d62093e40766e12d35c3812d14120ba34d493cb62cd76ec3",
+    "runtimeSha256":  "118d562c2121cf7099dbaf16711bcb997293bdba646bad6dafd73eccedaad1b6",
     "shadersSha256":  "ded2fbf537c330665e501665850bad746bb1f1e1b5549a3223075603533eb438",
     "note":  "Prebuilt MSVC x86 component; implementation and shader source retained in separate owner workspace. Carve, height and bloom time read from server policy.",
-    "sourceCommit":  "c26ceb098402d673130d053d5fd148d627043395",
-    "selectedTag":  "checkpoint/smoke-split-selected-20261103"
+    "sourceCommit":  "0d4fd94f9b740c404af89c62523e6887959772b5",
+    "selectedTag":  "handoff/cod2-dx7-msaa"
 }

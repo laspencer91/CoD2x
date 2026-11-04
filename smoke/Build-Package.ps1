@@ -75,6 +75,7 @@ Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'competitive-occupancy\prosmoke_
 
 $bridge = Get-Content -LiteralPath (Join-Path $provenance 'bridge-build.json') -Raw | ConvertFrom-Json
 $bridge.sha256 = Hash (Join-Path $client 'mss32.dll')
+$bridge.rendererSha256 = Hash (Join-Path $runtime 'prosmoke.dll')
 $bridge.sourceHashes | Add-Member -NotePropertyName 'src/mss32/smoke_waits.hpp' -NotePropertyValue '' -Force
 $bridge.sourceHashes | Add-Member -NotePropertyName 'src/shared/iwd.cpp' -NotePropertyValue '' -Force
 foreach ($entry in $bridge.sourceHashes.PSObject.Properties) { $entry.Value = Hash-Source (Join-Path $source $entry.Name) }

@@ -1,12 +1,12 @@
 {
     "schema":  1,
-    "feature":  "ProSmoke 0.1.5: local stock-grid archive mounting plus selected renderer and guarded GPU fence waits",
+    "feature":  "ProSmoke 0.1.6: DX7 MSAA renderer, zPAM smoke variants, local stock-grid mounting and guarded GPU fence waits",
     "cod2xCommit":  "edee5a080c93a7a6a9c752bf0a1da0eab648c671",
     "configuration":  "RelWithDebInfo; no CoD2x debug hot reload",
-    "sha256":  "d5ccff9eb9d8ed6cd3d55f131cbc54531c734a016c0b73b77164ad5f09c45063",
-    "rendererSha256":  "243505f56ec0f86122fc09b3a6c18f0daf49a00abb2d969147f595991584a6b2",
+    "sha256":  "bd8c14feafdb3852e2853fb4b91f3882a7421cced692db0c453ce89cbbdabc77",
+    "rendererSha256":  "118d562c2121cf7099dbaf16711bcb997293bdba646bad6dafd73eccedaad1b6",
     "originalMss32Sha256":  "7855b8fbae917cb8449f2d4361ab61b5ecec4df0a11130d797cb0aa99b4260ea",
-    "adapterSha256":  "d039b7ca2422a919201d905e78af294b0098cd36d910ac9200e31a35b8465b1e",
+    "adapterSha256":  "e7e4defe09ca0cdce9f746f65cee4cf2526088529358fd8426b5333493508ca4",
     "enableEnvironment":  "COD2_SMOKE_DIAGNOSTICS=1",
     "renderEnvironment":  "COD2_SMOKE_RENDER=1",
     "logEnvironment":  "COD2_SMOKE_LOG=\u003cabsolute log path\u003e",
@@ -23,7 +23,7 @@
                          "src/mss32/hook.cpp":  "b989b6f046e908ff13f76ab4d06965c6e3470536636c9dc503d045a0ef622eb5",
                          "src/mss32/drawing.cpp":  "742bfb90f06c956c46dd4e89568c1fc96916997e180cf0157c70d82baee34d50",
                          "src/mss32/updater.cpp":  "f95915d8bb36907a0e53a17b347dcd540171830e307eb1cd0f0274994e1c80d8",
-                         "src/mss32/smoke_diagnostics.cpp":  "d039b7ca2422a919201d905e78af294b0098cd36d910ac9200e31a35b8465b1e",
+                         "src/mss32/smoke_diagnostics.cpp":  "e7e4defe09ca0cdce9f746f65cee4cf2526088529358fd8426b5333493508ca4",
                          "src/mss32/smoke_diagnostics.h":  "19bfaa9f950283acbc22b094a4199b54deb22fdcd38d37335b97c2b9a2f46de3",
                          "src/mss32/policy.hpp":  "6caa00dba772a56111c69be2340c5c6cfb4e59739fa3434df673c25c5cbaeddc",
                          "src/mss32/mapkit_reload.cpp":  "7fda5e22db230bdb9640ce21e887c410325320fd3c3dfcbf73eb497b77e368cf",
@@ -35,6 +35,6 @@
                          "src/shared/iwd.cpp":  "c02e2dcf22a2682272262175cc7a55b169a5dd00f6b3514d8430373aa3fdd94e"
                      },
     "activation":  "Installed preview runtime beside CoD2MP_s.exe; environment overrides optional",
-    "buildPromotion":  "Rebuilt x86 normal loader; native base-game DX7 Toujane grid/BSP binding accepted with fs_game empty and sv_pure 0 and 1. Renderer and shader binaries unchanged from selected 0.1.4.",
-    "localSourceCommit":  "5cadf6ff8c762514a755ca043fd4f9dc69000044"
+    "buildPromotion":  "Normal x86 loader rebuilt with preview version 0.1.6; renderer updated from private DX7 MSAA handoff. See release-0.1.6.json for native checks.",
+    "localSourceCommit":  "04ca6f0820e7e2f5288ca738be21ddc18ea33e07"
 }
