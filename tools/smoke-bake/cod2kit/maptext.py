@@ -3,7 +3,7 @@
 import re
 
 
-def read(text, spans=False):
+def read(text, spans=False, *, keep_keys=None):
     tokens = list(
         re.finditer(r'"(?:\\.|[^"\\])*"|//[^\n]*|/\*[\s\S]*?\*/|[{}]|[^\s{}"]+', text)
     )
@@ -58,11 +58,12 @@ def read(text, spans=False):
                 pending = value
                 key_start = match.start()
             else:
-                if pending in entity["keys"]:
-                    raise ValueError("Duplicate entity property: " + pending)
-                entity["keys"][pending] = value
-                if spans:
-                    entity["key_spans"][pending] = (key_start, match.end())
+                if keep_keys is None or pending in keep_keys:
+                    if pending in entity["keys"]:
+                        raise ValueError("Duplicate entity property: " + pending)
+                    entity["keys"][pending] = value
+                    if spans:
+                        entity["key_spans"][pending] = (key_start, match.end())
                 pending = None
         elif depth == 2 and token.startswith("patchDef"):
             is_patch = True

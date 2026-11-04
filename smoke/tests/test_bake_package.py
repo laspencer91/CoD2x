@@ -9,16 +9,27 @@ import unittest
 import zipfile
 import zlib
 from pathlib import Path
+from importlib import import_module
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/smoke-bake'))
 spec = importlib.util.spec_from_file_location('standalone_bake', ROOT / 'tools/smoke-bake/bake.py')
 baker = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(baker)
+maptext = import_module('cod2kit.maptext')
 sys.path.pop(0)
 
 
 class PackageValidation(unittest.TestCase):
+    def test_hint_entity_filter_ignores_unused_duplicate_prop_scale(self):
+        text = '{ "classname" "mp_sd_spawn_attacker" "origin" "1 2 3" "modelscale" "1" "modelscale" "1.5 1.5 1.5" }'
+        with self.assertRaisesRegex(ValueError, 'Duplicate entity property: modelscale'):
+            maptext.read(text)
+        entities = maptext.read(text, keep_keys={'classname', 'origin'})
+        self.assertEqual(entities[0]['keys'], {'classname':'mp_sd_spawn_attacker', 'origin':'1 2 3'})
+        with self.assertRaisesRegex(ValueError, 'Duplicate entity property: origin'):
+            maptext.read('{ "classname" "mp_sd_spawn_attacker" "origin" "1 2 3" "origin" "4 5 6" }', keep_keys={'classname','origin'})
+
     def test_accepts_valid_package_rejects_stale_binding_and_extra_entries(self):
         with zipfile.ZipFile(ROOT / 'smoke/package/client/prosmoke/prosmoke_stock.iwd') as stock:
             grid = stock.read('maps/mp/mp_toujane.smokegrid')

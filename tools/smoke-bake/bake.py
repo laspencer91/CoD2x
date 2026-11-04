@@ -33,7 +33,7 @@ def validate_package(package, source):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('bsp', type=Path, nargs='+', help='Compiled mp_*.d3dbsp maps')
+    parser.add_argument('bsp', type=Path, nargs='+', help='Compiled multiplayer .d3dbsp maps')
     parser.add_argument('--output', type=Path, required=True, help='Separate bake output directory')
     parser.add_argument('--bounds', choices=('collision', 'hints'), default='collision',
                         help='Full included collision bounds, or explicitly cropped spawn-hint bounds')
@@ -46,8 +46,8 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     for source in args.bsp:
         source = source.resolve()
-        if source.suffix.lower() != '.d3dbsp' or not re.fullmatch(r'mp_[a-z0-9_]{1,28}', source.stem):
-            raise ValueError('Expected a compiled mp_*.d3dbsp map')
+        if source.suffix.lower() != '.d3dbsp' or not re.fullmatch(r'[a-z0-9_]{1,31}', source.stem):
+            raise ValueError('Expected a compiled .d3dbsp map with a safe multiplayer map name')
         if not 0 < source.stat().st_size <= 256 * 1024 * 1024:
             raise ValueError('BSP must be between 1 byte and 256 MiB')
         # The existing bake pipeline expects a workspace. Keep it ephemeral and local

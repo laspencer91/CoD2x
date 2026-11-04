@@ -35,7 +35,7 @@ SNAPSHOT_BRUSH = struct.Struct("<6f4I")
 HINT = struct.Struct("<3fI")
 
 
-def extract(data, game=None, *, props="rigid"):
+def extract(data, game=None, *, props="rigid", include_hints=True):
     if props not in ("rigid", "ignore"):
         raise ValueError("Choose rigid or ignore static props for smoke occupancy")
     lumps = bsp.directory(data)
@@ -109,8 +109,13 @@ def extract(data, game=None, *, props="rigid"):
     if not selected:
         raise ValueError("No solid world brushes available for smoke baking")
 
-    text = payload(bsp.Lump.ENTITIES).rstrip(b"\0").decode("utf8")
-    entities = maptext.read(text)
+    entities = []
+    if props == "rigid" or include_hints:
+        text = payload(bsp.Lump.ENTITIES).rstrip(b"\0").decode("utf8")
+        # World-only occupancy does not use modelscale or other prop properties.
+        # Real compiled maps can repeat those; keep strict validation for the
+        # classname/origin fields actually used to derive spawn hints.
+        entities = maptext.read(text, keep_keys=None if props == "rigid" else {"classname", "origin"})
     terrain = smoke_geometry.world_triangles(
         payload, flags, models, SMOKE_CONTENTS_MASK, CONTENTS_SKY, SURFACE_SKY
     )
@@ -118,7 +123,7 @@ def extract(data, game=None, *, props="rigid"):
         smoke_geometry.prop_triangles(entities, game) if game and props == "rigid" else ([], 0, {})
     )
     hints = []
-    for entity in entities:
+    for entity in entities if include_hints else ():
         keys = entity["keys"]
         if keys.get("classname") not in SPAWN_CLASSES:
             continue
@@ -151,7 +156,7 @@ def export(source: Path, output: Path, game=None, *, data=None, bounds="hints", 
         raise ValueError("Smoke output must be separate from the BSP source")
     if data is None:
         data = source.read_bytes()
-    collision = extract(data, game, props=props)
+    collision = extract(data, game, props=props, include_hints=bounds != "collision")
     # With no hints the portable baker covers the complete included collision
     # extent. Never crop stock-map routes merely because they lack nearby spawns.
     if bounds == "collision":

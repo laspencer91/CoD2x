@@ -8,6 +8,11 @@ terrain collision, voxelizes them at 50 cm, and packages the grid with the BSP/g
 CRC binding and public metadata. It does not compile map geometry, bake lighting,
 edit materials or change the BSP. It contains no editor and no stock game assets.
 
+Safe multiplayer names without an `mp_` prefix, such as `wawa_3daim`, are also
+accepted. World-only collision bakes do not parse unused entity/prop settings;
+spawn-hint bakes read only classname and origin, so duplicate prop-scale fields
+in compiled maps do not block occupancy generation.
+
 The portable ZIP's `CoD2SmokeTool.exe` offers a **Bake occupancy** screen and includes
 its own Python runtime. No Python installation is needed when using that interface.
 The command below requires Windows and Python 3.10 or later. The voxelizer is prebuilt; the Python
