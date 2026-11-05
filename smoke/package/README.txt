@@ -1,4 +1,4 @@
-ProSmoke 0.1.6 preview - manual install for Call of Duty 2 (CoD2x)
+ProSmoke 0.1.7 preview - manual install for Call of Duty 2 (CoD2x)
 
 Volumetric smoke provides competitive integrity by rendering smoke as a true 3D
 volume that exists in the world. It does not suffer from the problems of 2D
@@ -108,6 +108,7 @@ PROBLEMS
 This is a preview build shared for testing. CoD2x auto-updates are disabled in
 this loader so an update cannot silently remove smoke. Restore a verified stock
 CoD2x loader, or reinstall official CoD2x, to return to its regular updates.
-The 0.1.6 renderer supports NVIDIA MSAA depth copies and recognizes the stock
-and zPAM smoke types 2/3. Shaders and noise are unchanged. The loader retains
-local grid-archive mounting; use the matching mss32.dll from this package.
+The 0.1.7 renderer fixes faint scenery-dependent colour inside fully opaque
+smoke. It retains NVIDIA MSAA depth copies and stock/zPAM smoke type 2/3
+support. Use this package's matching DLL and shader bundle. Noise and map grids
+are unchanged. The loader retains local grid-archive mounting.

@@ -5,7 +5,10 @@ server, so every player sees the same cloud.
 
 ## What is in this branch
 
-Preview 0.1.6 adds DX7 antialiasing support through NVIDIA NVAPI depth copies,
+Preview 0.1.7 fixes faint background-colour leakage inside fully opaque smoke.
+Fresh AMD checks include a native DX7/4x AA screenshot, full/half/quarter
+opaque-depth checks and unchanged weapon shader payloads. It retains the
+0.1.6 DX7 antialiasing support through NVIDIA NVAPI depth copies,
 corrects AMD RESZ state restoration, and recognizes zPAM smoke types 2/3.
 AMD RX 9060 XT and NVIDIA RTX 5080 checks cover 2x/4x AA; this is not a
 250 FPS certification or a guarantee for every GPU/driver. The server package
