@@ -1,0 +1,104 @@
+{
+  "releaseTag": "v0.1.7-preview",
+  "runtimeVersion": "0.1.7-preview",
+  "baseReleaseTag": "v0.1.6-preview",
+  "rendererSourceCommit": "3cc0eb93c77cdf9a1921a619011753d57fe35332",
+  "rendererSourceBranch": "fix/cod2-opaque-smoke-20261104",
+  "loaderSourceCommit": "bda0e4d7dda6520ac5b94c1c015da8591060c214",
+  "fix": "Prevent faint hidden-background colour changes inside fully opaque smoke; retain DX7 AA support and zPAM detection.",
+  "localGpu": "AMD Radeon RX 9060 XT",
+  "shaderValidation": {
+    "variantCount": 18,
+    "opaqueFullHalfQuarter": "PASS: zero RGB difference in depth 170/500 and 240/2000 fixture pairs; foreground zero and soft fringes retained",
+    "reconstructionComparisons": 96,
+    "bundleValidation": "PASS",
+    "weaponDepthAndFastProgramsByteIdentical": 10
+  },
+  "packageChecks": {
+    "passed": 16,
+    "skipped": 0,
+    "loaderProxyExportsIdenticalTo016": 364,
+    "archiveCRC": "PASS",
+    "payloadFileCount": 13,
+    "scriptsIncluded": false
+  },
+  "zipSha256": "8111ea318f7d25c9d1979c73712381227363ec436e7ec98b3549b805bde7ae62",
+  "bytes": 14980496,
+  "filesSha256": {
+    "README.txt": "8d65fd0548eb40c44e4324fef76d121fa27fe894d22b73aa2c88cd94e446979b",
+    "client/mss32.dll": "9dae478ab495e4240a701f8175fb78d9390802bd79da0b8010a184eedee58f1f",
+    "client/main/iw_prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "client/prosmoke/noise128.rgba": "b67672efe1393289a943ed50a6c5c945528140abe8308b0edd70f0f8133a32a7",
+    "client/prosmoke/prosmoke.cfg": "59ab63d3f17ef8a1adce564bc48a036dda26d9f7b2dbbb1517278b73c0b33e88",
+    "client/prosmoke/prosmoke.dll": "3e80f73bd650f4fa5ecd08ceb6faa518a0e6788d8dc858ed80157597f1fd1569",
+    "client/prosmoke/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "client/prosmoke/smoke.shaders": "5238cdf40dbc51809485f8cd63791384f603bb4f73cef810fb4da0b5f1eaa1d6",
+    "client/prosmoke/version.json": "3c926b56e09a38369a9c9c34c449d84cea6ef693aa09f88f0a76f2675a2fc6b7",
+    "server/prosmoke_competitive_full.iwd": "5d8df24150c8acdc44e5d350146e99d7ff247d7ea2fdf9d9ff979efcec368eb5",
+    "server/prosmoke_server.cfg": "3be718260d1fcfa7707960c20df9ee7727d7bb6568c824f2f8d218835dfd496e",
+    "server/prosmoke_stock.iwd": "f4f693a517a8ef16f6b32a6dcf0e6b30020ddcf20026b62c7cde10a8698228cf",
+    "server/README-SERVER.txt": "c1e7a40f81ae9ff2b170e51b306911e2c5a982be862c5004f7462003552861cf"
+  },
+  "defender": {
+    "packageScanExit": 0,
+    "zipScanExit": 0,
+    "result": "no threats",
+    "engine": {
+      "AMEngineVersion": "1.1.26100.4",
+      "AntivirusSignatureVersion": "1.463.122.0",
+      "RealTimeProtectionEnabled": true
+    }
+  },
+  "limitations": [
+    "Functional and visual acceptance is local to the tested AMD DX7 setup; no fresh NVIDIA/Intel run.",
+    "No FPS gain is claimed for this colour correction. CoD4 performance work is separate."
+  ],
+  "dx7NativeChecks": [
+    {
+      "accepted": true,
+      "requestedRenderer": "dx7",
+      "requestedAA": 2,
+      "fourActualSmokeSources": true,
+      "elapsedSeconds": 19.7,
+      "pid": 56944,
+      "loaderSha256": "9dae478ab495e4240a701f8175fb78d9390802bd79da0b8010a184eedee58f1f",
+      "rendererSha256": "3e80f73bd650f4fa5ecd08ceb6faa518a0e6788d8dc858ed80157597f1fd1569",
+      "shaderSha256": "5238cdf40dbc51809485f8cd63791384f603bb4f73cef810fb4da0b5f1eaa1d6",
+      "packageVersion": "0.1.7-preview",
+      "engineSettingLines": [
+        "      dvar set r_aaSamples 2",
+        "\"r_rendererInUse\" is: \"dx7^7\" default: \"none^7\"",
+        "\"r_aaSamples\" is: \"2^7\" default: \"1^7\"",
+        "      dvar set r_aaSamples 2"
+      ]
+    },
+    {
+      "accepted": true,
+      "requestedRenderer": "dx7",
+      "requestedAA": 4,
+      "fourActualSmokeSources": true,
+      "elapsedSeconds": 21.56,
+      "pid": 53668,
+      "loaderSha256": "9dae478ab495e4240a701f8175fb78d9390802bd79da0b8010a184eedee58f1f",
+      "rendererSha256": "3e80f73bd650f4fa5ecd08ceb6faa518a0e6788d8dc858ed80157597f1fd1569",
+      "shaderSha256": "5238cdf40dbc51809485f8cd63791384f603bb4f73cef810fb4da0b5f1eaa1d6",
+      "packageVersion": "0.1.7-preview",
+      "engineSettingLines": [
+        "      dvar set r_aaSamples 4",
+        "\"r_rendererInUse\" is: \"dx7^7\" default: \"none^7\"",
+        "\"r_aaSamples\" is: \"4^7\" default: \"1^7\"",
+        "      dvar set r_aaSamples 4"
+      ]
+    }
+  ],
+  "nativeChecksUsePackagedFiles": true,
+  "nativeScreenshot": {
+    "renderer": "dx7",
+    "samples": 4,
+    "map": "mp_carentan",
+    "size": "1280x1024",
+    "visuallyInspected": true,
+    "observation": "Smoke is visible and obscures the street; foreground weapon and nearby geometry remain visible.",
+    "asset": "dx7-aa4-preview.jpg"
+  }
+}

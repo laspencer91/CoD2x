@@ -1,8 +1,8 @@
 {
-    "version":  "0.1.6-preview",
-    "loaderSha256":  "bd8c14feafdb3852e2853fb4b91f3882a7421cced692db0c453ce89cbbdabc77",
-    "runtimeSha256":  "118d562c2121cf7099dbaf16711bcb997293bdba646bad6dafd73eccedaad1b6",
-    "shadersSha256":  "ded2fbf537c330665e501665850bad746bb1f1e1b5549a3223075603533eb438",
+    "version":  "0.1.7-preview",
+    "loaderSha256":  "9dae478ab495e4240a701f8175fb78d9390802bd79da0b8010a184eedee58f1f",
+    "runtimeSha256":  "3e80f73bd650f4fa5ecd08ceb6faa518a0e6788d8dc858ed80157597f1fd1569",
+    "shadersSha256":  "5238cdf40dbc51809485f8cd63791384f603bb4f73cef810fb4da0b5f1eaa1d6",
     "shaderVariants":  18,
     "shortWaitRequestedUs":  250
 }
